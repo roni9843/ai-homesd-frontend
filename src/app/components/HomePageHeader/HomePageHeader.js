@@ -116,7 +116,7 @@ export default function HomePageHeader() {
       >
         <div>
           <Link href="/">
-            <span style={{ fontSize: "24px" }}>EE</span>
+            <span style={{ fontSize: "24px" }}>BB</span>
           </Link>
         </div>
         <div
