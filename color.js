@@ -12,3 +12,6 @@ export const grayColor = "#808080";
 export const blackColor = "#010002";
 
 export const redColor = "#FF0000";
+
+
+// this is color
