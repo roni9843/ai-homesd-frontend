@@ -118,7 +118,7 @@ export default function CustomerHeader() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center", // Vertically center items
-          padding: { xs: "0 10px", lg: "0 20px" },
+          padding: { xs: "0 10px", lg: "0 50px" },
           minHeight: "60px",
         }}
       >

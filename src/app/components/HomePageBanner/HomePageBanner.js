@@ -16,7 +16,7 @@ export default function HomePageBanner() {
           <div style={{ width: "100%" }}>
             <Image
               unoptimized
-              src="https://i.ibb.co/BjV13H6/Group-5.png" // Change to local image
+              src="https://i.ibb.co/Fs4SWHj/all-product-web-Cover-1-1400x533.jpg" // Change to local image
               alt="Moto Logo"
               layout="responsive"
               width={100}
@@ -40,7 +40,7 @@ export default function HomePageBanner() {
           <div style={{ width: "100%" }}>
             <Image
               unoptimized
-              src="https://i.ibb.co/y6tP9qM/Group-4.png" // Change to local image
+              src="https://i.ibb.co/Fs4SWHj/all-product-web-Cover-1-1400x533.jpg" // Change to local image
               alt="Moto Logo"
               layout="responsive"
               width={100}

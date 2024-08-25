@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 import { Provider } from "react-redux";
 import { whiteColor_v_2 } from "../../color";
 import CategoryProductList from "./components/CategoryProductList";
-import CategoryUiSection from "./components/CategoryUiSection/CategoryUiSection";
 import DiscoverMoreTitle from "./components/DiscoverMoreTitle/DiscoverMoreTitle";
 import ExclusiveItemsPoster from "./components/ExclusiveItemsPoster/ExclusiveItemsPoster";
 import Footer from "./components/Footer/Footer";
@@ -31,10 +30,10 @@ const Home = () => {
         }}
       >
         <HomePageBanner />
-        <CategoryUiSection />
         <NewArrivalsUiSection />
-        <WeeklyOffers />
         <ExclusiveItemsPoster />
+        <WeeklyOffers />
+
         <CategoryProductList />
         <DiscoverMoreTitle />
 
@@ -52,3 +51,4 @@ const Home = () => {
 export default Home;
 
 //  <HomePageHeader />
+//   <CategoryUiSection />
