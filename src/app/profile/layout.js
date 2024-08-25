@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { Provider } from "react-redux";
 import { whiteColor_v_2 } from "../../../color";
 import Footer from "../components/Footer/Footer";
-import HomePageHeader from "../components/HomePageHeader/HomePageHeader";
+import CustomerHeader from "../components/HomePageHeader/CustomerHeader";
 import { store } from "../redux/store";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,7 +22,8 @@ export default function ProfileLayout({ children }) {
           className={inter.className}
           style={{ backgroundColor: whiteColor_v_2 }}
         >
-          <HomePageHeader></HomePageHeader>
+          <CustomerHeader></CustomerHeader>
+
           {children}
 
           <Footer></Footer>
@@ -31,6 +32,8 @@ export default function ProfileLayout({ children }) {
     </html>
   );
 }
+
+//   <HomePageHeader></HomePageHeader>
 /**
  *     <Provider store={store}>
         <body className={inter.className}>

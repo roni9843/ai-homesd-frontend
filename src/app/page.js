@@ -1,5 +1,6 @@
 "use client";
 // src/app/page.js
+import { Box } from "@mui/material";
 import { Provider } from "react-redux";
 import { whiteColor_v_2 } from "../../color";
 import CategoryProductList from "./components/CategoryProductList";
@@ -8,7 +9,8 @@ import DiscoverMoreTitle from "./components/DiscoverMoreTitle/DiscoverMoreTitle"
 import ExclusiveItemsPoster from "./components/ExclusiveItemsPoster/ExclusiveItemsPoster";
 import Footer from "./components/Footer/Footer";
 import HomePageBanner from "./components/HomePageBanner/HomePageBanner";
-import HomePageHeader from "./components/HomePageHeader/HomePageHeader";
+import CustomerHeader from "./components/HomePageHeader/CustomerHeader";
+import InfoBar from "./components/InfoBar/InfoBar";
 import NewArrivalsUiSection from "./components/NewArrivalsUiSection/NewArrivalsUiSection";
 import ProductListUiComponent from "./components/ProductListUiComponent/ProductListUiComponent";
 import SinglePoster from "./components/SinglePoster/SinglePoster";
@@ -19,29 +21,34 @@ import { store } from "./redux/store";
 const Home = () => {
   return (
     <Provider store={store}>
-      <main className="" style={{ backgroundColor: whiteColor_v_2 }}>
-        <HomePageHeader></HomePageHeader>
-        <HomePageBanner></HomePageBanner>
-        <CategoryUiSection></CategoryUiSection>
-        <NewArrivalsUiSection></NewArrivalsUiSection>
-        <WeeklyOffers></WeeklyOffers>
-        <ExclusiveItemsPoster></ExclusiveItemsPoster>
-        <CategoryProductList></CategoryProductList>
-        <DiscoverMoreTitle></DiscoverMoreTitle>
+      <InfoBar />
+      <CustomerHeader></CustomerHeader>
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: whiteColor_v_2,
+          padding: { xs: "0", lg: "0 50px" }, // No padding on small screens, padding on large screens
+        }}
+      >
+        <HomePageBanner />
+        <CategoryUiSection />
+        <NewArrivalsUiSection />
+        <WeeklyOffers />
+        <ExclusiveItemsPoster />
+        <CategoryProductList />
+        <DiscoverMoreTitle />
 
-        <SinglePoster
-          ImageLink={"https://i.ibb.co/Kssr3Qz/Group-11.png"}
-        ></SinglePoster>
-        <ProductListUiComponent></ProductListUiComponent>
+        <SinglePoster ImageLink={"https://i.ibb.co/Kssr3Qz/Group-11.png"} />
+        <ProductListUiComponent />
 
-        <div className="mt-5">
-          <Footer></Footer>
-        </div>
-      </main>
+        <Box className="mt-5">
+          <Footer />
+        </Box>
+      </Box>
     </Provider>
   );
 };
 
 export default Home;
 
-// <CateAndProductList></CateAndProductList>
+//  <HomePageHeader />

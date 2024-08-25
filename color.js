@@ -1,5 +1,5 @@
 // color.js
-export const primaryColor = "#2ECC71";
+export const primaryColor = "#FF0000";
 
 export const whiteColor = "#FFFFFF";
 

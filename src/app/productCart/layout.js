@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { Provider } from "react-redux";
 import { whiteColor_v_2 } from "../../../color";
 import Footer from "../components/Footer/Footer";
-import HomePageHeader from "../components/HomePageHeader/HomePageHeader";
+import CustomerHeader from "../components/HomePageHeader/CustomerHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +22,8 @@ export default function productCart({ children }) {
           className={inter.className}
           style={{ backgroundColor: whiteColor_v_2 }}
         >
-          <HomePageHeader></HomePageHeader>
+          <CustomerHeader></CustomerHeader>
+
           {children}
           <Footer></Footer>
         </body>
@@ -30,3 +31,5 @@ export default function productCart({ children }) {
     </html>
   );
 }
+
+// <HomePageHeader></HomePageHeader>

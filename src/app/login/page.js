@@ -12,7 +12,7 @@ import { Provider } from "react-redux";
 
 import { whiteColor_v_2 } from "../../../color";
 import Footer from "../components/Footer/Footer";
-import HomePageHeader from "../components/HomePageHeader/HomePageHeader";
+import CustomerHeader from "../components/HomePageHeader/CustomerHeader";
 import { store } from "../redux/store";
 import PageState from "./PageState";
 //import { useDispatch } from "react-redux";
@@ -59,7 +59,8 @@ export default function page() {
     <div>
       <Provider store={store}>
         <body style={{ backgroundColor: whiteColor_v_2 }}>
-          <HomePageHeader></HomePageHeader>
+          <CustomerHeader></CustomerHeader>
+
           <PageState></PageState>
           <Footer></Footer>
         </body>
@@ -67,7 +68,7 @@ export default function page() {
     </div>
   );
 }
-
+//       <HomePageHeader></HomePageHeader>
 /**
  *    <div
         style={{
