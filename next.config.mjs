@@ -8,6 +8,7 @@ const nextConfig = {
       "m.media-amazon.com",
       "i.ibb.co",
       "tenor.com",
+      "backend.aihomesd.com",
     ],
   },
 };

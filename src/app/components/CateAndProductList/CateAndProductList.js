@@ -10,16 +10,13 @@ export default function CateAndProductList() {
 
   const fetchProduct = async (category) => {
     try {
-      const response = await fetch(
-        "https://elec-ecommerce-back.vercel.app/getProduct",
-        {
-          method: "POST",
-          body: JSON.stringify({ category }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch("https://backend.aihomesd.com/getProduct", {
+        method: "POST",
+        body: JSON.stringify({ category }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);

@@ -158,9 +158,7 @@ import SingleProductPageReduxWrapped from "./SingleProductPageReduxWrapped";
 // Replace this with a real API call to fetch all product IDs you want to statically generate.
 async function fetchAllProductIds() {
   // Example: Fetch from your API
-  const response = await fetch(
-    "https://elec-ecommerce-back.vercel.app/getAllProductId"
-  );
+  const response = await fetch("https://backend.aihomesd.com/getAllProductId");
   const productIds = await response.json();
   return productIds.productIds.map((product) => ({ productId: product }));
 }
@@ -179,7 +177,7 @@ export default async function Page({ params }) {
 
   try {
     const response = await fetch(
-      "https://elec-ecommerce-back.vercel.app/getProductById",
+      "https://backend.aihomesd.com/getProductById",
       {
         method: "POST",
         body: JSON.stringify({ productId: productId }),

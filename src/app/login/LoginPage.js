@@ -25,13 +25,10 @@ export default function LoginPage({ setAuthState }) {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post(
-        "https://elec-ecommerce-back.vercel.app/login",
-        {
-          email,
-          password,
-        }
-      );
+      const { data } = await axios.post("https://backend.aihomesd.com/login", {
+        email,
+        password,
+      });
       const { token } = data;
 
       // Store JWT token in localStorage
@@ -44,7 +41,7 @@ export default function LoginPage({ setAuthState }) {
 
       const fetchUserInfo = async (userId) => {
         const response = await fetch(
-          "https://elec-ecommerce-back.vercel.app/getTheUser",
+          "https://backend.aihomesd.com/getTheUser",
           {
             method: "POST",
             headers: {

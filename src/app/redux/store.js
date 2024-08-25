@@ -27,7 +27,7 @@ const autoCall = async () => {
   // // ? get all product
   // await getAllCategoryWithProductFunc();
 
-  fetch("https://elec-ecommerce-back.vercel.app/getAllCategoryWithProducts")
+  fetch("https://backend.aihomesd.com/getAllCategoryWithProducts")
     .then((response) => response.json())
     .then((data) => {
       store.dispatch(addCategoryWithProductRedux(data.data));
@@ -49,7 +49,7 @@ const autoCall = async () => {
 
         const fetchUserInfo = async (userId) => {
           const response = await fetch(
-            "https://elec-ecommerce-back.vercel.app/getTheUser",
+            "https://backend.aihomesd.com/getTheUser",
             {
               method: "POST",
               headers: {

@@ -31,7 +31,7 @@ export async function generateStaticParams() {
   // );
   // const productIds = await response.json();
   const response = await fetch(
-    "https://elec-ecommerce-back.vercel.app/getAllCategoryName"
+    "https://backend.aihomesd.com/getAllCategoryName"
   );
   const names = await response.json();
 

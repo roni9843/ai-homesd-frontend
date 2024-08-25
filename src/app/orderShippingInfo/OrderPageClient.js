@@ -47,18 +47,15 @@ export default function OrderPageClient() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        "https://elec-ecommerce-back.vercel.app/getTheOrder",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: userInfo._id,
-          }),
-        }
-      );
+      const response = await fetch("https://backend.aihomesd.com/getTheOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userInfo._id,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();

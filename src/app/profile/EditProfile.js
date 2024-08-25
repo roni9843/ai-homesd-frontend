@@ -43,21 +43,18 @@ export default function EditProfile({ setPageState }) {
     event.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://elec-ecommerce-back.vercel.app/updateUser",
-        {
-          method: "POST", // Use POST method
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: userInfo._id,
-            username: username,
-            email: email,
-            phoneNumber: phoneNumber,
-          }),
-        }
-      );
+      const response = await fetch("https://backend.aihomesd.com/updateUser", {
+        method: "POST", // Use POST method
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: userInfo._id,
+          username: username,
+          email: email,
+          phoneNumber: phoneNumber,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();

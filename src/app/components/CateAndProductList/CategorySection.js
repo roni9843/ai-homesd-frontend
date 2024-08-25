@@ -12,7 +12,7 @@ export default function CategorySection({ selectedCategory, fetchProduct }) {
     const fetchCategories = async () => {
       try {
         const response = await fetch(
-          "https://elec-ecommerce-back.vercel.app/getAllCategory"
+          "https://backend.aihomesd.com/getAllCategory"
         );
         if (!response.ok) {
           throw new Error(

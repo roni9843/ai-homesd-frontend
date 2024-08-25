@@ -26,15 +26,12 @@ export default function SignupPage() {
     e.preventDefault();
     setError(""); // Reset error message
     try {
-      const { data } = await axios.post(
-        "https://elec-ecommerce-back.vercel.app/signup",
-        {
-          username: username,
-          phoneNumber: phoneNumber,
-          email: email,
-          password: password,
-        }
-      );
+      const { data } = await axios.post("https://backend.aihomesd.com/signup", {
+        username: username,
+        phoneNumber: phoneNumber,
+        email: email,
+        password: password,
+      });
 
       const { token } = data;
 
@@ -50,7 +47,7 @@ export default function SignupPage() {
 
       const fetchUserInfo = async (userId) => {
         const response = await fetch(
-          "https://elec-ecommerce-back.vercel.app/getTheUser",
+          "https://backend.aihomesd.com/getTheUser",
           {
             method: "POST",
             headers: {

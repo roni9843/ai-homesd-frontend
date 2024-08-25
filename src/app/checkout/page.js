@@ -37,16 +37,13 @@ export default function CheckoutPage() {
   }, [userInfo]);
 
   const fetchUserInfo = async (userId) => {
-    const response = await fetch(
-      "https://elec-ecommerce-back.vercel.app/getTheUser",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: userId }),
-      }
-    );
+    const response = await fetch("https://backend.aihomesd.com/getTheUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: userId }),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch user info");
@@ -95,16 +92,13 @@ export default function CheckoutPage() {
     };
 
     try {
-      const response = await fetch(
-        "https://elec-ecommerce-back.vercel.app/postOrder",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderDetails),
-        }
-      );
+      const response = await fetch("https://backend.aihomesd.com/postOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderDetails),
+      });
 
       if (response.ok) {
         const data = await response.json();
