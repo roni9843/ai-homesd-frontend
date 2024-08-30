@@ -17,7 +17,8 @@ export default function InfoBar() {
         alignItems: "center",
         backgroundColor: "#000",
         color: "#fff",
-        padding: { sm: "5px 50px" },
+        //  padding: { sm: "5px 50px" },
+        padding: { sm: "0px" },
         fontSize: "10px",
       }}
     >

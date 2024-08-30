@@ -1,155 +1,74 @@
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Image from "next/image";
-import {
-  blackColor,
-  redColor,
-  whiteColor,
-  whiteColor_v_3,
-} from "../../../../color";
 
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useRouter } from "next/navigation";
+import styles from "./ProductHorizontal.module.css"; //
 
 export default function ProductHorizontal({ title, p }) {
   const router = useRouter();
 
   return (
     <div>
-      <div
-        className="d-flex px-2 mt-3"
-        style={{ justifyContent: "space-between" }}
-      >
-        <span style={{ fontSize: "14px", fontWeight: "bold" }}>{title}</span>
-        <span
-          onClick={() => router.push(`/category/${title}`)}
-          style={{ fontSize: "10px" }}
-        >
-          View All <KeyboardArrowRightIcon style={{ fontSize: "16px" }} />
-        </span>
+      <div className={styles.titleContainer}>
+        <hr className={styles.titleLine} />
+        <span className={styles.titleText}>{title}</span>
+        <hr className={styles.titleLine} />
       </div>
 
       <div
-        className=" d-flex  "
-        style={{
-          overflowX: "auto",
-          overflowY: "hidden",
-          position: "relative",
-        }}
+        className="row m-0 p-0 "
+        style={{ marginTop: "10px", padding: "0px", margin: "0px" }}
       >
         {p &&
           p.products.map((p, index) => (
-            <div key={index} onClick={() => router.push(`/product/${p._id}`)}>
+            <div
+              key={index}
+              className="col-6 col-md-4 col-lg-3 col-xl-2"
+              style={{
+                padding: "10px",
+              }}
+            >
               <div
-                className="mt-2 px-2 py-4"
-                style={{
-                  backgroundColor: whiteColor_v_3,
-                  marginLeft: index === 0 ? "25px" : "0px",
-                  borderRadius: index === 0 ? "5px 0px 0px 5px" : "0px",
-                  width: "150px",
-                }}
+                className={styles.productCard}
+                onClick={() => router.push(`/product/${p._id}`)}
               >
-                <div
-                  className="p-2"
-                  style={{
-                    backgroundColor: whiteColor,
-                    borderRadius: "5px",
-                    boxShadow: "rgb(40 40 40 / 25%) 0px 2px 3px 0px",
-                  }}
-                >
-                  <div
-                    className="d-flex "
+                <div className={styles.imageContainer}>
+                  <Image
+                    unoptimized
+                    src={
+                      "https://i.ibb.co/mF1fnmf/Ghee-HF-Food-Service-1536x1536.jpg"
+                    }
+                    alt={p.productName}
+                    layout="responsive"
+                    width={200}
+                    height={200}
                     style={{
-                      justifyContent: "space-between",
-                      alignContent: "center",
-                      alignItems: "center",
+                      width: "100%",
+                      height: "auto",
+                      //  borderRadius: "10px 10px 0px 0px",
                     }}
-                  >
-                    <div>
-                      <span
-                        className="text-xs text-md-sm text-lg-base"
-                        style={{ color: redColor }}
-                      >
-                        {p.productOffer > 0 && `-${p.productOffer}% OFF`}
-                      </span>
-                    </div>
-                    <div>
-                      <FavoriteBorderIcon style={{ fontSize: "12px" }} />
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <Image
-                        unoptimized
-                        src={p.images[0]} // Change to local image
-                        alt="Moto Logo"
-                        layout="responsive"
-                        width={100}
-                        height={100}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        textAlign: "center",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {p.productName}
-                      </span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <div style={{ display: "flex" }}>
-                        {p.productOffer > 0 ? (
-                          <div>
-                            <span style={{ fontSize: "13px" }}>
-                              €
-                              {Math.round(
-                                p.productRegularPrice -
-                                  p.productRegularPrice * (p.productOffer / 100)
-                              )}
-                            </span>
-                          </div>
-                        ) : (
-                          <div>
-                            <span style={{ fontSize: "10px" }}>
-                              €{p.productRegularPrice}
-                            </span>
-                          </div>
-                        )}
+                  />
+                  <div className={styles.quickViewOverlay}>QUICK VIEW</div>
+                </div>
+                <div className={styles.productInfo}>
+                  <h5 className={styles.productName}>{p.productName}</h5>
 
-                        <div>
-                          {p.productOffer > 0 && (
-                            <span className="mx-1" style={{ fontSize: "13px" }}>
-                              {" "}
-                              <del>€{p.productRegularPrice}</del>
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                  <div className={styles.priceContainer}>
+                    {p.productOffer > 0 ? (
                       <div>
-                        <span
-                          className="p-1 px-3"
-                          style={{
-                            color: whiteColor,
-                            backgroundColor: blackColor,
-                            borderRadius: "20px",
-                            textAlign: "center",
-                            fontSize: "7px",
-                          }}
-                        >
-                          View
+                        <span>
+                          ৳
+                          {Math.round(
+                            p.productRegularPrice -
+                              p.productRegularPrice * (p.productOffer / 100)
+                          )}
+                        </span>
+                        <span className={styles.originalPrice}>
+                          ৳{p.productRegularPrice}
                         </span>
                       </div>
-                    </div>
+                    ) : (
+                      <span>৳{p.productRegularPrice}</span>
+                    )}
                   </div>
                 </div>
               </div>

@@ -20,12 +20,15 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function CustomerHeader() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const filterCategory = useSelector((state) => state.users.filterCategory);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -70,7 +73,8 @@ export default function CustomerHeader() {
       {/* Search Bar in Drawer */}
       <Box
         sx={{
-          display: "flex",
+          display: "none",
+          // display: "flex",
           alignItems: "center",
           border: "1px solid #ccc",
           borderRadius: "0",
@@ -119,6 +123,7 @@ export default function CustomerHeader() {
           justifyContent: "space-between",
           alignItems: "center", // Vertically center items
           padding: { xs: "0 10px", lg: "0 50px" },
+          padding: { xs: "0 10px", lg: "0px" },
           minHeight: "60px",
         }}
       >
@@ -148,7 +153,7 @@ export default function CustomerHeader() {
             }}
           >
             <Image
-              src="https://i.ibb.co/zGzXCjC/cropped-HF-Food-Service-Logo-Color-and-Font-01-Custom-2.png"
+              src="https://i.ibb.co/ynTcnkK/Asset-1.png"
               alt="Logo"
               width={50}
               height={50}
@@ -215,7 +220,8 @@ export default function CustomerHeader() {
               {/* Search Bar */}
               <Box
                 sx={{
-                  display: "flex",
+                  display: "none",
+                  //  display: "flex",
                   alignItems: "center",
                   border: "1px solid #ccc",
                   borderRadius: "0",
@@ -294,3 +300,9 @@ export default function CustomerHeader() {
     </AppBar>
   );
 }
+
+/**
+ *    {subMenu.map((c) => {
+<MenuItem onClick={handleMenuClose}>{c}</MenuItem>;
+})}
+ */
