@@ -301,8 +301,4 @@ export default function CustomerHeader() {
   );
 }
 
-/**
- *    {subMenu.map((c) => {
-<MenuItem onClick={handleMenuClose}>{c}</MenuItem>;
-})}
- */
+
