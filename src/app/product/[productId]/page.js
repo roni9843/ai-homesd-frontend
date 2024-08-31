@@ -215,7 +215,7 @@ export default async function Page({ params }) {
 
   return (
     <div style={{ backgroundColor: whiteColor_v_2 }}>
-      <title>{productData.productName} - E-commerce Site</title>
+      <title>{productData.productName} - Buy Now!!!</title>
       <meta property="og:title" content={productData.productName} />
       <meta name="keywords" content={keywords} />
       <meta property="og:image" content={productData.images[0]} />

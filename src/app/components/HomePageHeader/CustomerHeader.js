@@ -4,6 +4,8 @@ import {
   Search as SearchIcon,
   ShoppingCart as ShoppingCartIcon,
 } from "@mui/icons-material";
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+import PersonIcon from "@mui/icons-material/Person";
 import {
   AppBar,
   Badge,
@@ -19,8 +21,11 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { blackColor } from "../../../../color";
 
 export default function CustomerHeader() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,6 +47,79 @@ export default function CustomerHeader() {
     setDrawerOpen(!drawerOpen);
   };
 
+  const userInfo = useSelector((state) => state.users.userInfo);
+  const AllProduct = useSelector((state) => state.users.AllProduct);
+  // For testing purposes, use the below static state
+  // const AllProduct = useState([...]);
+
+  const router = useRouter();
+  const cart = useSelector((state) => state.users.cart);
+  const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 600);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (inputValue.length >= 3) {
+      fetchSuggestions(inputValue);
+    } else {
+      setSuggestions([]);
+    }
+  }, [inputValue]);
+
+  const fetchSuggestions = async (query) => {
+    if (query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    const filteredSuggestions = AllProduct.filter((item) => {
+      const queryLowerCase = query.toLowerCase();
+      const nameMatches = item.productName
+        .toLowerCase()
+        .includes(queryLowerCase);
+      const tagMatches = item.productTag.some((tag) =>
+        tag.toLowerCase().includes(queryLowerCase)
+      );
+      const descriptionMatches = item.productDescription
+        .toLowerCase()
+        .includes(queryLowerCase);
+
+      return nameMatches || tagMatches || descriptionMatches;
+    });
+
+    setSuggestions(filteredSuggestions);
+  };
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setInputValue(suggestion.productName);
+    setSuggestions([]);
+  };
+
+  const handleButtonClick = async (props) => {
+    if (!userInfo) {
+      router.push(`/login?callbackUrl=/${props}`);
+    } else {
+      router.push(`/${props}`);
+    }
+  };
+
   const drawerContent = (
     <Box
       sx={{
@@ -52,9 +130,17 @@ export default function CustomerHeader() {
         gap: "20px",
       }}
     >
-      <Typography variant="h6" onClick={handleMenuClose}>
-        HOME
-      </Typography>
+      <Link href="/">
+        <Typography
+          //    onClick={() => router.push(`/`)}
+          variant="h6"
+
+          //onClick={handleMenuClose}
+        >
+          HOME
+        </Typography>
+      </Link>
+
       <Box
         sx={{
           display: "flex",
@@ -67,8 +153,12 @@ export default function CustomerHeader() {
         <Typography variant="h6">ALL FOOD</Typography>
         <ArrowDropDownIcon />
       </Box>
-      <Typography variant="h6">ABOUT</Typography>
-      <Typography variant="h6">CONTACT</Typography>
+      <Typography variant="h6" onClick={() => router.push(`/about`)}>
+        ABOUT
+      </Typography>
+      <Typography variant="h6" onClick={() => router.push(`/contact`)}>
+        CONTACT
+      </Typography>
 
       {/* Search Bar in Drawer */}
       <Box
@@ -110,6 +200,21 @@ export default function CustomerHeader() {
       </Box>
     </Box>
   );
+
+  const profileStyles = {
+    profileImage: {
+      width: isSmallScreen ? "25px" : "25px",
+      height: isSmallScreen ? "25px" : "25px",
+      borderRadius: "50%",
+      backgroundColor: "#007bff",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: isSmallScreen ? "15px" : "20px",
+      color: "#fff",
+      margin: "0 auto",
+    },
+  };
 
   return (
     <AppBar
@@ -157,6 +262,7 @@ export default function CustomerHeader() {
               alt="Logo"
               width={50}
               height={50}
+              onClick={() => router.push(`/`)}
               style={{ objectFit: "contain" }}
             />
           </Box>
@@ -172,9 +278,10 @@ export default function CustomerHeader() {
                 }}
               >
                 <Typography
+                  onClick={() => router.push(`/`)}
                   variant="body1"
                   sx={{
-                    color: "#FFA500",
+                    color: "black",
                     fontWeight: "bold",
                     fontSize: "14px",
                   }}
@@ -204,12 +311,14 @@ export default function CustomerHeader() {
                   <ArrowDropDownIcon sx={{ color: "#000" }} />
                 </Box>
                 <Typography
+                  onClick={() => router.push(`/about`)}
                   variant="body1"
                   sx={{ color: "#000", fontWeight: "bold", fontSize: "14px" }}
                 >
                   ABOUT
                 </Typography>
                 <Typography
+                  onClick={() => router.push(`/contact`)}
                   variant="body1"
                   sx={{ color: "#000", fontWeight: "bold", fontSize: "14px" }}
                 >
@@ -265,12 +374,38 @@ export default function CustomerHeader() {
             alignItems: "center",
           }}
         >
-          <IconButton aria-label="cart" sx={{ color: "#000" }}>
-            <Badge badgeContent={0} color="error">
-              <ShoppingCartIcon fontSize="small" />
+          <Link
+            href="/productCart"
+            style={{ textDecoration: "none", color: blackColor }}
+          >
+            <Badge badgeContent={totalQuantity} color="secondary">
+              <ShoppingCartIcon style={{ fontSize: "20px" }} />
             </Badge>
-          </IconButton>
+          </Link>
         </Box>
+        <div
+          style={{ marginLeft: "10px", display: "flex", alignItems: "center" }}
+          onClick={() => handleButtonClick("orderShippingInfo")}
+        >
+          <LocalMallIcon style={{ fontSize: "20px", color: blackColor }} />
+        </div>
+        <div
+          onClick={() => handleButtonClick("profile")}
+          style={{
+            marginLeft: "10px",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {userInfo ? (
+            <div style={profileStyles.profileImage}>
+              {userInfo.username.charAt(0)}
+            </div>
+          ) : (
+            <PersonIcon style={{ fontSize: "20px", color: blackColor }} />
+          )}
+        </div>
       </Toolbar>
 
       {/* Drawer for mobile menu */}
@@ -300,5 +435,3 @@ export default function CustomerHeader() {
     </AppBar>
   );
 }
-
-

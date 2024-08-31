@@ -16,6 +16,7 @@ import CustomerHeader from "../components/HomePageHeader/CustomerHeader";
 import { store } from "../redux/store";
 import PageState from "./PageState";
 //import { useDispatch } from "react-redux";
+import { Box } from "@mui/material";
 
 export default function page() {
   // const router = useRouter();
@@ -59,7 +60,16 @@ export default function page() {
     <div>
       <Provider store={store}>
         <body style={{ backgroundColor: whiteColor_v_2 }}>
-          <CustomerHeader></CustomerHeader>
+          <Box
+            component="main"
+            sx={{
+              backgroundColor: whiteColor_v_2,
+              padding: { xs: "0", lg: "0 50px" }, // No padding on small screens, padding on large screens
+              backgroundColor: "white",
+            }}
+          >
+            <CustomerHeader></CustomerHeader>
+          </Box>
 
           <PageState></PageState>
           <Footer></Footer>

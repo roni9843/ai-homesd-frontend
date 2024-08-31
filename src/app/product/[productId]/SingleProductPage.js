@@ -1,9 +1,7 @@
 "use client";
 
 import CategoryProductList from "@/app/components/CategoryProductList";
-import DiscoverMoreTitle from "@/app/components/DiscoverMoreTitle/DiscoverMoreTitle";
-import ProductListUiComponent from "@/app/components/ProductListUiComponent/ProductListUiComponent";
-import SinglePoster from "@/app/components/SinglePoster/SinglePoster";
+import ExclusiveItemsPoster from "@/app/components/ExclusiveItemsPoster/ExclusiveItemsPoster";
 import { addToCart } from "@/app/redux/userSlice";
 import AddShoppingCartTwoToneIcon from "@mui/icons-material/AddShoppingCartTwoTone";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -102,7 +100,7 @@ export default function SingleProductPage({ productData }) {
           >
             <div>
               <span style={{ fontSize: 24, color: blackColor }}>
-                €{discountedPrice.toFixed(2)}
+                ৳{discountedPrice.toFixed(2)}
               </span>
               <span
                 style={{
@@ -114,7 +112,7 @@ export default function SingleProductPage({ productData }) {
                   marginRight: "10px",
                 }}
               >
-                €{productData.productRegularPrice.toFixed(2)}
+                ৳{productData.productRegularPrice.toFixed(2)}
               </span>
             </div>
 
@@ -249,15 +247,15 @@ export default function SingleProductPage({ productData }) {
             </button>
 
             <button
-              className="btn   button-opacityNormal"
+              className="btn   "
               onClick={() => {
                 const payload = productData;
                 dispatch(addToCart(payload));
                 router.push("/productCart");
               }}
               style={{
-                border: `2px solid ${blackColor}`,
-                color: blackColor,
+                border: `2px solid ${"#FFA500"}`,
+                color: "#FFA500",
                 padding: "12px 25px",
                 fontWeight: "bold",
                 fontSize: 16,
@@ -270,7 +268,7 @@ export default function SingleProductPage({ productData }) {
               }}
             >
               <ShoppingBasketTwoToneIcon
-                style={{ color: blackColor, marginRight: 8 }}
+                style={{ color: "#FFA500", marginRight: 8 }}
               />
               Order Now
             </button>
@@ -278,12 +276,18 @@ export default function SingleProductPage({ productData }) {
         </div>
       </div>
       <CategoryProductList></CategoryProductList>
-      <DiscoverMoreTitle></DiscoverMoreTitle>
-
-      <SinglePoster
-        ImageLink={"https://i.ibb.co/Kssr3Qz/Group-11.png"}
-      ></SinglePoster>
-      <ProductListUiComponent></ProductListUiComponent>
+      <ExclusiveItemsPoster />
     </>
   );
 }
+
+/**
+ * 
+ * <DiscoverMoreTitle></DiscoverMoreTitle>
+ * 
+ *  <SinglePoster
+        ImageLink={"https://i.ibb.co/Kssr3Qz/Group-11.png"}
+      ></SinglePoster>
+
+ <ProductListUiComponent></ProductListUiComponent>
+ *  */

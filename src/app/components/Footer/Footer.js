@@ -1,140 +1,209 @@
-// components/Footer.js
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import { blackColor, whiteColor_v_3 } from "../../../../color";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
 const Footer = () => {
   return (
     <footer
       style={{
-        padding: "20px 0",
-        textAlign: "center",
+        padding: "40px 0",
+        backgroundColor: "#D18D33", // Similar background color
+        color: "white",
       }}
     >
-      <div
-        className="my-4"
-        style={{
-          width: "100%",
-          height: "1px",
-          backgroundColor: whiteColor_v_3,
-        }}
-      ></div>
-
       <div className="container">
         <div className="row">
-          <div className="col">
+          {/* About Section */}
+          <div className="col-md-3">
+            <h5 style={{ fontWeight: "bold" }}>ABOUT</h5>
+            <div
+              style={{
+                width: "30px",
+                height: "2px",
+                backgroundColor: "white",
+                marginBottom: "10px",
+              }}
+            ></div>
+            <p>
+              Aihomesd Food Service is a leading business that delivers natural,
+              healthy, and chemical-free food to people.
+            </p>
+            <div className="d-flex">
+              <a
+                href="https://www.facebook.com"
+                style={{
+                  margin: "0 10px",
+                  color: "white",
+                  fontSize: "24px",
+                }}
+              >
+                <FacebookIcon />
+              </a>
+              <a
+                href="https://www.instagram.com"
+                style={{
+                  margin: "0 10px",
+                  color: "white",
+                  fontSize: "24px",
+                }}
+              >
+                <InstagramIcon />
+              </a>
+              <a
+                href="https://www.linkedin.com"
+                style={{
+                  margin: "0 10px",
+                  color: "white",
+                  fontSize: "24px",
+                }}
+              >
+                <LinkedInIcon />
+              </a>
+              <a
+                href="https://www.youtube.com"
+                style={{
+                  margin: "0 10px",
+                  color: "white",
+                  fontSize: "24px",
+                }}
+              >
+                <YouTubeIcon />
+              </a>
+            </div>
+          </div>
+
+          {/* Information Section */}
+          <div className="col-md-3">
+            <h5 style={{ fontWeight: "bold" }}>INFORMATION</h5>
+            <div
+              style={{
+                width: "30px",
+                height: "2px",
+                backgroundColor: "white",
+                marginBottom: "10px",
+              }}
+            ></div>
             <ul className="list-unstyled">
               <li>
-                <div>Product & Service</div>
+                <a
+                  href="/wishlist"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  Wishlist
+                </a>
               </li>
               <li>
-                <div>Shop</div>
+                <a
+                  href="/privacy"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  Privacy Policy
+                </a>
               </li>
               <li>
-                <div>Support</div>
+                <a
+                  href="/refund"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  Refund and Returns
+                </a>
               </li>
               <li>
-                <div>Account</div>
-              </li>
-              <li>
-                <div> About Us </div>
+                <a
+                  href="/terms"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  Terms & Conditions
+                </a>
               </li>
             </ul>
           </div>
+
+          {/* Company Section */}
+          <div className="col-md-3">
+            <h5 style={{ fontWeight: "bold" }}>COMPANY</h5>
+            <div
+              style={{
+                width: "30px",
+                height: "2px",
+                backgroundColor: "white",
+                marginBottom: "10px",
+              }}
+            ></div>
+            <ul className="list-unstyled">
+              <li>
+                <a
+                  href="/about"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  About
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/ceo"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  CEO Message
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/coo"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  COO Message
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/cmo"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  CMO Message
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Facebook Section */}
+          <div className="col-md-3">
+            <h5 style={{ fontWeight: "bold" }}>LIKE US ON FACEBOOK</h5>
+            <div
+              style={{
+                width: "30px",
+                height: "2px",
+                backgroundColor: "white",
+                marginBottom: "10px",
+              }}
+            ></div>
+            <div>
+              <iframe
+                src="https://www.facebook.com/plugins/page.php?href=https://www.facebook.com/LogicLark&tabs=timeline&width=250&height=300&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+                width="100%"
+                height="150"
+                style={{ border: "none", overflow: "hidden", width: "200px" }}
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen={true}
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              ></iframe>
+            </div>
+          </div>
         </div>
+
+        {/* Footer Bottom */}
         <div className="row mt-4">
-          <div className="col">
+          <div className="col text-center">
             <p
               style={{
                 margin: 0,
+                color: "white",
               }}
             >
-              &copy; 2024 EE Corp. All rights reserved.
+              &copy; 2024 aihomesd. All rights reserved.
             </p>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col d-flex justify-content-center">
-            <a
-              href="https://www.facebook.com"
-              style={{
-                margin: "0 10px",
-                color: blackColor,
-                fontSize: "24px",
-                textDecoration: "none",
-              }}
-            >
-              <FacebookIcon />
-            </a>
-            <a
-              href="https://www.instagram.com"
-              style={{
-                margin: "0 10px",
-                color: blackColor,
-                fontSize: "24px",
-                textDecoration: "none",
-              }}
-            >
-              <InstagramIcon />
-            </a>
-            <a
-              href="https://www.twitter.com"
-              style={{
-                margin: "0 10px",
-                color: blackColor,
-                fontSize: "24px",
-                textDecoration: "none",
-              }}
-            >
-              <TwitterIcon />
-            </a>
-            <a
-              href="https://www.whatsapp.com"
-              style={{
-                margin: "0 10px",
-                color: blackColor,
-                fontSize: "24px",
-                textDecoration: "none",
-              }}
-            >
-              <WhatsAppIcon />
-            </a>
-          </div>
-        </div>
-        <div className="row mt-2">
-          <div className="col d-flex justify-content-center">
-            <a
-              href="/privacy"
-              style={{
-                margin: "0 10px",
-                color: blackColor,
-                textDecoration: "none",
-              }}
-            >
-              Privacy
-            </a>
-            <a
-              href="/terms"
-              style={{
-                margin: "0 10px",
-                color: blackColor,
-                textDecoration: "none",
-              }}
-            >
-              Terms and Conditions
-            </a>
-            <a
-              href="/legal"
-              style={{
-                margin: "0 10px",
-                color: blackColor,
-                textDecoration: "none",
-              }}
-            >
-              Legal
-            </a>
           </div>
         </div>
       </div>

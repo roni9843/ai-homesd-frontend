@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { blackColor, whiteColor, whiteColor_v_3 } from "../../../color";
 import checkGif from "../../../public/check.gif";
 import { clearCart } from "../redux/userSlice";
 
@@ -29,8 +28,6 @@ export default function CheckoutPage() {
     setUserEmailState(userInfo?.email);
     setUserNameState(userInfo?.phoneNumber);
 
-    console.log("==> ", userInfo);
-
     if (userInfo?.id) {
       fetchUserInfo(userInfo.id);
     }
@@ -52,8 +49,6 @@ export default function CheckoutPage() {
     const fetchUser = await response.json();
 
     if (fetchUser) {
-      console.log("888 => ", fetchUser);
-
       setUserPhoneState(fetchUser.user.username);
       setUserEmailState(fetchUser.user.email);
       setUserNameState(fetchUser.user.phoneNumber);
@@ -120,204 +115,179 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div
-      style={{
-        margin: "0 auto",
-        padding: "20px",
-      }}
-    >
+    <div className="checkout-page">
+      <style jsx>{`
+        .checkout-page {
+          margin: 0 auto;
+          padding: 20px;
+          max-width: 600px;
+          width: 100%;
+        }
+
+        .checkout-title {
+          text-align: center;
+          color: #000;
+          margin-bottom: 20px;
+          font-size: 24px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .checkout-title-bold {
+          padding-left: 5px;
+          font-weight: bold;
+        }
+
+        .checkout-form {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .checkout-field {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .checkout-label {
+          margin-bottom: 8px;
+          color: #000;
+          font-weight: bold;
+          font-size: 15px;
+        }
+
+        .checkout-input {
+          padding: 7px;
+          border-radius: 5px;
+          font-size: 12px;
+          color: #000;
+          background-color: #f3f3f3;
+          border: none;
+        }
+
+        .checkout-textarea {
+          padding: 7px;
+          border-radius: 5px;
+          font-size: 12px;
+          color: #000;
+          background-color: #fff;
+          border: 1px solid #f3f3f3;
+          height: 100px;
+        }
+
+        .checkout-submit {
+          padding: 10px;
+          border-radius: 20px;
+          border: none;
+          background-color: #000;
+          color: #fff;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.1s ease;
+        }
+
+        .order-confirmation {
+          margin-top: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .order-confirmation-card {
+          width: 300px;
+          border-radius: 10px;
+          overflow: hidden;
+          background-color: #f8faf6;
+          border: none;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .order-status {
+          text-align: center;
+          margin-top: 20px;
+          color: #000;
+          font-weight: bold;
+          font-size: 16px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+          .checkout-title {
+            font-size: 20px;
+          }
+
+          .checkout-label {
+            font-size: 14px;
+          }
+
+          .checkout-input,
+          .checkout-textarea {
+            font-size: 14px;
+          }
+
+          .checkout-submit {
+            font-size: 14px;
+          }
+        }
+      `}</style>
+
       {userInfo && (
         <div style={{ display: `${isOrderDone ? "none" : "block"}` }}>
-          <span
-            style={{
-              textAlign: "center",
-              color: blackColor,
-              marginBottom: "20px",
-              fontSize: "24px",
-              alignItems: "center",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
+          <span className="checkout-title">
             Checkout{"  "}
-            <span className="px-1" style={{ fontWeight: "bold" }}>
-              {" "}
-              Details
-            </span>
+            <span className="checkout-title-bold">Details</span>
           </span>
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <label
-                style={{
-                  marginBottom: "8px",
-                  color: blackColor,
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                }}
-              >
-                Name:
-              </label>
+          <form onSubmit={handleSubmit} className="checkout-form">
+            <div className="checkout-field">
+              <label className="checkout-label">Name:</label>
               <input
                 type="email"
-                style={{
-                  padding: "7px",
-                  borderRadius: "5px",
-                  fontSize: "12px",
-                  color: blackColor,
-                  backgroundColor: whiteColor_v_3,
-                  border: "none",
-                }}
+                className="checkout-input"
                 value={userNameState}
                 readOnly
               />
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <label
-                style={{
-                  marginBottom: "8px",
-                  color: blackColor,
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                }}
-              >
-                Email:
-              </label>
+            <div className="checkout-field">
+              <label className="checkout-label">Email:</label>
               <input
                 type="email"
-                style={{
-                  padding: "7px",
-                  borderRadius: "5px",
-                  fontSize: "12px",
-                  color: blackColor,
-                  backgroundColor: whiteColor_v_3,
-                  border: "none",
-                }}
+                className="checkout-input"
                 value={userEmailState}
                 readOnly
               />
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <label
-                style={{
-                  marginBottom: "8px",
-                  color: blackColor,
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                }}
-              >
-                Phone Number:
-              </label>
+            <div className="checkout-field">
+              <label className="checkout-label">Phone Number:</label>
               <input
                 type="text"
                 value={userPhoneState}
                 readOnly
-                style={{
-                  padding: "7px",
-                  borderRadius: "5px",
-                  fontSize: "12px",
-                  color: blackColor,
-                  backgroundColor: whiteColor_v_3,
-                  border: "none",
-                }}
+                className="checkout-input"
               />
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <label
-                style={{
-                  marginBottom: "8px",
-                  color: blackColor,
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                }}
-              >
-                Address:
-              </label>
+            <div className="checkout-field">
+              <label className="checkout-label">Address:</label>
               <textarea
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 required
-                style={{
-                  padding: "7px",
-                  borderRadius: "5px",
-                  fontSize: "12px",
-                  color: blackColor,
-                  backgroundColor: whiteColor,
-                  border: `1px solid ${whiteColor_v_3}`,
-                  height: "100px",
-                }}
+                className="checkout-textarea"
               />
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <label
-                style={{
-                  marginBottom: "8px",
-                  color: "#333",
-                  fontWeight: "bold",
-                  fontSize: "16px",
-                }}
-              >
-                Payment Method:
-              </label>
+            <div className="checkout-field">
+              <label className="checkout-label">Payment Method:</label>
               <input
                 type="text"
                 value="Cash on Delivery"
                 readOnly
-                style={{
-                  padding: "10px",
-                  borderRadius: "6px",
-                  border: "1px solid #ccc",
-                  fontSize: "16px",
-                  color: "#333",
-                }}
+                className="checkout-input"
               />
             </div>
-            <button
-              type="submit"
-              className="btn btn-success btn-block button-opacity"
-              style={{
-                padding: "10px",
-                borderRadius: "20px",
-                border: "none",
-                backgroundColor: blackColor,
-                color: whiteColor,
-                fontSize: "16px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                transition: "background-color 0.3s, transform 0.1s ease", // Enhanced transition
-              }}
-            >
+            <button type="submit" className="checkout-submit">
               Place Order
             </button>
           </form>
@@ -325,23 +295,12 @@ export default function CheckoutPage() {
       )}
 
       {isOrderDone && (
-        <div className="mt-5 pt-5 d-flex justify-content-center align-items-center ">
-          <div
-            className="card align-items-center"
-            style={{
-              width: "300px",
-              borderRadius: "10px",
-              overflow: "hidden",
-
-              backgroundColor: "#f8faf6",
-              border: "none",
-            }}
-          >
+        <div className="order-confirmation">
+          <div className="order-confirmation-card">
             <Image
               unoptimized
               src={checkGif}
               alt="Order Confirmed"
-              //   layout="fill"
               objectFit="cover"
               width={100}
               height={100}
@@ -356,19 +315,7 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      {orderStatus && (
-        <p
-          style={{
-            textAlign: "center",
-            marginTop: "20px",
-            color: blackColor,
-            fontWeight: "bold",
-            fontSize: "16px",
-          }}
-        >
-          {orderStatus}
-        </p>
-      )}
+      {orderStatus && <p className="order-status">{orderStatus}</p>}
     </div>
   );
 }

@@ -58,74 +58,6 @@ export default function CartPage() {
           <div className="row px-0 mx-0">
             <div className="col-12 col-md-6 col-lg-6">
               <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: 14,
-                }}
-              >
-                <span>Subtotal : </span>
-                <span style={{ fontWeight: "bold" }}>
-                  €{totalPrice.toFixed(2)}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: 14,
-                }}
-              >
-                <span>Delivery Fee : </span>
-                <span style={{ fontWeight: "bold" }}>€5.00</span>
-              </div>
-              <div>
-                <div
-                  className="my-3"
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <button
-                    className="btn   button-opacityNormal"
-                    onClick={handleOrder}
-                    style={{
-                      backgroundColor: blackColor,
-                      padding: "10px 15px",
-                      borderRadius: "25px",
-                      color: whiteColor,
-                      fontSize: 16,
-                      fontWeight: "bold",
-                      cursor: "pointer", // Added cursor style
-                      transition:
-                        "background-color 0.3s ease, transform 0.1s ease", // Enhanced transition
-                    }}
-                  >
-                    Checkout for €{totalPrice.toFixed(2)}
-                  </button>
-                </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: 14,
-                }}
-              >
-                <span>Cash On Delivery (COD)</span>
-              </div>
-              <div
-                className="my-4"
-                style={{
-                  height: "5px",
-                  width: "100%",
-                  backgroundColor: whiteColor_v_3,
-                }}
-              ></div>
-            </div>
-            <div className="col-12 col-md-6 col-lg-6">
-              <div
                 className="mb-3"
                 style={{ textAlign: "center", fontSize: "24px" }}
               >
@@ -215,7 +147,7 @@ export default function CartPage() {
                                 fontWeight: "bold",
                               }}
                             >
-                              €{item.productRegularPrice.toFixed(2)}
+                              ৳{item.productRegularPrice.toFixed(2)}
                             </span>
                           </div>
                           <div
@@ -263,6 +195,83 @@ export default function CartPage() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            <div className="col-12 col-md-6 col-lg-6">
+              <div
+                className="my-4"
+                style={{
+                  height: "5px",
+                  width: "100%",
+                  backgroundColor: whiteColor_v_3,
+                }}
+              ></div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: 14,
+                }}
+              >
+                <span>Subtotal : </span>
+                <span style={{ fontWeight: "bold" }}>
+                  ৳{totalPrice.toFixed(2)}
+                </span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: 14,
+                }}
+              >
+                <span>Delivery Fee : </span>
+                <span style={{ fontWeight: "bold" }}>৳5.00</span>
+              </div>
+              <div>
+                <div
+                  className="my-3"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <button
+                    className="btn   button-opacityNormal"
+                    onClick={handleOrder}
+                    style={{
+                      backgroundColor: blackColor,
+                      padding: "10px 15px",
+                      borderRadius: "25px",
+                      color: whiteColor,
+                      fontSize: 16,
+                      fontWeight: "bold",
+                      cursor: "pointer", // Added cursor style
+                      transition:
+                        "background-color 0.3s ease, transform 0.1s ease", // Enhanced transition
+                    }}
+                  >
+                    Checkout for ৳{totalPrice.toFixed(2)}
+                  </button>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  fontSize: 14,
+                }}
+              >
+                <span>Cash On Delivery (COD)</span>
+              </div>
+              <div
+                className="my-4"
+                style={{
+                  height: "5px",
+                  width: "100%",
+                  backgroundColor: whiteColor_v_3,
+                }}
+              ></div>
             </div>
           </div>
         </div>

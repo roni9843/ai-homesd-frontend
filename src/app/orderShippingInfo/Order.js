@@ -16,7 +16,6 @@ import Image from "next/image";
 import PropTypes from "prop-types";
 import {
   blackColor,
-  grayColor,
   redColor,
   whiteColor,
   whiteColor_v_3,
@@ -112,23 +111,45 @@ export default function Order({ orderDetails, userInfo }) {
     }
   };
 
+  <style jsx>{`
+    @media (min-width: 576px) {
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+
+    @media (min-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+
+    @media (min-width: 992px) {
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+  `}</style>;
+
   return (
-    <div>
-      <div style={{ padding: 20 }}>
-        <div
-          className="p-2"
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ padding: "10px", textAlign: "center" }}>
           <span style={{ fontSize: "24px" }}>
             Shipping <span style={{ fontWeight: "bold" }}>Information</span>
           </span>
         </div>
-        <div className="pt-3" style={{ fontSize: "12px" }}>
+        <div style={{ fontSize: "12px", textAlign: "center" }}>
           <span>
             Order date: {new Date(orderDetails.orderDate).toLocaleDateString()}
           </span>
-        </div>
-        <div style={{ fontSize: "12px" }}>
+          <br />
           <span>
             Estimated delivery:{" "}
             {new Date(
@@ -137,20 +158,22 @@ export default function Order({ orderDetails, userInfo }) {
               )
             ).toLocaleDateString()}
           </span>
-        </div>
-        <div style={{ fontSize: "12px" }}>
+          <br />
           <span>
             Order Id:{" "}
-            <span style={{ fontWeight: "bold" }}>{orderDetails.orderId}</span>{" "}
+            <span style={{ fontWeight: "bold" }}>{orderDetails.orderId}</span>
           </span>
         </div>
 
         <div
-          className="p-2 m-1 mt-2"
           style={{
+            padding: "10px",
+            margin: "10px",
             backgroundColor: whiteColor_v_3,
             borderRadius: "5px",
             fontSize: "13px",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
           <div>
@@ -159,32 +182,38 @@ export default function Order({ orderDetails, userInfo }) {
             </span>
           </div>
           <div>
-            <span>Name : {userInfo.username}</span>
+            <span>Name: {userInfo.username}</span>
           </div>
           <div>
-            <span>Email : {userInfo.email}</span>
+            <span>Email: {userInfo.email}</span>
           </div>
           <div>
-            <span>Phone : {userInfo.phoneNumber} </span>
+            <span>Phone: {userInfo.phoneNumber}</span>
           </div>
-
           <div>
-            <span>Address : {orderDetails.address}</span>
+            <span>Address: {orderDetails.address}</span>
           </div>
           <div>
             <span style={{ fontWeight: "bold" }}>
-              Payment Method : {orderDetails.paymentMethod}
+              Payment Method: {orderDetails.paymentMethod}
             </span>
+          </div>
+          <div
+            style={{
+              //textAlign: "left",
+              fontWeight: "bold",
+              fontSize: "15px",
+              marginTop: "20px",
+            }}
+          >
+            Total: ৳{orderDetails.totalAmount}
           </div>
         </div>
       </div>
 
       {orderDetails.status === "Cancelled" ? (
-        <div
-          className="d-flex justify-content-center"
-          style={{ color: redColor }}
-        >
-          This order was Cancelled{" "}
+        <div style={{ textAlign: "center", color: redColor }}>
+          This order was Cancelled
         </div>
       ) : (
         <Stack sx={{ width: "100%" }} spacing={4}>
@@ -207,16 +236,11 @@ export default function Order({ orderDetails, userInfo }) {
         </Stack>
       )}
 
-      <div style={{ padding: 20 }}>
+      <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
         <h4>Products</h4>
-        {orderDetails.products.map((item, index) => (
-          <div key={index}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
+        <div className="row">
+          {orderDetails.products.map((item, index) => (
+            <div key={index} className="col-6 col-md-3 col-lg-3 ">
               <Image
                 unoptimized
                 src={item.product.images[0]}
@@ -228,83 +252,21 @@ export default function Order({ orderDetails, userInfo }) {
                   height: "100px",
                   objectFit: "cover",
                   borderRadius: "8px",
-                  marginRight: "20px",
                 }}
               />
-              <div style={{ flex: 1 }}>
-                <div className="align-self-start">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <span style={{ fontSize: "14px" }}>
-                      {item.product.productName}
-                    </span>
-                  </div>
-                  <div>
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        color: grayColor,
-                      }}
-                    >
-                      Qty : {item.qty}
-                    </span>
-                  </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "14px" }}>
+                  {item.product.productName}
                 </div>
-                <div
-                  className="align-self-end"
-                  style={{
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div
-                    className="d-flex d-flex align-items-end"
-                    style={{ justifyContent: "space-between" }}
-                  >
-                    <div>
-                      <span
-                        style={{
-                          margin: "0 0 10px 0",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        €{item.product.productRegularPrice.toFixed(2)}
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                      }}
-                    >
-                      <span
-                        style={{ fontSize: "16px", fontWeight: "bold" }}
-                      ></span>
-                    </div>
-                  </div>
+                <div style={{ fontSize: "11px", color: "#888" }}>
+                  Qty: {item.qty}
+                </div>
+                <div style={{ fontWeight: "bold", fontSize: "16px" }}>
+                  ৳{item.product.productRegularPrice.toFixed(2)}
                 </div>
               </div>
             </div>
-
-            <div
-              className="my-2"
-              style={{
-                height: "2px",
-                width: "100%",
-                backgroundColor: whiteColor_v_3,
-              }}
-            ></div>
-          </div>
-        ))}
-
-        <div style={{ textAlign: "right" }}>
-          <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-            Total : €{orderDetails.totalAmount}
-          </span>
+          ))}
         </div>
       </div>
     </div>
