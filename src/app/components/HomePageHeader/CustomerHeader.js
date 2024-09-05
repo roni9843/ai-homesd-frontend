@@ -134,6 +134,7 @@ export default function CustomerHeader() {
         <Typography
           //    onClick={() => router.push(`/`)}
           variant="h6"
+          sx={{ cursor: "pointer" }}
 
           //onClick={handleMenuClose}
         >
@@ -153,10 +154,18 @@ export default function CustomerHeader() {
         <Typography variant="h6">ALL FOOD</Typography>
         <ArrowDropDownIcon />
       </Box>
-      <Typography variant="h6" onClick={() => router.push(`/about`)}>
+      <Typography
+        sx={{ cursor: "pointer" }}
+        variant="h6"
+        onClick={() => router.push(`/about`)}
+      >
         ABOUT
       </Typography>
-      <Typography variant="h6" onClick={() => router.push(`/contact`)}>
+      <Typography
+        sx={{ cursor: "pointer" }}
+        variant="h6"
+        onClick={() => router.push(`/contact`)}
+      >
         CONTACT
       </Typography>
 
@@ -255,6 +264,7 @@ export default function CustomerHeader() {
               alignItems: "center",
               justifyContent: isMobile ? "center" : "flex-start", // Center logo on mobile
               width: isMobile ? "100%" : "auto", // Take full width on mobile
+              cursor: "pointer",
             }}
           >
             <Image
@@ -284,6 +294,7 @@ export default function CustomerHeader() {
                     color: "black",
                     fontWeight: "bold",
                     fontSize: "14px",
+                    cursor: "pointer",
                   }}
                 >
                   HOME
@@ -313,14 +324,24 @@ export default function CustomerHeader() {
                 <Typography
                   onClick={() => router.push(`/about`)}
                   variant="body1"
-                  sx={{ color: "#000", fontWeight: "bold", fontSize: "14px" }}
+                  sx={{
+                    color: "#000",
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                  }}
                 >
                   ABOUT
                 </Typography>
                 <Typography
                   onClick={() => router.push(`/contact`)}
                   variant="body1"
-                  sx={{ color: "#000", fontWeight: "bold", fontSize: "14px" }}
+                  sx={{
+                    color: "#000",
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                  }}
                 >
                   CONTACT
                 </Typography>
@@ -384,7 +405,12 @@ export default function CustomerHeader() {
           </Link>
         </Box>
         <div
-          style={{ marginLeft: "10px", display: "flex", alignItems: "center" }}
+          style={{
+            marginLeft: "10px",
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
           onClick={() => handleButtonClick("orderShippingInfo")}
         >
           <LocalMallIcon style={{ fontSize: "20px", color: blackColor }} />

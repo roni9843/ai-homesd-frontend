@@ -150,11 +150,12 @@ export default function SingleProductPage({ productData }) {
             {/* PDF Download Section */}
 
             {/* Short Description Section */}
-            {productData.shortDescription !== "" && (
-              <div style={{ marginBottom: 20 }}>
-                <p>{productData.shortDescription}</p>
-              </div>
-            )}
+            {productData?.shortDescription &&
+              productData.shortDescription !== "" && (
+                <div style={{ marginBottom: 20 }}>
+                  <p>{productData.shortDescription}</p>
+                </div>
+              )}
 
             {/* Additional Info Section */}
 
@@ -226,53 +227,54 @@ export default function SingleProductPage({ productData }) {
             </button>
           </Box>
 
-          {productData.productYoutubeLink !== "" && (
-            <div
-              style={{
-                marginTop: 20,
-                display:
-                  productData.productYoutubeLink !== "" ? "none" : "block",
-              }}
-            >
-              <iframe
-                width="100%"
-                //    height="315"
-                src={productData.productYoutubeLink}
-                title="Product Video"
-                frameBorder="0"
-                allowFullScreen
-              ></iframe>
-            </div>
-          )}
-
-          {productData.pdfFileName !== "" ||
-            (productData.pdfFileName !== undefined && (
+          {productData?.productYoutubeLink &&
+            productData.productYoutubeLink !== "" && (
               <div
                 style={{
-                  display: "flex",
                   marginTop: 20,
-                  justifyContent: "center",
+                  display:
+                    productData.productYoutubeLink !== "" ? "block" : "none",
                 }}
               >
-                <a
-                  href={`https://backend.aihomesd.com/controller/uploads/${productData.pdfFileName}`}
-                  download
-                >
-                  <button
-                    style={{
-                      backgroundColor: blackColor,
-                      color: whiteColor,
-                      border: "none",
-                      padding: "5px 20px",
-                      borderRadius: 5,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Download PDF
-                  </button>
-                </a>
+                <iframe
+                  width="100%"
+                  //    height="315"
+                  src={productData.productYoutubeLink}
+                  title="Product Video"
+                  frameBorder="0"
+                  allowFullScreen
+                ></iframe>
               </div>
-            ))}
+            )}
+
+          {productData?.pdfFileName && productData.pdfFileName !== "" && (
+            <div
+              style={{
+                display: "flex",
+                marginTop: 20,
+                justifyContent: "center",
+              }}
+            >
+              {console.log("this is pdf -> ", productData.pdfFileName)}
+              <a
+                href={`https://backend.aihomesd.com/controller/uploads/${productData.pdfFileName}`}
+                download
+              >
+                <button
+                  style={{
+                    backgroundColor: blackColor,
+                    color: whiteColor,
+                    border: "none",
+                    padding: "5px 20px",
+                    borderRadius: 5,
+                    cursor: "pointer",
+                  }}
+                >
+                  Download PDF
+                </button>
+              </a>
+            </div>
+          )}
 
           <Box
             sx={{
