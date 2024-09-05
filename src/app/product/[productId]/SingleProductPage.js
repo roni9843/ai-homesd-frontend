@@ -150,14 +150,11 @@ export default function SingleProductPage({ productData }) {
             {/* PDF Download Section */}
 
             {/* Short Description Section */}
-            <div style={{ marginBottom: 20 }}>
-              <p>
-                ঘিয়ের ভিটামিন ‘কে’ ক্যালসিয়ামের সঙ্গে মিলে হাড়ের স্বাস্থ্য ও গঠন
-                বজায় রাখে। স্বাস্থ্যকর ইনসুলিন ও শর্করার মাত্রা বজায় রাখতে কাজে
-                লাগে ভিটামিন ‘কে।” বলেন চ্যাডউইক। ঘিতে যেসব ভিটামিন রয়েছে -এ,
-                ডি, ই এবং কে, যা আমাদের হৃৎপিন্ড,হাড়ের জন্য খুব উপকারী। এই ঘিয়ের
-              </p>
-            </div>
+            {productData.shortDescription !== "" && (
+              <div style={{ marginBottom: 20 }}>
+                <p>{productData.shortDescription}</p>
+              </div>
+            )}
 
             {/* Additional Info Section */}
 
@@ -228,34 +225,54 @@ export default function SingleProductPage({ productData }) {
               Buy Now
             </button>
           </Box>
-          <div style={{ marginTop: 20 }}>
-            <iframe
-              width="100%"
-              //    height="315"
-              src={
-                "https://www.youtube.com/embed/6stlCkUDG_s?si=0Uf4U0Z-YkPro59I"
-              }
-              title="Product Video"
-              frameBorder="0"
-              allowFullScreen
-            ></iframe>
-            <div>
-              <a href={productData.pdfLink} download>
-                <button
-                  style={{
-                    backgroundColor: blackColor,
-                    color: whiteColor,
-                    border: "none",
-                    padding: "10px 20px",
-                    borderRadius: 5,
-                    cursor: "pointer",
-                  }}
-                >
-                  Download Product PDF
-                </button>
-              </a>
+
+          {productData.productYoutubeLink !== "" && (
+            <div
+              style={{
+                marginTop: 20,
+                display:
+                  productData.productYoutubeLink !== "" ? "none" : "block",
+              }}
+            >
+              <iframe
+                width="100%"
+                //    height="315"
+                src={productData.productYoutubeLink}
+                title="Product Video"
+                frameBorder="0"
+                allowFullScreen
+              ></iframe>
             </div>
-          </div>
+          )}
+
+          {productData.pdfFileName !== "" ||
+            (productData.pdfFileName !== undefined && (
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: 20,
+                  justifyContent: "center",
+                }}
+              >
+                <a
+                  href={`https://backend.aihomesd.com/controller/uploads/${productData.pdfFileName}`}
+                  download
+                >
+                  <button
+                    style={{
+                      backgroundColor: blackColor,
+                      color: whiteColor,
+                      border: "none",
+                      padding: "5px 20px",
+                      borderRadius: 5,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Download PDF
+                  </button>
+                </a>
+              </div>
+            ))}
 
           <Box
             sx={{
@@ -293,7 +310,7 @@ export default function SingleProductPage({ productData }) {
             </Tabs>
 
             <Box sx={{ p: 3 }}>
-              {value === 0 && (
+              {value === 0 && productData.productDescription !== "" && (
                 <div>
                   <div
                     style={{
@@ -341,7 +358,58 @@ export default function SingleProductPage({ productData }) {
                 <Typography variant="body1">
                   {/* Add your additional information content here */}
 
-                  <p>Weight : 200 kg</p>
+                  {productData.additionalInfo !== "" && (
+                    <div>
+                      <div
+                        style={{
+                          position: "relative",
+                          height: showMore ? "auto" : 100,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: productData.additionalInfo,
+                          }}
+                        />
+                        {!showMore && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              bottom: 0,
+                              left: 0,
+                              width: "100%",
+                              height: 100,
+                              background: `linear-gradient(to bottom, rgba(255, 255, 255, 0), ${whiteColor_v_2})`,
+                            }}
+                          />
+                        )}
+                      </div>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          mt: 2,
+                        }}
+                      >
+                        <Button
+                          onClick={handleShowMore}
+                          variant="outlined"
+                          size="small"
+                          sx={{
+                            color: "#FFA500", // Text color
+                            borderColor: "#FFA500", // Border color
+                            "&:hover": {
+                              borderColor: "#FFA500", // Border color on hover
+                              backgroundColor: "rgba(255, 165, 0, 0.1)", // Light orange background on hover
+                            },
+                          }}
+                        >
+                          {showMore ? "Show Less" : "Show More"}
+                        </Button>
+                      </Box>
+                    </div>
+                  )}
                 </Typography>
               )}
             </Box>
@@ -377,6 +445,7 @@ export default function SingleProductPage({ productData }) {
                 display: "flex",
                 alignItems: "center",
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Shadow for button
+                transition: "transform 0.1s ease, box-shadow 0.1s ease",
                 "&:hover": {
                   backgroundColor: blackColor,
                   boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)", // Darker shadow on hover
@@ -384,6 +453,7 @@ export default function SingleProductPage({ productData }) {
                 "&:active": {
                   backgroundColor: blackColor,
                   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", // Shadow effect on click
+                  transform: "scale(0.80)", // Slightly reduce size on click
                 },
                 "&:focus": {
                   backgroundColor: blackColor,
@@ -412,13 +482,17 @@ export default function SingleProductPage({ productData }) {
                 display: "flex",
                 alignItems: "center",
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Shadow for button
+                transition: "background-color 0.3s ease, transform 0.1s ease",
                 "&:hover": {
                   backgroundColor: "#FF8C00",
                   boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)", // Darker shadow on hover
+                  color: whiteColor,
                 },
                 "&:active": {
                   backgroundColor: "#FF8C00",
                   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", // Shadow effect on click
+                  transform: "scale(0.80)", // Slightly reduce size on click
+                  color: whiteColor,
                 },
               }}
               onClick={() => {

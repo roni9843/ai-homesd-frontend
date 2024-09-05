@@ -8,7 +8,7 @@ const Footer = () => {
     <footer
       style={{
         padding: "40px 0",
-        backgroundColor: "#D18D33", // Similar background color
+        backgroundColor: "#454545", // Similar background color
         color: "white",
       }}
     >

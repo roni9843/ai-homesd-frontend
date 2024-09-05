@@ -34,9 +34,7 @@ export default function ProductHorizontal({ title, p }) {
                 <div className={styles.imageContainer}>
                   <Image
                     unoptimized
-                    src={
-                      "https://i.ibb.co/mF1fnmf/Ghee-HF-Food-Service-1536x1536.jpg"
-                    }
+                    src={p.images[0]}
                     alt={p.productName}
                     layout="responsive"
                     width={200}
