@@ -4,8 +4,6 @@ import { Box } from "@mui/material";
 import { Provider } from "react-redux";
 import { whiteColor_v_2 } from "../../color";
 import CategoryProductList from "./components/CategoryProductList";
-import DiscoverMoreTitle from "./components/DiscoverMoreTitle/DiscoverMoreTitle";
-import ExclusiveItemsPoster from "./components/ExclusiveItemsPoster/ExclusiveItemsPoster";
 import Footer from "./components/Footer/Footer";
 import HomePageBanner from "./components/HomePageBanner/HomePageBanner";
 import CustomerHeader from "./components/HomePageHeader/CustomerHeader";
@@ -49,9 +47,6 @@ const Home = () => {
         <NewArrivalsUiSection />
 
         <CategoryProductList />
-        <DiscoverMoreTitle />
-
-        <ExclusiveItemsPoster />
 
         <Box className="mt-5">
           <Footer />
@@ -68,3 +63,5 @@ export default Home;
 //    <SinglePoster ImageLink={"https://i.ibb.co/Kssr3Qz/Group-11.png"} />
 //    <WeeklyOffers />
 //   <ProductListUiComponent />
+//  <DiscoverMoreTitle />
+//  <ExclusiveItemsPoster />

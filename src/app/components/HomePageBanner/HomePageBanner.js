@@ -16,7 +16,7 @@ export default function HomePageBanner() {
           <div style={{ width: "100%" }}>
             <Image
               unoptimized
-              src="https://i.ibb.co/y6tP9qM/Group-4.png" // Change to local image
+              src="https://i.ibb.co/ZXsv66y/BLACK-FRIDAY-SPLASH-BANNER-01.jpg" // Change to local image
               alt="Moto Logo"
               layout="responsive"
               width={100}

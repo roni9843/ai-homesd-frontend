@@ -151,7 +151,7 @@ export default function CustomerHeader() {
         }}
         onClick={handleMenuClick}
       >
-        <Typography variant="h6">ALL FOOD</Typography>
+        <Typography variant="h6">ALL Product</Typography>
         <ArrowDropDownIcon />
       </Box>
       <Typography
@@ -215,7 +215,7 @@ export default function CustomerHeader() {
       width: isSmallScreen ? "25px" : "25px",
       height: isSmallScreen ? "25px" : "25px",
       borderRadius: "50%",
-      backgroundColor: "#007bff",
+      backgroundColor: "black",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -317,7 +317,7 @@ export default function CustomerHeader() {
                       fontSize: "14px",
                     }}
                   >
-                    ALL FOOD
+                    ALL Product
                   </Typography>
                   <ArrowDropDownIcon sx={{ color: "#000" }} />
                 </Box>
@@ -399,7 +399,16 @@ export default function CustomerHeader() {
             href="/productCart"
             style={{ textDecoration: "none", color: blackColor }}
           >
-            <Badge badgeContent={totalQuantity} color="secondary">
+            <Badge
+              badgeContent={totalQuantity}
+              color="secondary"
+              sx={{
+                "& .MuiBadge-badge": {
+                  backgroundColor: "black", // Change badge background color
+                  color: "white", // Change badge text color
+                },
+              }}
+            >
               <ShoppingCartIcon style={{ fontSize: "20px" }} />
             </Badge>
           </Link>
@@ -429,7 +438,18 @@ export default function CustomerHeader() {
               {userInfo.username.charAt(0)}
             </div>
           ) : (
-            <PersonIcon style={{ fontSize: "20px", color: blackColor }} />
+            <div
+              style={{
+                backgroundColor: "black", // Set background color to black
+                borderRadius: "50%", // Make it round
+                padding: "5px", // Add some padding around the icon
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <PersonIcon style={{ fontSize: "20px", color: "white" }} />
+            </div>
           )}
         </div>
       </Toolbar>

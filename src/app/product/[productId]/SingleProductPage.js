@@ -1,5 +1,4 @@
 import CategoryProductList from "@/app/components/CategoryProductList";
-import ExclusiveItemsPoster from "@/app/components/ExclusiveItemsPoster/ExclusiveItemsPoster";
 import { addToCart } from "@/app/redux/userSlice";
 import AddShoppingCartTwoToneIcon from "@mui/icons-material/AddShoppingCartTwoTone";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -47,8 +46,12 @@ export default function SingleProductPage({ productData }) {
   return (
     <>
       <Head>
-        <title>My E-commerce Site 22</title>
+        <title>{productData.productName}</title>
         <meta property="og:image" content={productData.images[0]} />
+        <meta
+          property="og:description"
+          content={productData?.shortDescription}
+        />
       </Head>
 
       <div style={{ display: "flex", flexWrap: "wrap", margin: 0, padding: 0 }}>
@@ -205,8 +208,8 @@ export default function SingleProductPage({ productData }) {
                 router.push("/productCart");
               }}
               style={{
-                border: `2px solid ${"#FFA500"}`,
-                color: "#FFA500",
+                border: `2px solid ${"black"}`,
+                color: "black",
                 padding: "12px 25px",
                 fontWeight: "bold",
                 fontSize: 16,
@@ -221,7 +224,7 @@ export default function SingleProductPage({ productData }) {
               }}
             >
               <ShoppingBasketTwoToneIcon
-                style={{ color: "#FFA500", marginRight: 8 }}
+                style={{ color: "black", marginRight: 8 }}
               />
               Buy Now
             </button>
@@ -287,7 +290,7 @@ export default function SingleProductPage({ productData }) {
               aria-label="product details tabs"
               sx={{
                 "& .MuiTabs-indicator": {
-                  backgroundColor: "#FFA500", // Changes the indicator color to red
+                  backgroundColor: "black", // Changes the indicator color to red
                 },
               }}
             >
@@ -296,7 +299,7 @@ export default function SingleProductPage({ productData }) {
                 sx={{
                   color: "black", // Default color of the tab label
                   "&.Mui-selected": {
-                    color: "#FFA500", // Color of the tab label when selected
+                    color: "black", // Color of the tab label when selected
                   },
                 }}
               />
@@ -305,7 +308,7 @@ export default function SingleProductPage({ productData }) {
                 sx={{
                   color: "black", // Default color of the tab label
                   "&.Mui-selected": {
-                    color: "#FFA500", // Color of the tab label when selected
+                    color: "black", // Color of the tab label when selected
                   },
                 }}
               />
@@ -343,15 +346,15 @@ export default function SingleProductPage({ productData }) {
                       variant="outlined"
                       size="small"
                       sx={{
-                        color: "#FFA500", // Text color
-                        borderColor: "#FFA500", // Border color
+                        color: "black", // Text color
+                        borderColor: "black", // Border color
                         "&:hover": {
-                          borderColor: "#FFA500", // Border color on hover
+                          borderColor: "black", // Border color on hover
                           backgroundColor: "rgba(255, 165, 0, 0.1)", // Light orange background on hover
                         },
                       }}
                     >
-                      {showMore ? "Show Less" : "Show More"}
+                      {showMore ? "Show less" : "Show  more"}
                     </Button>
                   </Box>
                 </div>
@@ -399,15 +402,15 @@ export default function SingleProductPage({ productData }) {
                           variant="outlined"
                           size="small"
                           sx={{
-                            color: "#FFA500", // Text color
-                            borderColor: "#FFA500", // Border color
+                            color: "black", // Text color
+                            borderColor: "black", // Border color
                             "&:hover": {
-                              borderColor: "#FFA500", // Border color on hover
+                              borderColor: "black", // Border color on hover
                               backgroundColor: "rgba(255, 165, 0, 0.1)", // Light orange background on hover
                             },
                           }}
                         >
-                          {showMore ? "Show Less" : "Show More"}
+                          {showMore ? "Show less" : "Show more"}
                         </Button>
                       </Box>
                     </div>
@@ -475,8 +478,8 @@ export default function SingleProductPage({ productData }) {
 
             <Button
               sx={{
-                border: `2px solid ${"#FFA500"}`,
-                color: "#FFA500",
+                border: `2px solid ${"black"}`,
+                color: "black",
                 padding: "12px 25px",
                 fontWeight: "bold",
                 fontSize: 16,
@@ -504,7 +507,7 @@ export default function SingleProductPage({ productData }) {
               }}
             >
               <ShoppingBasketTwoToneIcon
-                sx={{ color: "#FFA500", marginRight: 1 }}
+                sx={{ color: "black", marginRight: 1 }}
               />
               Order Now
             </Button>
@@ -519,8 +522,6 @@ export default function SingleProductPage({ productData }) {
           title="Related Products"
         />
       </div>
-      {/* Exclusive Items Section */}
-      <ExclusiveItemsPoster />
     </>
   );
 }
@@ -534,4 +535,7 @@ export default function SingleProductPage({ productData }) {
       ></SinglePoster>
 
  <ProductListUiComponent></ProductListUiComponent>
+
+  
+  <ExclusiveItemsPoster />
  *  */

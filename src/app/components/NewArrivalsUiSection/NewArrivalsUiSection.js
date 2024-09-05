@@ -4,7 +4,10 @@ import { useSelector } from "react-redux";
 import styles from "./NewArrivalsUiSection.module.css"; // Assuming you use CSS modules
 
 export default function NewArrivalsUiSection() {
-  const AllProduct = useSelector((state) => state.users.AllProduct);
+  let AllProduct = useSelector((state) => state.users.AllProduct);
+
+  AllProduct = AllProduct.slice(0, 6);
+
   const router = useRouter();
 
   return (
