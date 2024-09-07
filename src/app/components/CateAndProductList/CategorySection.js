@@ -11,9 +11,7 @@ export default function CategorySection({ selectedCategory, fetchProduct }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
-          "https://backend.aihomesd.com/getAllCategory"
-        );
+        const response = await fetch("http://localhost:8000/getAllCategory");
         if (!response.ok) {
           throw new Error(
             `Network response was not ok: ${response.statusText}`

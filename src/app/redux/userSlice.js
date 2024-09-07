@@ -4,7 +4,7 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: {
     userInfo: null, // Initialize userInfo to null
-    userEmail: null,
+    userPhone: null,
     cart: [],
     orderHistory: [],
     allCategoryWithProduct: [],
@@ -16,8 +16,8 @@ export const usersSlice = createSlice({
     setUserInfo: (state, action) => {
       state.userInfo = action.payload;
     },
-    setUserEmail: (state, action) => {
-      state.userEmail = action.payload;
+    setUserPhone: (state, action) => {
+      state.userPhone = action.payload;
     },
     addToCart: (state, action) => {
       const existingProduct = state.cart.find(
@@ -117,7 +117,7 @@ export const usersSlice = createSlice({
     },
     logOut: (state) => {
       state.userInfo = null;
-      state.userEmail = null;
+      state.userPhone = null;
       state.cart = [];
       state.orderHistory = [];
     },
@@ -126,7 +126,7 @@ export const usersSlice = createSlice({
 
 export const {
   setUserInfo,
-  setUserEmail,
+  setUserPhone,
   addToCart,
   removeFromCart,
   increaseQuantity,

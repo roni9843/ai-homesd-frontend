@@ -6,8 +6,8 @@ import usersReducer, {
   addOrderHistory,
   filterCategory,
   filterOfferProduct,
-  setUserEmail,
   setUserInfo,
+  setUserPhone,
 } from "./userSlice";
 
 // Configure store
@@ -27,7 +27,7 @@ const autoCall = async () => {
   // // ? get all product
   // await getAllCategoryWithProductFunc();
 
-  fetch("https://backend.aihomesd.com/getAllCategoryWithProducts")
+  fetch("http://localhost:8000/getAllCategoryWithProducts")
     .then((response) => response.json())
     .then((data) => {
       store.dispatch(addCategoryWithProductRedux(data.data));
@@ -48,16 +48,13 @@ const autoCall = async () => {
         const userInfo = jwtDecode(token);
 
         const fetchUserInfo = async (userId) => {
-          const response = await fetch(
-            "https://backend.aihomesd.com/getTheUser",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ id: userId }),
-            }
-          );
+          const response = await fetch("http://localhost:8000/getTheUser", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: userId }),
+          });
 
           if (!response.ok) {
             throw new Error("Failed to fetch user info");
@@ -70,7 +67,7 @@ const autoCall = async () => {
 
         if (fetchUser) {
           store.dispatch(setUserInfo(fetchUser.user));
-          store.dispatch(setUserEmail(fetchUser.user.email));
+          store.dispatch(setUserPhone(fetchUser.user.phone));
           store.dispatch(addOrderHistory(fetchUser.orderHistory));
         }
       } catch (error) {

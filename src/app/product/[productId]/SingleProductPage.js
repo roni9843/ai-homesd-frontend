@@ -260,7 +260,7 @@ export default function SingleProductPage({ productData }) {
             >
               {console.log("this is pdf -> ", productData.pdfFileName)}
               <a
-                href={`https://backend.aihomesd.com/controller/uploads/${productData.pdfFileName}`}
+                href={`http://localhost:8000/controller/uploads/${productData.pdfFileName}`}
                 download
               >
                 <button

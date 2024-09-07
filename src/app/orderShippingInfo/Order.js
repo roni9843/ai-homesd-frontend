@@ -184,9 +184,7 @@ export default function Order({ orderDetails, userInfo }) {
           <div>
             <span>Name: {userInfo.username}</span>
           </div>
-          <div>
-            <span>Email: {userInfo.email}</span>
-          </div>
+
           <div>
             <span>Phone: {userInfo.phoneNumber}</span>
           </div>

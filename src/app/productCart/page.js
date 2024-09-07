@@ -1,8 +1,10 @@
 "use client";
 
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+import CircularProgress from "@mui/material/CircularProgress"; // Importing spinner
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   blackColor,
@@ -22,6 +24,8 @@ export default function CartPage() {
   const cart = useSelector((state) => state.users.cart);
   const userInfo = useSelector((state) => state.users.userInfo);
 
+  const [loading, setLoading] = useState(false); // Loading state
+
   const handleIncrease = (id) => {
     dispatch(increaseQuantity(id));
   };
@@ -35,13 +39,15 @@ export default function CartPage() {
   };
 
   const handleOrder = () => {
-    console.log("this is product card=>", userInfo);
+    setLoading(true); // Set loading to true when order is initiated
 
     if (!userInfo) {
       router.push("/login?callbackUrl=/checkout");
     } else {
       router.push("/checkout");
     }
+
+    setLoading(false); // Reset loading state after routing
   };
 
   const totalPrice = cart.reduce(
@@ -147,7 +153,13 @@ export default function CartPage() {
                                 fontWeight: "bold",
                               }}
                             >
-                              ৳{item.productRegularPrice.toFixed(2)}
+                              ৳
+                              {item.productOffer
+                                ? (
+                                    item.productRegularPrice.toFixed(2) *
+                                    (1 - item.productOffer / 100)
+                                  ).toFixed(2)
+                                : item.productRegularPrice.toFixed(2)}
                             </span>
                           </div>
                           <div
@@ -220,7 +232,8 @@ export default function CartPage() {
               </div>
               <div
                 style={{
-                  display: "flex",
+                  display: "none",
+                  // display: "flex",
                   justifyContent: "space-between",
                   fontSize: 14,
                 }}
@@ -237,7 +250,7 @@ export default function CartPage() {
                   }}
                 >
                   <button
-                    className="btn   button-opacityNormal"
+                    className="btn button-opacityNormal"
                     onClick={handleOrder}
                     style={{
                       backgroundColor: blackColor,
@@ -246,12 +259,24 @@ export default function CartPage() {
                       color: whiteColor,
                       fontSize: 16,
                       fontWeight: "bold",
-                      cursor: "pointer", // Added cursor style
+                      cursor: "pointer",
                       transition:
-                        "background-color 0.3s ease, transform 0.1s ease", // Enhanced transition
+                        "background-color 0.3s ease, transform 0.1s ease",
+                      display: "flex", // Ensuring the spinner aligns
+                      alignItems: "center", // Aligning spinner with text
+                      justifyContent: "center",
                     }}
+                    disabled={loading} // Disable the button when loading
                   >
-                    Checkout for ৳{totalPrice.toFixed(2)}
+                    {loading ? (
+                      <CircularProgress
+                        size={20}
+                        color="inherit"
+                        style={{ marginRight: "10px" }}
+                      />
+                    ) : (
+                      `Checkout for ৳${totalPrice.toFixed(2)}`
+                    )}
                   </button>
                 </div>
               </div>

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserEmail, setUserInfo } from "../redux/userSlice";
+import { setUserInfo, setUserPhone } from "../redux/userSlice";
 
 const ProfilePage = () => {
   let userInfoRedux = useSelector((state) => state.users.userInfo);
@@ -20,7 +20,6 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfoState] = useState({
     name: userInfoRedux?.username,
-    email: userInfoRedux?.email,
     timeZone: "(GMT+6:00), Bangladesh",
     language: "English",
     phoneNumber: userInfoRedux?.phoneNumber,
@@ -50,7 +49,7 @@ const ProfilePage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("https://backend.aihomesd.com/updateUser", {
+      const response = await fetch("http://localhost:8000/updateUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +57,6 @@ const ProfilePage = () => {
         body: JSON.stringify({
           id: userInfoRedux._id,
           username: userInfo.name,
-          email: userInfo.email,
           phoneNumber: userInfo.phoneNumber,
         }),
       });
@@ -66,7 +64,7 @@ const ProfilePage = () => {
       if (response.ok) {
         const data = await response.json();
         dispatch(setUserInfo(data));
-        dispatch(setUserEmail(data.email));
+        dispatch(setUserPhone(data.phone));
         setIsEditing(false);
       } else {
         console.error("Failed to update profile", response);
@@ -180,12 +178,7 @@ const ProfilePage = () => {
             value: userInfo.name,
             editable: true,
           },
-          {
-            label: "Email",
-            name: "email",
-            value: userInfo.email,
-            editable: true,
-          },
+
           {
             label: "Time Zone",
             name: "timeZone",

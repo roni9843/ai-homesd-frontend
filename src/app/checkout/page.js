@@ -16,17 +16,17 @@ export default function CheckoutPage() {
   const [orderStatus, setOrderStatus] = useState(null);
 
   const [userNameState, setUserNameState] = useState("");
-  const [userEmailState, setUserEmailState] = useState("");
+
   const [userPhoneState, setUserPhoneState] = useState("");
 
   const [isOrderDone, setIsOrderDone] = useState(false);
-
   const [isPushBack, setIsPushBack] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // New loading state
 
   useEffect(() => {
-    setUserPhoneState(userInfo?.username);
-    setUserEmailState(userInfo?.email);
-    setUserNameState(userInfo?.phoneNumber);
+    setUserNameState(userInfo?.username);
+
+    setUserPhoneState(userInfo?.phoneNumber);
 
     if (userInfo?.id) {
       fetchUserInfo(userInfo.id);
@@ -34,7 +34,7 @@ export default function CheckoutPage() {
   }, [userInfo]);
 
   const fetchUserInfo = async (userId) => {
-    const response = await fetch("https://backend.aihomesd.com/getTheUser", {
+    const response = await fetch("http://localhost:8000/getTheUser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,12 +50,11 @@ export default function CheckoutPage() {
 
     if (fetchUser) {
       setUserPhoneState(fetchUser.user.username);
-      setUserEmailState(fetchUser.user.email);
+
       setUserNameState(fetchUser.user.phoneNumber);
     }
   };
 
-  // Effect to redirect to home if cart is empty
   useEffect(() => {
     if (isPushBack) {
       if (cart.length === 0) {
@@ -72,6 +71,8 @@ export default function CheckoutPage() {
       return;
     }
 
+    setIsLoading(true); // Start loading
+
     const orderDetails = {
       userId: userInfo._id,
       products: cart.map((item) => ({
@@ -87,7 +88,7 @@ export default function CheckoutPage() {
     };
 
     try {
-      const response = await fetch("https://backend.aihomesd.com/postOrder", {
+      const response = await fetch("http://localhost:8000/postOrder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,12 +106,15 @@ export default function CheckoutPage() {
           router.push("/orderShippingInfo");
           setIsPushBack(false);
           dispatch(clearCart());
+          setIsLoading(false); // Stop loading after redirect
         }, 3000);
       } else {
         setOrderStatus("Failed to place order.");
+        setIsLoading(false); // Stop loading on failure
       }
     } catch (error) {
       setOrderStatus("Error: " + error.message);
+      setIsLoading(false); // Stop loading on error
     }
   };
 
@@ -180,11 +184,11 @@ export default function CheckoutPage() {
           padding: 10px;
           border-radius: 20px;
           border: none;
-          background-color: #000;
+          background-color: ${isLoading ? "#ccc" : "#000"};
           color: #fff;
           font-size: 16px;
           font-weight: bold;
-          cursor: pointer;
+          cursor: ${isLoading ? "not-allowed" : "pointer"};
           transition: background-color 0.3s, transform 0.1s ease;
         }
 
@@ -212,6 +216,25 @@ export default function CheckoutPage() {
           color: #000;
           font-weight: bold;
           font-size: 16px;
+        }
+
+        .spinner {
+          width: 50px;
+          height: 50px;
+          border: 5px solid #f3f3f3;
+          border-top: 5px solid #000;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin: 20px auto;
+        }
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
 
         /* Responsive Styles */
@@ -245,21 +268,13 @@ export default function CheckoutPage() {
             <div className="checkout-field">
               <label className="checkout-label">Name:</label>
               <input
-                type="email"
+                type="text"
                 className="checkout-input"
                 value={userNameState}
                 readOnly
               />
             </div>
-            <div className="checkout-field">
-              <label className="checkout-label">Email:</label>
-              <input
-                type="email"
-                className="checkout-input"
-                value={userEmailState}
-                readOnly
-              />
-            </div>
+
             <div className="checkout-field">
               <label className="checkout-label">Phone Number:</label>
               <input
@@ -287,9 +302,16 @@ export default function CheckoutPage() {
                 className="checkout-input"
               />
             </div>
-            <button type="submit" className="checkout-submit">
-              Place Order
-            </button>
+
+            {isLoading ? (
+              <div className="spinner"></div>
+            ) : (
+              <button type="submit" className="checkout-submit">
+                Place Order
+              </button>
+            )}
+
+            <span>{orderStatus}</span>
           </form>
         </div>
       )}
@@ -297,25 +319,11 @@ export default function CheckoutPage() {
       {isOrderDone && (
         <div className="order-confirmation">
           <div className="order-confirmation-card">
-            <Image
-              unoptimized
-              src={checkGif}
-              alt="Order Confirmed"
-              objectFit="cover"
-              width={100}
-              height={100}
-              style={{ borderRadius: "5px" }}
-            />
-            <div className="card-body text-center">
-              <h5 className="card-title">Order Confirmed!</h5>
-              <p className="card-text">Thank you for your purchase.</p>
-              <p className="card-text">Please, wait a moment...</p>
-            </div>
+            <Image src={checkGif} alt="check" width={100} height={100} />
+            <span className="order-status">Order Placed Successfully!</span>
           </div>
         </div>
       )}
-
-      {orderStatus && <p className="order-status">{orderStatus}</p>}
     </div>
   );
 }

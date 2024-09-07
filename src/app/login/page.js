@@ -17,8 +17,18 @@ import { store } from "../redux/store";
 import PageState from "./PageState";
 //import { useDispatch } from "react-redux";
 import { Box } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import InfoBar from "../components/InfoBar/InfoBar";
 
 export default function page() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Scroll to the top when the page loads
+    window.scrollTo(0, 0);
+  }, [router.pathname]); // Triggers whenever the page route changes
+
   // const router = useRouter();
 
   // const [email, setEmail] = useState("");
@@ -60,6 +70,16 @@ export default function page() {
     <div>
       <Provider store={store}>
         <body style={{ backgroundColor: whiteColor_v_2 }}>
+          <Box
+            component="main"
+            sx={{
+              backgroundColor: whiteColor_v_2,
+              padding: { xs: "0", lg: "5px 50px" }, // No padding on small screens, padding on large screens
+              backgroundColor: "black",
+            }}
+          >
+            <InfoBar />
+          </Box>
           <Box
             component="main"
             sx={{

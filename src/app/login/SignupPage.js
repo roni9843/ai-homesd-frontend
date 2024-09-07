@@ -11,14 +11,13 @@ import {
   whiteColor_v_2,
   whiteColor_v_3,
 } from "../../../color";
-import { setUserEmail, setUserInfo } from "../redux/userSlice";
+import { setUserInfo, setUserPhone } from "../redux/userSlice";
 
 export default function SignupPage({ setAuthState }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -26,10 +25,9 @@ export default function SignupPage({ setAuthState }) {
     e.preventDefault();
     setError(""); // Reset error message
     try {
-      const { data } = await axios.post("https://backend.aihomesd.com/signup", {
+      const { data } = await axios.post("http://localhost:8000/signup", {
         username: username,
         phoneNumber: phoneNumber,
-        email: email,
         password: password,
       });
 
@@ -49,16 +47,13 @@ export default function SignupPage({ setAuthState }) {
       console.log("this is decoad ", token);
 
       const fetchUserInfo = async (userId) => {
-        const response = await fetch(
-          "https://backend.aihomesd.com/getTheUser",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: userId }),
-          }
-        );
+        const response = await fetch("http://localhost:8000/getTheUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: userId }),
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch user info");
@@ -70,7 +65,7 @@ export default function SignupPage({ setAuthState }) {
           console.log("this is fetch ", fetchUser);
 
           dispatch(setUserInfo(fetchUser.user));
-          dispatch(setUserEmail(fetchUser.user.email));
+          dispatch(setUserPhone(fetchUser.user.phone));
 
           // Redirect to the intended page or default to home
           const callbackUrl =
@@ -161,25 +156,7 @@ export default function SignupPage({ setAuthState }) {
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
-          <div style={{ marginBottom: "20px" }}>
-            <input
-              type="email"
-              id="email"
-              className="form-control"
-              style={{
-                backgroundColor: whiteColor,
-                borderColor: whiteColor_v_3,
-                color: grayColor,
-                borderRadius: "5px",
-                padding: "10px",
-                width: "100%",
-                border: `1px solid ${whiteColor_v_3}`,
-              }}
-              placeholder="email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+
           <div style={{ marginBottom: "20px" }}>
             <input
               type="password"
@@ -225,7 +202,7 @@ export default function SignupPage({ setAuthState }) {
 
               setAuthState("Login");
             }}
-            style={{ color: "#333", fontWeight: "bold" }}
+            style={{ color: "#333", fontWeight: "bold", cursor: "pointer" }}
           >
             Log In
           </span>

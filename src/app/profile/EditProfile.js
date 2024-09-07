@@ -5,13 +5,13 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { whiteColor_v_2 } from "../../../color";
-import { setUserEmail, setUserInfo } from "../redux/userSlice";
+import { setUserInfo, setUserPhone } from "../redux/userSlice";
 
 export default function EditProfile({ setPageState }) {
   const userInfo = useSelector((state) => state.users.userInfo);
   const dispatch = useDispatch();
   const [username, setUsername] = useState(userInfo?.username);
-  const [email, setEmail] = useState(userInfo?.email);
+
   const [phoneNumber, setPhoneNumber] = useState(userInfo?.phoneNumber);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -43,7 +43,7 @@ export default function EditProfile({ setPageState }) {
     event.preventDefault();
 
     try {
-      const response = await fetch("https://backend.aihomesd.com/updateUser", {
+      const response = await fetch("http://localhost:8000/updateUser", {
         method: "POST", // Use POST method
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,6 @@ export default function EditProfile({ setPageState }) {
         body: JSON.stringify({
           id: userInfo._id,
           username: username,
-          email: email,
           phoneNumber: phoneNumber,
         }),
       });
@@ -62,7 +61,7 @@ export default function EditProfile({ setPageState }) {
         console.log("Profile updated successfully", data);
 
         dispatch(setUserInfo(data));
-        dispatch(setUserEmail(data.email));
+        dispatch(setUserPhone(data.phone));
 
         setPageState("Profile");
 
@@ -200,20 +199,7 @@ export default function EditProfile({ setPageState }) {
             </div>
           </div>
         </div>
-        <div style={profileStyles.formGroup}>
-          <label style={profileStyles.formLabel}>Email</label>
-          <div style={profileStyles.inputGroup}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={profileStyles.formControl}
-            />
-            <div style={profileStyles.inputGroupText}>
-              <EditIcon style={profileStyles.editIcon} />
-            </div>
-          </div>
-        </div>
+
         <div style={profileStyles.formGroup}>
           <label style={profileStyles.formLabel}>Phone</label>
           <div style={profileStyles.inputGroup}>

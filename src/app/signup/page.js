@@ -1,5 +1,6 @@
 "use client";
 
+import CircularProgress from "@mui/material/CircularProgress"; // Import loading spinner from MUI
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,26 +12,26 @@ import {
   whiteColor_v_2,
   whiteColor_v_3,
 } from "../../../color";
-import { setUserEmail, setUserInfo } from "../redux/userSlice";
+import { setUserInfo, setUserPhone } from "../redux/userSlice";
 
 export default function SignupPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // For loading state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Reset error message
+    setLoading(true); // Show loading spinner
     try {
-      const { data } = await axios.post("https://backend.aihomesd.com/signup", {
-        username: username,
-        phoneNumber: phoneNumber,
-        email: email,
-        password: password,
+      const { data } = await axios.post("http://localhost:8000/signup", {
+        username,
+        phoneNumber,
+        password,
       });
 
       const { token } = data;
@@ -40,22 +41,15 @@ export default function SignupPage() {
 
       document.cookie = `token=${token}`;
 
-      // Decode token to get user info
-      //const userInfo = await jwtDecode(token);
-
-      console.log("this is decoad ", token);
-
+      // Fetch user info
       const fetchUserInfo = async (userId) => {
-        const response = await fetch(
-          "https://backend.aihomesd.com/getTheUser",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: userId }),
-          }
-        );
+        const response = await fetch("http://localhost:8000/getTheUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: userId }),
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch user info");
@@ -64,25 +58,27 @@ export default function SignupPage() {
         const fetchUser = await response.json();
 
         if (fetchUser) {
-          console.log("this is fetch ", fetchUser);
-
           dispatch(setUserInfo(fetchUser.user));
-          dispatch(setUserEmail(fetchUser.user.email));
+          dispatch(setUserPhone(fetchUser.user.phone));
 
           // Redirect to the intended page or default to home
           const callbackUrl =
             new URLSearchParams(window.location.search).get("callbackUrl") ||
             "/";
-
           router.push(callbackUrl);
         }
       };
 
       fetchUserInfo(token.id);
     } catch (error) {
-      console.log("this is signup  error-> ", error);
-      setError("Error signing up. Please try again.");
-      console.error("Error signing up:", error);
+      // Handle error and display error message
+      if (error.response && error.response.data.message) {
+        setError(error.response.data.message); // Display backend error message
+      } else {
+        setError("Error signing up. Please try again.");
+      }
+    } finally {
+      setLoading(false); // Hide loading spinner
     }
   };
 
@@ -160,25 +156,6 @@ export default function SignupPage() {
           </div>
           <div style={{ marginBottom: "20px" }}>
             <input
-              type="email"
-              id="email"
-              className="form-control"
-              style={{
-                backgroundColor: whiteColor,
-                borderColor: whiteColor_v_3,
-                color: grayColor,
-                borderRadius: "5px",
-                padding: "10px",
-                width: "100%",
-                border: `1px solid ${whiteColor_v_3}`,
-              }}
-              placeholder="email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div style={{ marginBottom: "20px" }}>
-            <input
               type="password"
               id="password"
               className="form-control"
@@ -199,6 +176,7 @@ export default function SignupPage() {
           <button
             className="btn btn-success btn-block button-opacity"
             type="submit"
+            disabled={loading} // Disable button when loading
             style={{
               backgroundColor: "#000",
               borderColor: "#000",
@@ -208,7 +186,11 @@ export default function SignupPage() {
               width: "100%",
             }}
           >
-            Sign In
+            {loading ? (
+              <CircularProgress size={24} style={{ color: "#fff" }} /> // Show loading spinner
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
         <p style={{ marginTop: "20px" }}>

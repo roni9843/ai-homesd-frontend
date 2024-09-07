@@ -47,7 +47,7 @@ export default function OrderPageClient() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://backend.aihomesd.com/getTheOrder", {
+      const response = await fetch("http://localhost:8000/getTheOrder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

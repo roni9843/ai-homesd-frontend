@@ -2,9 +2,8 @@
 
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { useState } from "react";
-
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   grayColor,
@@ -12,44 +11,45 @@ import {
   whiteColor_v_2,
   whiteColor_v_3,
 } from "../../../color";
-import { setUserEmail, setUserInfo } from "../redux/userSlice";
+import { setUserInfo } from "../redux/userSlice";
+import "./LoginPage.css";
 
 export default function LoginPage({ setAuthState }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // To store error messages
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Show loading spinner
+    setErrorMessage(""); // Reset any previous error message
 
     try {
-      const { data } = await axios.post("https://backend.aihomesd.com/login", {
-        email,
+      const { data } = await axios.post("http://localhost:8000/login", {
+        phoneNumber: phone,
         password,
       });
       const { token } = data;
 
       // Store JWT token in localStorage
       localStorage.setItem("token", token);
-
       document.cookie = `token=${token}`;
 
       // Decode token to get user info
       const userInfo = await jwtDecode(token);
 
       const fetchUserInfo = async (userId) => {
-        const response = await fetch(
-          "https://backend.aihomesd.com/getTheUser",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: userId }),
-          }
-        );
+        const response = await fetch("http://localhost:8000/getTheUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: userId }),
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch user info");
@@ -59,7 +59,6 @@ export default function LoginPage({ setAuthState }) {
 
         if (fetchUser) {
           dispatch(setUserInfo(fetchUser.user));
-          dispatch(setUserEmail(fetchUser.user.email));
 
           // Redirect to the intended page or default to home
           const callbackUrl =
@@ -72,7 +71,14 @@ export default function LoginPage({ setAuthState }) {
 
       fetchUserInfo(userInfo.id);
     } catch (error) {
-      console.error("Error logging in:", error);
+      // Check if error response from backend contains specific error message
+      if (error.response && error.response.data.error) {
+        setErrorMessage(error.response.data.error); // Set the error message
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setLoading(false); // Hide loading spinner
     }
   };
 
@@ -108,11 +114,12 @@ export default function LoginPage({ setAuthState }) {
         <p style={{ marginBottom: "30px", fontSize: "14px", color: grayColor }}>
           Faster login, instant access!
         </p>
+
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "20px" }}>
             <input
-              type="email"
-              id="email"
+              type="number"
+              id="number"
               className="form-control"
               style={{
                 backgroundColor: whiteColor,
@@ -123,9 +130,10 @@ export default function LoginPage({ setAuthState }) {
                 width: "100%",
                 border: `1px solid ${whiteColor_v_3}`,
               }}
-              placeholder="email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Phone..."
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
             />
           </div>
 
@@ -146,32 +154,39 @@ export default function LoginPage({ setAuthState }) {
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
-          <div
-            style={{ marginBottom: "20px", textAlign: "left", display: "none" }}
-          >
-            <label>
-              <input type="checkbox" style={{ marginRight: "10px" }} />
-              Remember me
-            </label>
-          </div>
+          {/* Error message display */}
+          {errorMessage && (
+            <div style={{ color: "red", marginBottom: "20px" }}>
+              {errorMessage}
+            </div>
+          )}
           <button
             type="submit"
             className="btn btn-success btn-block button-opacity"
+            style={{
+              backgroundColor: loading ? "gray" : "green",
+              borderColor: "green",
+            }}
+            disabled={loading} // Disable button while loading
           >
-            Log In
+            {loading ? (
+              <div className="spinner-border text-light" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            ) : (
+              "Log In"
+            )}
           </button>
         </form>
+
         <p style={{ marginTop: "20px" }}>
           Don’t have an account?{" "}
           <span
-            onClick={() => {
-              console.log("this is signup");
-
-              setAuthState("Signup");
-            }}
-            style={{ color: "#333", fontWeight: "bold" }}
+            onClick={() => setAuthState("Signup")}
+            style={{ color: "#333", fontWeight: "bold", cursor: "pointer" }}
           >
             Sign Up
           </span>
@@ -180,10 +195,3 @@ export default function LoginPage({ setAuthState }) {
     </div>
   );
 }
-
-/**  <Link
-              /// href="/forgot-password"
-              style={{ float: "right", color: "#333" }}
-            >
-              Forget Password?
-            </Link> */

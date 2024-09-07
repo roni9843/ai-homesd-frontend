@@ -1,5 +1,5 @@
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import EmailIcon from "@mui/icons-material/Email";
+
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -42,7 +42,7 @@ export default function InfoBar() {
       <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
         <FacebookIcon fontSize="small" />
         <InstagramIcon fontSize="small" />
-        <EmailIcon fontSize="small" />
+
         <PhoneIcon fontSize="small" />
         <LinkedInIcon fontSize="small" />
         <YouTubeIcon fontSize="small" />
