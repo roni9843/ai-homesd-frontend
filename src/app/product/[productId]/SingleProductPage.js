@@ -135,7 +135,9 @@ export default function SingleProductPage({ productData }) {
                 </span>
               </div>
             ) : (
-              <span>৳{productData.productRegularPrice.toFixed(2)}</span>
+              <span style={{ fontSize: 24, color: blackColor }}>
+                ৳{productData.productRegularPrice.toFixed(2)}
+              </span>
             )}
 
             {discountPercentage && (
@@ -440,7 +442,7 @@ export default function SingleProductPage({ productData }) {
               borderTop: `1px solid ${grayColor}`,
               display: { xs: "flex", md: "none" }, // Show only on small screens
               justifyContent: "space-around",
-              padding: "15px 0",
+              padding: "10px 0", // Reduced padding for small screens
               boxShadow: "0 -4px 10px rgba(0, 0, 0, 0.2)",
               zIndex: 10000,
             }}
@@ -449,9 +451,9 @@ export default function SingleProductPage({ productData }) {
               sx={{
                 backgroundColor: blackColor,
                 color: whiteColor,
-                padding: "12px 25px",
+                padding: { xs: "8px 20px", sm: "12px 25px" }, // Responsive padding
                 fontWeight: "bold",
-                fontSize: 16,
+                fontSize: { xs: 14, sm: 16 }, // Responsive font size
                 borderRadius: 5,
                 display: "flex",
                 alignItems: "center",
@@ -464,7 +466,7 @@ export default function SingleProductPage({ productData }) {
                 "&:active": {
                   backgroundColor: blackColor,
                   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", // Shadow effect on click
-                  transform: "scale(0.80)", // Slightly reduce size on click
+                  transform: "scale(0.95)", // Slightly reduce size on click
                 },
                 "&:focus": {
                   backgroundColor: blackColor,
@@ -477,7 +479,11 @@ export default function SingleProductPage({ productData }) {
               }}
             >
               <AddShoppingCartTwoToneIcon
-                sx={{ color: whiteColor, marginRight: 1 }}
+                sx={{
+                  color: whiteColor,
+                  marginRight: 1,
+                  fontSize: { xs: 18, sm: 24 },
+                }} // Responsive icon size
               />
               + Add to Cart
             </Button>
@@ -486,23 +492,23 @@ export default function SingleProductPage({ productData }) {
               sx={{
                 border: `2px solid ${"black"}`,
                 color: "black",
-                padding: "12px 25px",
+                padding: { xs: "8px 20px", sm: "12px 25px" }, // Responsive padding
                 fontWeight: "bold",
-                fontSize: 16,
+                fontSize: { xs: 14, sm: 16 }, // Responsive font size
                 borderRadius: 5,
                 display: "flex",
                 alignItems: "center",
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Shadow for button
                 transition: "background-color 0.3s ease, transform 0.1s ease",
                 "&:hover": {
-                  backgroundColor: "#FF8C00",
+                  backgroundColor: blackColor,
                   boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)", // Darker shadow on hover
                   color: whiteColor,
                 },
                 "&:active": {
-                  backgroundColor: "#FF8C00",
+                  backgroundColor: blackColor,
                   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", // Shadow effect on click
-                  transform: "scale(0.80)", // Slightly reduce size on click
+                  transform: "scale(0.95)", // Slightly reduce size on click
                   color: whiteColor,
                 },
               }}
@@ -513,7 +519,11 @@ export default function SingleProductPage({ productData }) {
               }}
             >
               <ShoppingBasketTwoToneIcon
-                sx={{ color: "black", marginRight: 1 }}
+                sx={{
+                  color: "black",
+                  marginRight: 1,
+                  fontSize: { xs: 18, sm: 24 },
+                }} // Responsive icon size
               />
               Order Now
             </Button>

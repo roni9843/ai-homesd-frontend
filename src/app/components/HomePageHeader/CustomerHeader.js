@@ -2,8 +2,8 @@ import {
   ArrowDropDown as ArrowDropDownIcon,
   Menu as MenuIcon,
   Search as SearchIcon,
-  ShoppingCart as ShoppingCartIcon,
 } from "@mui/icons-material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import PersonIcon from "@mui/icons-material/Person";
 import {
@@ -20,12 +20,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Image from "next/image";
-import Link from "next/link";
+import Image from "next/image"; // Assuming Next.js
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { blackColor } from "../../../../color";
 
 export default function CustomerHeader() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -127,81 +126,83 @@ export default function CustomerHeader() {
         padding: "20px",
         display: "flex",
         flexDirection: "column",
-        gap: "20px",
+        gap: "0px", // No gap between items
+        backgroundColor: "white",
+        // backgroundColor: "#f4f4f4",
       }}
     >
-      <Link href="/">
-        <Typography
-          //    onClick={() => router.push(`/`)}
-          variant="h6"
-          sx={{ cursor: "pointer" }}
-
-          //onClick={handleMenuClose}
+      {/* Menu Option Styling */}
+      {[
+        { label: "HOME", link: "/" },
+        {
+          label: "ALL Products",
+          icon: <ArrowDropDownIcon />,
+          action: handleMenuClick,
+        },
+        { label: "ABOUT", link: "/about" },
+        { label: "CONTACT", link: "/contact" },
+      ].map((item, index) => (
+        <Box
+          key={index}
+          onClick={item.action || (() => router.push(item.link))}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "12px 16px",
+            cursor: "pointer",
+            borderBottom: "1px solid #ccc", // Bottom border for each option
+            transition: "all 0.3s ease",
+            "&:hover": {
+              backgroundColor: "#f0f0f0", // Light gray hover effect
+            },
+          }}
         >
-          HOME
-        </Typography>
-      </Link>
+          <Typography
+            variant="h6"
+            sx={{ color: "#333", fontWeight: 500, fontSize: 14 }}
+          >
+            {item.label}
+          </Typography>
+          {item.icon || null}
+        </Box>
+      ))}
 
+      {/* Search Bar */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: "5px",
-          cursor: "pointer",
-        }}
-        onClick={handleMenuClick}
-      >
-        <Typography variant="h6">ALL Product</Typography>
-        <ArrowDropDownIcon />
-      </Box>
-      <Typography
-        sx={{ cursor: "pointer" }}
-        variant="h6"
-        onClick={() => router.push(`/about`)}
-      >
-        ABOUT
-      </Typography>
-      <Typography
-        sx={{ cursor: "pointer" }}
-        variant="h6"
-        onClick={() => router.push(`/contact`)}
-      >
-        CONTACT
-      </Typography>
-
-      {/* Search Bar in Drawer */}
-      <Box
-        sx={{
-          display: "none",
-          // display: "flex",
-          alignItems: "center",
           border: "1px solid #ccc",
-          borderRadius: "0",
-          maxWidth: "100%",
+          borderRadius: "4px",
+          overflow: "hidden",
           width: "100%",
           height: "40px",
           marginTop: "20px",
+          display: "none",
         }}
       >
         <InputBase
           placeholder="Search Here"
           sx={{
             flex: 1,
-            paddingLeft: "8px",
+            paddingLeft: "12px",
             fontSize: "14px",
             height: "100%",
+            color: "#333",
           }}
         />
         <IconButton
           type="submit"
           sx={{
-            backgroundColor: "#FF0000",
-            borderRadius: "0",
+            backgroundColor: "#FF5555", // Red theme for the button
             color: "#fff",
+            padding: "8px",
             height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            "&:hover": {
+              backgroundColor: "#FF3333",
+            },
+            display: "none",
           }}
         >
           <SearchIcon />
@@ -235,49 +236,42 @@ export default function CustomerHeader() {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center", // Vertically center items
+          alignItems: "center",
           padding: { xs: "0 10px", lg: "0 50px" },
-          padding: { xs: "0 10px", lg: "0px" },
           minHeight: "60px",
         }}
       >
-        {/* Left Side: Menu Icon, Logo, and Navigation Links */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center", // Vertically center items
-            gap: isMobile ? "0" : "20px",
-            flexGrow: 1,
-          }}
-        >
+        {/* Left Side: Logo and Mobile Menu Icon */}
+        <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
           {/* Mobile Menu Icon */}
           {isMobile && (
-            <IconButton onClick={toggleDrawer} sx={{ color: "#000" }}>
+            <IconButton
+              onClick={toggleDrawer}
+              sx={{
+                color: "#000",
+                transition: "color 0.3s",
+                ":hover": { color: "gray" }, // Hover effect
+              }}
+            >
               <MenuIcon />
             </IconButton>
           )}
 
           {/* Logo */}
           <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: isMobile ? "center" : "flex-start", // Center logo on mobile
-              width: isMobile ? "100%" : "auto", // Take full width on mobile
-              cursor: "pointer",
-            }}
+            sx={{ cursor: "pointer", ml: isMobile ? "10px" : "0px" }}
+            onClick={() => router.push(`/`)}
           >
             <Image
               src="https://i.ibb.co/ynTcnkK/Asset-1.png"
               alt="Logo"
               width={50}
               height={50}
-              onClick={() => router.push(`/`)}
               style={{ objectFit: "contain" }}
             />
           </Box>
 
-          {/* Navigation Links (only on large screens) */}
+          {/* Navigation Links (Visible on larger screens) */}
           {!isMobile && (
             <>
               <Box
@@ -285,8 +279,11 @@ export default function CustomerHeader() {
                   display: "flex",
                   alignItems: "center",
                   gap: "25px",
+                  justifyContent: "flex-start",
+                  ml: "20px",
                 }}
               >
+                {/* Home Link */}
                 <Typography
                   onClick={() => router.push(`/`)}
                   variant="body1"
@@ -295,52 +292,67 @@ export default function CustomerHeader() {
                     fontWeight: "bold",
                     fontSize: "14px",
                     cursor: "pointer",
+                    transition: "color 0.3s",
+                    ":hover": { color: "gray" }, // Hover effect
                   }}
                 >
                   HOME
                 </Typography>
+
+                {/* All Product Menu */}
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
                     cursor: "pointer",
+                    color: "black",
+                    transition: "color 0.3s",
+                    ":hover": { color: "gray" }, // Hover effect
                   }}
                   onClick={handleMenuClick}
-                  id="all-food-menu-trigger"
+                  id="all-product-menu-trigger"
                 >
                   <Typography
                     variant="body1"
                     sx={{
-                      color: "#000",
                       fontWeight: "bold",
                       fontSize: "14px",
+                      color: "black",
                     }}
                   >
-                    ALL Product
+                    ALL Products
                   </Typography>
-                  <ArrowDropDownIcon sx={{ color: "#000" }} />
+                  <ArrowDropDownIcon />
                 </Box>
+
+                {/* About Link */}
                 <Typography
                   onClick={() => router.push(`/about`)}
                   variant="body1"
                   sx={{
-                    color: "#000",
+                    color: "black",
                     fontWeight: "bold",
                     fontSize: "14px",
                     cursor: "pointer",
+                    transition: "color 0.3s",
+                    ":hover": { color: "gray" }, // Hover effect
                   }}
                 >
                   ABOUT
                 </Typography>
+
+                {/* Contact Link */}
                 <Typography
                   onClick={() => router.push(`/contact`)}
                   variant="body1"
                   sx={{
-                    color: "#000",
+                    color: "black",
                     fontWeight: "bold",
                     fontSize: "14px",
                     cursor: "pointer",
+                    transition: "color 0.3s",
+                    ":hover": { color: "gray" }, // Hover effect
                   }}
                 >
                   CONTACT
@@ -350,35 +362,28 @@ export default function CustomerHeader() {
               {/* Search Bar */}
               <Box
                 sx={{
-                  display: "none",
-                  //  display: "flex",
+                  display: "none", // Hidden by default, you can change it to 'flex' if needed
                   alignItems: "center",
                   border: "1px solid #ccc",
                   borderRadius: "0",
                   maxWidth: "500px",
                   width: "100%",
                   height: "40px",
+                  ml: "20px",
                 }}
               >
                 <InputBase
                   placeholder="Search Here"
-                  sx={{
-                    flex: 1,
-                    paddingLeft: "8px",
-                    fontSize: "14px",
-                    height: "100%",
-                  }}
+                  sx={{ flex: 1, pl: "8px", fontSize: "14px", height: "100%" }}
                 />
                 <IconButton
                   type="submit"
                   sx={{
-                    backgroundColor: "#FF0000",
+                    backgroundColor: "gray",
                     borderRadius: "0",
                     color: "#fff",
                     height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    ":hover": { backgroundColor: "#C70039" }, // Hover effect
                   }}
                 >
                   <SearchIcon />
@@ -388,91 +393,91 @@ export default function CustomerHeader() {
           )}
         </Box>
 
-        {/* Right Side: Shopping Cart Icon */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Link
-            href="/productCart"
-            style={{ textDecoration: "none", color: blackColor }}
+        {/* Right Side: Shopping Cart and User Profile */}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {/* Shopping Cart Icon */}
+          <Badge
+            badgeContent={totalQuantity}
+            color="secondary"
+            sx={{
+              "& .MuiBadge-badge": {
+                backgroundColor: "black", // Change badge background color
+                color: "white", // Change badge text color
+              },
+            }}
           >
-            <Badge
-              badgeContent={totalQuantity}
-              color="secondary"
+            <AddShoppingCartIcon
               sx={{
-                "& .MuiBadge-badge": {
-                  backgroundColor: "black", // Change badge background color
-                  color: "white", // Change badge text color
-                },
+                fontSize: "20px",
+                color: "black",
+                ml: "10px",
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
               }}
-            >
-              <ShoppingCartIcon style={{ fontSize: "20px" }} />
-            </Badge>
-          </Link>
+              onClick={() => handleButtonClick("productCart")}
+            />
+          </Badge>
+
+          {/* Local Mall Icon */}
+          <LocalMallIcon
+            sx={{
+              fontSize: "20px",
+              color: "black",
+              ml: "10px",
+              cursor: "pointer",
+              transition: "transform 0.3s",
+              ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
+            }}
+            onClick={() => handleButtonClick("orderShippingInfo")}
+          />
+
+          {/* Profile Icon */}
+          <Box
+            sx={{
+              ml: "10px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              transition: "transform 0.3s",
+              ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
+            }}
+            onClick={() => handleButtonClick("profile")}
+          >
+            {userInfo ? (
+              <div style={profileStyles.profileImage}>
+                {userInfo.username.charAt(0)}
+              </div>
+            ) : (
+              <Box
+                sx={{
+                  backgroundColor: "black",
+                  borderRadius: "50%",
+                  padding: "5px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <PersonIcon sx={{ fontSize: "20px", color: "white" }} />
+              </Box>
+            )}
+          </Box>
         </Box>
-        <div
-          style={{
-            marginLeft: "10px",
-            display: "flex",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-          onClick={() => handleButtonClick("orderShippingInfo")}
-        >
-          <LocalMallIcon style={{ fontSize: "20px", color: blackColor }} />
-        </div>
-        <div
-          onClick={() => handleButtonClick("profile")}
-          style={{
-            marginLeft: "10px",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          {userInfo ? (
-            <div style={profileStyles.profileImage}>
-              {userInfo.username.charAt(0)}
-            </div>
-          ) : (
-            <div
-              style={{
-                backgroundColor: "black", // Set background color to black
-                borderRadius: "50%", // Make it round
-                padding: "5px", // Add some padding around the icon
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <PersonIcon style={{ fontSize: "20px", color: "white" }} />
-            </div>
-          )}
-        </div>
       </Toolbar>
 
-      {/* Drawer for mobile menu */}
+      {/* Mobile Sidebar Drawer */}
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
         {drawerContent}
       </Drawer>
 
-      {/* Dropdown Menu for ALL FOOD */}
+      {/* Dropdown Menu for ALL Products */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        sx={{ mt: "5px" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
         <MenuItem onClick={handleMenuClose}>Category 1</MenuItem>
         <MenuItem onClick={handleMenuClose}>Category 2</MenuItem>
