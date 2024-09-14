@@ -18,6 +18,7 @@ import {
   whiteColor_v_3,
 } from "../../../../color";
 import ProductCarousel from "./ProductCarousel";
+import "./SingleProductPage.css";
 
 export default function SingleProductPage({ productData }) {
   const [showMore, setShowMore] = useState(false);
@@ -325,6 +326,7 @@ export default function SingleProductPage({ productData }) {
                 <div>
                   <div
                     style={{
+                      width: "100",
                       position: "relative",
                       height: showMore ? "auto" : 100,
                       overflow: "hidden",
