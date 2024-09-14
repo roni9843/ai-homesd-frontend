@@ -50,10 +50,20 @@ export default function CartPage() {
     setLoading(false); // Reset loading state after routing
   };
 
-  const totalPrice = cart.reduce(
-    (total, item) => total + item.productRegularPrice * item.quantity,
-    0
-  );
+  const totalPrice = cart
+    .reduce(
+      (total, item) =>
+        total +
+        (item.productOffer
+          ? (
+              item.productRegularPrice.toFixed(2) *
+              (1 - item.productOffer / 100)
+            ).toFixed(2)
+          : item.productRegularPrice.toFixed(2)) *
+          item.quantity,
+      0
+    )
+    .toFixed(2);
 
   return (
     <div style={{ padding: "10px 5px", maxWidth: "800px", margin: "0 auto" }}>
@@ -226,9 +236,7 @@ export default function CartPage() {
                 }}
               >
                 <span>Subtotal : </span>
-                <span style={{ fontWeight: "bold" }}>
-                  ৳{totalPrice.toFixed(2)}
-                </span>
+                <span style={{ fontWeight: "bold" }}>৳{totalPrice}</span>
               </div>
               <div
                 style={{
@@ -275,7 +283,7 @@ export default function CartPage() {
                         style={{ marginRight: "10px" }}
                       />
                     ) : (
-                      `Checkout for ৳${totalPrice.toFixed(2)}`
+                      `Checkout for ৳${totalPrice}`
                     )}
                   </button>
                 </div>

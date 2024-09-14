@@ -55,17 +55,17 @@ export default function ProductHorizontal({ title, p }) {
                       <div>
                         <span>
                           ৳
-                          {Math.round(
-                            p.productRegularPrice -
-                              p.productRegularPrice * (p.productOffer / 100)
-                          )}
+                          {(
+                            p.productRegularPrice.toFixed(2) *
+                            (1 - p.productOffer / 100)
+                          ).toFixed(2)}
                         </span>
                         <span className={styles.originalPrice}>
-                          ৳{p.productRegularPrice}
+                          ৳{p.productRegularPrice.toFixed(2)}
                         </span>
                       </div>
                     ) : (
-                      <span>৳{p.productRegularPrice}</span>
+                      <span>৳{p.productRegularPrice.toFixed(2)}</span>
                     )}
                   </div>
                 </div>

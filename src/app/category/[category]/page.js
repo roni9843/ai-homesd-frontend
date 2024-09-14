@@ -30,7 +30,9 @@ export async function generateStaticParams() {
   //   "https://elec-ecommerce-back.vercel.app/getAllProductIds"
   // );
   // const productIds = await response.json();
-  const response = await fetch("http://localhost:8000/getAllCategoryName");
+  const response = await fetch(
+    "https://backend.aihomesd.com/getAllCategoryName"
+  );
   const names = await response.json();
 
   // console.log(names, " < ---- category");

@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie"; // Import js-cookie
 
 export const usersSlice = createSlice({
   name: "users",
   initialState: {
-    userInfo: null, // Initialize userInfo to null
+    userInfo: null,
     userPhone: null,
     cart: [],
     orderHistory: [],
@@ -115,11 +116,23 @@ export const usersSlice = createSlice({
     addOrderHistory: (state, action) => {
       state.orderHistory.push(action.payload);
     },
+
     logOut: (state) => {
+      // Clear the user's information from Redux state
       state.userInfo = null;
       state.userPhone = null;
       state.cart = [];
       state.orderHistory = [];
+
+      // Remove token from cookies
+      Cookies.remove("token");
+
+      // Remove token and other relevant data from localStorage
+      localStorage.removeItem("token");
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("userPhone");
+      localStorage.removeItem("cart");
+      localStorage.removeItem("orderHistory");
     },
   },
 });

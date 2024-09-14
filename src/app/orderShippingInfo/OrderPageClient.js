@@ -1,8 +1,20 @@
 "use client";
 
+import CancelIcon from "@mui/icons-material/Cancel";
+import DoneIcon from "@mui/icons-material/Done";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Order from "./Order";
 
@@ -13,41 +25,16 @@ export default function OrderPageClient() {
   const [completeOrder, setCompleteOrder] = useState([]);
   const [orderCancel, setOrderCancel] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [menuStyles, setMenuStyles] = useState({});
-  const menuRef = useRef(null);
-
+  const [loading, setLoading] = useState(true);
   const [pageState, setPageState] = useState("Con_order");
 
   useEffect(() => {
     fetchData();
   }, [userInfo]);
 
-  useLayoutEffect(() => {
-    if (anchorEl && menuRef.current) {
-      const { bottom, left } = anchorEl.getBoundingClientRect();
-      setMenuStyles({
-        top: bottom + window.scrollY,
-        left: left + window.scrollX - menuRef.current.offsetWidth,
-      });
-    }
-  }, [anchorEl]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        handleClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menuRef]);
-
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8000/getTheOrder", {
+      const response = await fetch("https://backend.aihomesd.com/getTheOrder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,19 +46,19 @@ export default function OrderPageClient() {
 
       if (response.ok) {
         const data = await response.json();
-
         const completeOrder = data.filter((o) => o.status === "Delivered");
         const orderCancel = data.filter((o) => o.status === "Cancelled");
         const orderPro = data.filter(
           (o) => o.status !== "Cancelled" && o.status !== "Delivered"
         );
-
         setCompleteOrder(completeOrder);
         setOrderCancel(orderCancel);
         setFetchOrder(orderPro);
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,70 +71,162 @@ export default function OrderPageClient() {
   };
 
   return (
-    <div>
-      <div
-        className="mx-2 d-flex justify-content-end"
-        style={{ position: "relative" }}
-      >
-        <MoreVertIcon onClick={handleMenuClick} style={{ cursor: "pointer" }} />
-        {anchorEl && (
-          <div
-            ref={menuRef}
-            className="dropdown-menu show"
-            style={{
-              position: "absolute",
-              top: 0,
-              left: menuStyles.left,
+    <Box
+      sx={{
+        paddingTop: "10px", // Top padding always 10px
+        paddingX: {
+          xs: "10px", // Mobile (extra-small screens) - horizontal padding
+          sm: "20px", // Small screens (e.g., tablets)
+          lg: "90px", // Large screens (e.g., desktops)
+          xl: "90px", // Extra-large screens
+        },
+        paddingBottom: {
+          xs: "10px", // Mobile (extra-small screens) - bottom padding
+          sm: "20px", // Small screens (e.g., tablets)
+          lg: "90px", // Large screens (e.g., desktops)
+          xl: "90px", // Extra-large screens
+        },
+      }}
+    >
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+        <IconButton onClick={handleMenuClick}>
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          PaperProps={{
+            style: {
+              maxHeight: 48 * 4.5,
+              width: "20ch",
+            },
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              setPageState("Con_order");
+              handleClose();
             }}
           >
-            <button
-              className="dropdown-item"
-              onClick={() => setPageState("Con_order")}
-            >
-              Processing Order
-            </button>
-            <button
-              className="dropdown-item"
-              onClick={() => setPageState("Complete_order")}
-            >
-              Complete Order
-            </button>
-            <button
-              className="dropdown-item"
-              onClick={() => setPageState("Cancel_order")}
-            >
-              Cancel Order
-            </button>
-          </div>
-        )}
-      </div>
+            <HourglassEmptyIcon sx={{ mr: 1 }} /> Processing Order
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setPageState("Complete_order");
+              handleClose();
+            }}
+          >
+            <DoneIcon sx={{ mr: 1 }} /> Complete Order
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setPageState("Cancel_order");
+              handleClose();
+            }}
+          >
+            <CancelIcon sx={{ mr: 1 }} /> Cancel Order
+          </MenuItem>
+        </Menu>
+      </Box>
 
-      {pageState === "Complete_order" && (
-        <div>
-          <div>
-            {completeOrder?.map((or) => (
-              <Order key={or._id} orderDetails={or} userInfo={userInfo} />
-            ))}
-          </div>
-        </div>
-      )}
-      {pageState === "Cancel_order" && (
-        <div>
-          <div>
-            {orderCancel?.map((or) => (
-              <Order key={or._id} orderDetails={or} userInfo={userInfo} />
-            ))}
-          </div>
-        </div>
-      )}
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box>
+          {/* Redesigned Title Section */}
+          {pageState === "Complete_order" && (
+            <Box>
+              <Typography
+                variant="h4"
+                sx={{
+                  mb: 2,
+                  fontWeight: "bold",
+                  color: "#333", // Dark gray color for the title
+                  textAlign: "center", // Center-align the title
+                }}
+              >
+                Completed Orders
+              </Typography>
+              <Divider
+                sx={{ mb: 4, borderColor: "#d32f2f", width: "10%", mx: "auto" }}
+              />
+              <Box>
+                {completeOrder.length > 0 ? (
+                  completeOrder.map((or) => (
+                    <Box key={or._id} sx={{ mb: 2 }}>
+                      <Order orderDetails={or} userInfo={userInfo} />
+                    </Box>
+                  ))
+                ) : (
+                  <Typography>No completed orders found.</Typography>
+                )}
+              </Box>
+            </Box>
+          )}
+          {pageState === "Cancel_order" && (
+            <Box>
+              <Typography
+                variant="h4"
+                sx={{
+                  mb: 2,
+                  fontWeight: "bold",
+                  color: "#333",
+                  textAlign: "center",
+                }}
+              >
+                Cancelled Orders
+              </Typography>
+              <Divider
+                sx={{ mb: 4, borderColor: "#d32f2f", width: "10%", mx: "auto" }}
+              />
+              <Box>
+                {orderCancel.length > 0 ? (
+                  orderCancel.map((or) => (
+                    <Box key={or._id} sx={{ mb: 2 }}>
+                      <Order orderDetails={or} userInfo={userInfo} />
+                    </Box>
+                  ))
+                ) : (
+                  <Typography>No cancelled orders found.</Typography>
+                )}
+              </Box>
+            </Box>
+          )}
 
-      {pageState === "Con_order" && (
-        <div>
-          {fetchOrder?.map((or) => (
-            <Order key={or._id} orderDetails={or} userInfo={userInfo} />
-          ))}
-        </div>
+          {pageState === "Con_order" && (
+            <Box>
+              <Typography
+                variant="h4"
+                sx={{
+                  mb: 2,
+                  fontWeight: "bold",
+                  color: "#333",
+                  textAlign: "center",
+                }}
+              >
+                Processing Orders
+              </Typography>
+              <Divider
+                sx={{ mb: 4, borderColor: "#d32f2f", width: "10%", mx: "auto" }}
+              />
+              <Box>
+                {fetchOrder.length > 0 ? (
+                  fetchOrder.map((or) => (
+                    <Box key={or._id} sx={{ mb: 2 }}>
+                      <Order orderDetails={or} userInfo={userInfo} />
+                    </Box>
+                  ))
+                ) : (
+                  <Typography>No processing orders found.</Typography>
+                )}
+              </Box>
+            </Box>
+          )}
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }

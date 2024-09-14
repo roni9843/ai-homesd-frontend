@@ -43,7 +43,7 @@ export default function EditProfile({ setPageState }) {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/updateUser", {
+      const response = await fetch("https://backend.aihomesd.com/updateUser", {
         method: "POST", // Use POST method
         headers: {
           "Content-Type": "application/json",

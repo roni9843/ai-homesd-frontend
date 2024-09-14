@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import checkGif from "../../../public/check.gif";
 import { clearCart } from "../redux/userSlice";
@@ -22,6 +22,7 @@ export default function CheckoutPage() {
   const [isOrderDone, setIsOrderDone] = useState(false);
   const [isPushBack, setIsPushBack] = useState(true);
   const [isLoading, setIsLoading] = useState(false); // New loading state
+  const addressInputRef = useRef(null); // Ref for address field
 
   useEffect(() => {
     setUserNameState(userInfo?.username);
@@ -34,7 +35,7 @@ export default function CheckoutPage() {
   }, [userInfo]);
 
   const fetchUserInfo = async (userId) => {
-    const response = await fetch("http://localhost:8000/getTheUser", {
+    const response = await fetch("https://backend.aihomesd.com/getTheUser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,17 +79,35 @@ export default function CheckoutPage() {
       products: cart.map((item) => ({
         product: item._id,
         qty: item.quantity,
+        price:
+          item.productOffer > 0
+            ? (
+                item.productRegularPrice.toFixed(2) *
+                (1 - item.productOffer / 100)
+              ).toFixed(2)
+            : item.productRegularPrice.toFixed(2),
       })),
+
       address,
-      totalAmount: cart.reduce(
-        (total, item) => total + item.productMRP * item.quantity,
-        0
-      ),
+      totalAmount: cart
+        .reduce(
+          (total, item) =>
+            total +
+            (item.productOffer
+              ? (
+                  item.productRegularPrice.toFixed(2) *
+                  (1 - item.productOffer / 100)
+                ).toFixed(2)
+              : item.productRegularPrice.toFixed(2)) *
+              item.quantity,
+          0
+        )
+        .toFixed(2),
       paymentMethod: "Cash on Delivery",
     };
 
     try {
-      const response = await fetch("http://localhost:8000/postOrder", {
+      const response = await fetch("https://backend.aihomesd.com/postOrder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,6 +136,13 @@ export default function CheckoutPage() {
       setIsLoading(false); // Stop loading on error
     }
   };
+
+  useEffect(() => {
+    // Focus on address field when page loads
+    if (addressInputRef.current) {
+      addressInputRef.current.focus();
+    }
+  }, []);
 
   return (
     <div className="checkout-page">
@@ -287,6 +313,7 @@ export default function CheckoutPage() {
             <div className="checkout-field">
               <label className="checkout-label">Address:</label>
               <textarea
+                ref={addressInputRef} // Set the ref for auto focus
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 required

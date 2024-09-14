@@ -29,7 +29,7 @@ export default function LoginPage({ setAuthState }) {
     setErrorMessage(""); // Reset any previous error message
 
     try {
-      const { data } = await axios.post("http://localhost:8000/login", {
+      const { data } = await axios.post("https://backend.aihomesd.com/login", {
         phoneNumber: phone,
         password,
       });
@@ -43,13 +43,16 @@ export default function LoginPage({ setAuthState }) {
       const userInfo = await jwtDecode(token);
 
       const fetchUserInfo = async (userId) => {
-        const response = await fetch("http://localhost:8000/getTheUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id: userId }),
-        });
+        const response = await fetch(
+          "https://backend.aihomesd.com/getTheUser",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: userId }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch user info");
@@ -174,7 +177,7 @@ export default function LoginPage({ setAuthState }) {
           >
             {loading ? (
               <div className="spinner-border text-light" role="status">
-                <span className="sr-only">Loading...</span>
+                <span className="sr-only"></span>
               </div>
             ) : (
               "Log In"

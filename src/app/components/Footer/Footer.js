@@ -8,7 +8,7 @@ const Footer = () => {
     <footer
       style={{
         padding: "40px 0",
-        backgroundColor: "#454545", // Similar background color
+        backgroundColor: "#454545",
         color: "white",
       }}
     >
@@ -195,15 +195,31 @@ const Footer = () => {
 
         {/* Footer Bottom */}
         <div className="row mt-4">
-          <div className="col text-center">
-            <p
-              style={{
-                margin: 0,
-                color: "white",
-              }}
-            >
-              &copy; 2024 aihomesd. All rights reserved.
-            </p>
+          <div className="col">
+            <div className="d-flex justify-content-between align-items-center">
+              <p
+                style={{
+                  margin: 0,
+                  color: "white",
+                }}
+              >
+                &copy; 2024 aihomesd. All rights reserved.
+              </p>
+              <p
+                style={{
+                  margin: 0,
+                  color: "white",
+                }}
+              >
+                Developed by{" "}
+                <a
+                  href="https://araflogix.com/"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  ArafLogix.com
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

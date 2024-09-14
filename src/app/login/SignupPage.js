@@ -20,15 +20,17 @@ export default function SignupPage({ setAuthState }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Added loading state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Reset error message
+    setLoading(true); // Start loading
     try {
-      const { data } = await axios.post("http://localhost:8000/signup", {
-        username: username,
-        phoneNumber: phoneNumber,
-        password: password,
+      const { data } = await axios.post("https://backend.aihomesd.com/signup", {
+        username,
+        phoneNumber,
+        password,
       });
 
       const { token } = data;
@@ -39,21 +41,19 @@ export default function SignupPage({ setAuthState }) {
       document.cookie = `token=${token}`;
 
       // Decode token to get user info
-      //const userInfo = await jwtDecode(token);
-
-      // Decode token to get user info
       const userInfo = await jwtDecode(token);
 
-      console.log("this is decoad ", token);
-
       const fetchUserInfo = async (userId) => {
-        const response = await fetch("http://localhost:8000/getTheUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id: userId }),
-        });
+        const response = await fetch(
+          "https://backend.aihomesd.com/getTheUser",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: userId }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch user info");
@@ -79,8 +79,10 @@ export default function SignupPage({ setAuthState }) {
       fetchUserInfo(userInfo.id);
     } catch (error) {
       console.log("this is signup  error-> ", error);
-      setError("Error signing up. Please try again.");
+      setError(error?.response?.data?.message);
       console.error("Error signing up:", error);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -135,6 +137,7 @@ export default function SignupPage({ setAuthState }) {
               placeholder="Enter your name..."
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              disabled={loading} // Disable input when loading
             />
           </div>
           <div style={{ marginBottom: "20px" }}>
@@ -154,6 +157,7 @@ export default function SignupPage({ setAuthState }) {
               placeholder="phone number..."
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              disabled={loading} // Disable input when loading
             />
           </div>
 
@@ -174,11 +178,13 @@ export default function SignupPage({ setAuthState }) {
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={loading} // Disable input when loading
             />
           </div>
           {error && (
             <p style={{ color: "red", marginBottom: "20px" }}>{error}</p>
           )}
+
           <button
             type="submit"
             className="btn btn-success btn-block button-opacity"
@@ -190,16 +196,25 @@ export default function SignupPage({ setAuthState }) {
               padding: "10px",
               width: "100%",
             }}
+            disabled={loading} // Disable button when loading
           >
-            Sign In
+            {loading ? (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
+
         <p style={{ marginTop: "20px" }}>
           Already have an account?{" "}
           <span
             onClick={() => {
               console.log("this is Login");
-
               setAuthState("Login");
             }}
             style={{ color: "#333", fontWeight: "bold", cursor: "pointer" }}

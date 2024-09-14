@@ -116,34 +116,40 @@ export default function SingleProductPage({ productData }) {
               fontWeight: "bold",
             }}
           >
-            <div>
-              <span style={{ fontSize: 24, color: blackColor }}>
-                ৳{discountedPrice.toFixed(2)}
-              </span>
+            {productData.productOffer > 0 ? (
+              <div>
+                <span style={{ fontSize: 24, color: blackColor }}>
+                  ৳{discountedPrice.toFixed(2)}
+                </span>
+                <span
+                  style={{
+                    marginLeft: "5px",
+                    fontSize: 14,
+                    color: grayColor,
+                    textDecoration: "line-through",
+                    marginRight: "10px",
+                  }}
+                >
+                  ৳{productData.productRegularPrice.toFixed(2)}
+                </span>
+              </div>
+            ) : (
+              <span>৳{productData.productRegularPrice.toFixed(2)}</span>
+            )}
+
+            {discountPercentage && (
               <span
                 style={{
-                  marginLeft: "5px",
-                  fontSize: 14,
-                  color: grayColor,
-                  textDecoration: "line-through",
-                  marginRight: "10px",
+                  fontSize: 15,
+                  color: blackColor,
+                  padding: 5,
+                  marginLeft: 10,
+                  backgroundColor: "#14FF00",
                 }}
               >
-                ৳{productData.productRegularPrice.toFixed(2)}
+                {discountPercentage}% OFF
               </span>
-            </div>
-
-            <span
-              style={{
-                fontSize: 15,
-                color: blackColor,
-                padding: 5,
-                marginLeft: 10,
-                backgroundColor: "#14FF00",
-              }}
-            >
-              {discountPercentage}% OFF
-            </span>
+            )}
           </div>
 
           {/* Additional Sections */}
@@ -260,7 +266,7 @@ export default function SingleProductPage({ productData }) {
             >
               {console.log("this is pdf -> ", productData.pdfFileName)}
               <a
-                href={`http://localhost:8000/controller/uploads/${productData.pdfFileName}`}
+                href={`https://backend.aihomesd.com/controller/uploads/${productData.pdfFileName}`}
                 download
               >
                 <button
@@ -350,7 +356,6 @@ export default function SingleProductPage({ productData }) {
                         borderColor: "black", // Border color
                         "&:hover": {
                           borderColor: "black", // Border color on hover
-                          backgroundColor: "rgba(255, 165, 0, 0.1)", // Light orange background on hover
                         },
                       }}
                     >
@@ -406,7 +411,6 @@ export default function SingleProductPage({ productData }) {
                             borderColor: "black", // Border color
                             "&:hover": {
                               borderColor: "black", // Border color on hover
-                              backgroundColor: "rgba(255, 165, 0, 0.1)", // Light orange background on hover
                             },
                           }}
                         >

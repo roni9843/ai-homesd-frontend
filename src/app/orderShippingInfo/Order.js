@@ -4,6 +4,7 @@ import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
+import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Step from "@mui/material/Step";
 import StepConnector, {
@@ -21,6 +22,7 @@ import {
   whiteColor_v_3,
 } from "../../../color";
 
+// Custom Stepper Connector
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 22,
@@ -43,6 +45,7 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   },
 }));
 
+// Custom Stepper Icon
 const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
   backgroundColor: ownerState.active ? blackColor : whiteColor_v_3,
   zIndex: 1,
@@ -62,6 +65,7 @@ const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
   }),
 }));
 
+// Icons for Stepper
 function ColorlibStepIcon(props) {
   const { active, completed, className } = props;
 
@@ -89,6 +93,7 @@ ColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 
+// Steps for Order Status
 const steps = ["Pending", "Processing", "Shipped", "Delivered"];
 
 export default function Order({ orderDetails, userInfo }) {
@@ -96,6 +101,7 @@ export default function Order({ orderDetails, userInfo }) {
     return <div>No order details available</div>;
   }
 
+  // Determine the current step
   const getActiveStep = (status) => {
     switch (status) {
       case "Pending":
@@ -111,103 +117,67 @@ export default function Order({ orderDetails, userInfo }) {
     }
   };
 
-  <style jsx>{`
-    @media (min-width: 576px) {
-      .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      }
+  // Truncate product name
+  const truncateString = (str, num) => {
+    if (str.length > num) {
+      return str.slice(0, num) + "...";
+    } else {
+      return str;
     }
-
-    @media (min-width: 768px) {
-      .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      }
-    }
-
-    @media (min-width: 992px) {
-      .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      }
-    }
-  `}</style>;
+  };
 
   return (
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+      <Card
+        sx={{
+          padding: "20px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          marginBottom: "20px",
+          borderRadius: "10px",
         }}
       >
-        <div style={{ padding: "10px", textAlign: "center" }}>
-          <span style={{ fontSize: "24px" }}>
+        <CardContent>
+          <Typography variant="h4" align="center" gutterBottom>
             Shipping <span style={{ fontWeight: "bold" }}>Information</span>
-          </span>
-        </div>
-        <div style={{ fontSize: "12px", textAlign: "center" }}>
-          <span>
+          </Typography>
+          <Typography variant="body1" align="center">
             Order date: {new Date(orderDetails.orderDate).toLocaleDateString()}
-          </span>
-          <br />
-          <span>
+          </Typography>
+          <Typography variant="body1" align="center">
             Estimated delivery:{" "}
             {new Date(
               new Date(orderDetails.orderDate).setDate(
                 new Date(orderDetails.orderDate).getDate() + 7
               )
             ).toLocaleDateString()}
-          </span>
-          <br />
-          <span>
+          </Typography>
+          <Typography variant="body1" align="center">
             Order Id:{" "}
             <span style={{ fontWeight: "bold" }}>{orderDetails.orderId}</span>
-          </span>
-        </div>
+          </Typography>
 
-        <div
-          style={{
-            padding: "10px",
-            margin: "10px",
-            backgroundColor: whiteColor_v_3,
-            borderRadius: "5px",
-            fontSize: "13px",
-            width: "100%",
-            boxSizing: "border-box",
-          }}
-        >
-          <div>
-            <span style={{ fontSize: "15px", fontWeight: "bold" }}>
-              Order Details
-            </span>
-          </div>
-          <div>
-            <span>Name: {userInfo.username}</span>
-          </div>
-
-          <div>
-            <span>Phone: {userInfo.phoneNumber}</span>
-          </div>
-          <div>
-            <span>Address: {orderDetails.address}</span>
-          </div>
-          <div>
-            <span style={{ fontWeight: "bold" }}>
-              Payment Method: {orderDetails.paymentMethod}
-            </span>
-          </div>
-          <div
-            style={{
-              //textAlign: "left",
-              fontWeight: "bold",
-              fontSize: "15px",
-              marginTop: "20px",
-            }}
+          <Typography
+            variant="h6"
+            align="left"
+            sx={{ fontWeight: "bold", marginTop: "20px" }}
+          >
+            Order Details
+          </Typography>
+          <Typography>Name: {userInfo.username}</Typography>
+          <Typography>Phone: {userInfo.phoneNumber}</Typography>
+          <Typography>Address: {orderDetails.address}</Typography>
+          <Typography sx={{ fontWeight: "bold" }}>
+            Payment Method: {orderDetails.paymentMethod}
+          </Typography>
+          <Typography
+            variant="h5"
+            align="left"
+            sx={{ fontWeight: "bold", marginTop: "20px" }}
           >
             Total: ৳{orderDetails.totalAmount}
-          </div>
-        </div>
-      </div>
+          </Typography>
+        </CardContent>
+      </Card>
 
       {orderDetails.status === "Cancelled" ? (
         <div style={{ textAlign: "center", color: redColor }}>
@@ -234,60 +204,102 @@ export default function Order({ orderDetails, userInfo }) {
         </Stack>
       )}
 
-      <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
-        <h4>Products</h4>
-        <div className="row">
+      <Box sx={{ padding: "10px", maxWidth: "1000px", margin: "0 auto" }}>
+        <Grid container spacing={3}>
           {orderDetails.products.map((item, index) => (
-            <div key={index} className="col-6 col-md-3 col-lg-3 ">
-              <Image
-                unoptimized
-                src={item.product.images[0]}
-                alt={item.product.productName}
-                height={100}
-                width={100}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  objectFit: "cover",
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Card
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "#f7f7f7",
                   borderRadius: "8px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  padding: "10px",
+                  transition: "transform 0.2s",
+                  "&:hover": { transform: "scale(1.05)" },
                 }}
-              />
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "14px" }}>
-                  {item.product.productName}
-                </div>
-                <div style={{ fontSize: "11px", color: "#888" }}>
-                  Qty: {item.qty}
-                </div>
-                <div style={{ fontWeight: "bold", fontSize: "16px" }}>
-                  ৳{item.product.productRegularPrice.toFixed(2)}
-                </div>
-              </div>
-            </div>
+              >
+                <Image
+                  unoptimized
+                  src={item.product.images[0]}
+                  alt={item.product.productName}
+                  height={100}
+                  width={100}
+                  style={{
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                    marginRight: "16px",
+                  }}
+                />
+                <Box sx={{ textAlign: "left", flexGrow: 1 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontSize: {
+                        xs: "12px",
+                        sm: "14px",
+                        md: "16px",
+                      },
+                      fontWeight: 500,
+                    }}
+                  >
+                    {truncateString(item.product.productName, 12)}
+                  </Typography>
+
+                  {/* Display Quantity */}
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "10px",
+                        sm: "12px",
+                        md: "14px",
+                      },
+                      color: "#555",
+                    }}
+                  >
+                    Qty: {item.qty}
+                  </Typography>
+
+                  {/* Highlight Discount if Offer Exists */}
+                  {item.product.productOffer > 0 && (
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          xs: "10px",
+                          sm: "12px",
+                          md: "14px",
+                        },
+                        color: redColor,
+                      }}
+                    >
+                      Offer: {item.product.productOffer}% Off
+                    </Typography>
+                  )}
+
+                  {/* Show Product Price */}
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        xs: "12px",
+                        sm: "14px",
+                        md: "16px",
+                      },
+                      fontWeight: 600,
+                    }}
+                  >
+                    ৳
+                    {(
+                      item.product.productRegularPrice.toFixed(2) *
+                      (1 - item.product.productOffer / 100)
+                    ).toFixed(2)}
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
           ))}
-        </div>
-      </div>
+        </Grid>
+      </Box>
     </div>
   );
 }
-
-Order.propTypes = {
-  orderDetails: PropTypes.shape({
-    orderDate: PropTypes.string.isRequired,
-    orderId: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    totalAmount: PropTypes.number.isRequired,
-    paymentMethod: PropTypes.string.isRequired,
-    address: PropTypes.string.isRequired,
-    products: PropTypes.arrayOf(
-      PropTypes.shape({
-        product: PropTypes.shape({
-          productName: PropTypes.string.isRequired,
-          productRegularPrice: PropTypes.number.isRequired,
-          images: PropTypes.arrayOf(PropTypes.string).isRequired,
-        }).isRequired,
-        qty: PropTypes.number.isRequired,
-      })
-    ).isRequired,
-  }),
-};

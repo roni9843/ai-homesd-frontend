@@ -158,7 +158,7 @@ import SingleProductPageReduxWrapped from "./SingleProductPageReduxWrapped";
 // Replace this with a real API call to fetch all product IDs you want to statically generate.
 async function fetchAllProductIds() {
   // Example: Fetch from your API
-  const response = await fetch("http://localhost:8000/getAllProductId");
+  const response = await fetch("https://backend.aihomesd.com/getAllProductId");
   const productIds = await response.json();
   return productIds.productIds.map((product) => ({ productId: product }));
 }
@@ -176,13 +176,16 @@ export default async function Page({ params }) {
   let error = null;
 
   try {
-    const response = await fetch("http://localhost:8000/getProductById", {
-      method: "POST",
-      body: JSON.stringify({ productId: productId }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "https://backend.aihomesd.com/getProductById",
+      {
+        method: "POST",
+        body: JSON.stringify({ productId: productId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Error fetching product data: ${response.statusText}`);

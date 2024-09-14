@@ -1,21 +1,26 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
+  Alert,
   Avatar,
   Box,
   Button,
+  CircularProgress,
   IconButton,
   Menu,
   MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserInfo, setUserPhone } from "../redux/userSlice";
+import { logOut, setUserInfo, setUserPhone } from "../redux/userSlice";
 
 const ProfilePage = () => {
   let userInfoRedux = useSelector((state) => state.users.userInfo);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfoState] = useState({
@@ -26,6 +31,8 @@ const ProfilePage = () => {
   });
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state
+  const [errorMessage, setErrorMessage] = useState(""); // Error message state
   const open = Boolean(anchorEl);
 
   const handleMenuClick = (event) => {
@@ -41,6 +48,13 @@ const ProfilePage = () => {
     handleClose();
   };
 
+  const handleLogOut = () => {
+    Cookies.remove("token");
+    dispatch(logOut());
+    handleClose();
+    router.push(`/`);
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserInfoState((prev) => ({ ...prev, [name]: value }));
@@ -48,8 +62,10 @@ const ProfilePage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true); // Start loading
+    setErrorMessage(""); // Reset error message
     try {
-      const response = await fetch("http://localhost:8000/updateUser", {
+      const response = await fetch("https://backend.aihomesd.com/updateUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,10 +83,13 @@ const ProfilePage = () => {
         dispatch(setUserPhone(data.phone));
         setIsEditing(false);
       } else {
-        console.error("Failed to update profile", response);
+        const data = await response.json();
+        setErrorMessage("Failed to update profile: " + data.message);
       }
     } catch (error) {
-      console.error("Error updating profile", error);
+      setErrorMessage("Error updating profile: " + error.message);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -96,17 +115,17 @@ const ProfilePage = () => {
       justifyContent: "center",
       alignItems: "center",
       position: "relative",
-      top: "-40px", // Reduced top value to decrease the gap
-      marginBottom: "-30px", // Reduced bottom margin to close the gap
+      top: "-40px",
+      marginBottom: "-30px",
     },
     avatar: {
-      width: "100px", // Reduced avatar size slightly
-      height: "100px", // Reduced avatar size slightly
-      border: "4px solid white", // Adjusted border
+      width: "100px",
+      height: "100px",
+      border: "4px solid white",
       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     },
     profileInfo: {
-      padding: "10px", // Adjusted padding to reduce gaps
+      padding: "10px",
       textAlign: "center",
     },
     fieldContainer: {
@@ -132,7 +151,6 @@ const ProfilePage = () => {
   return (
     <Box style={styles.container}>
       {/* Cover Photo */}
-      {/* Cover Photo */}
       <Box
         style={{
           ...styles.coverPhoto,
@@ -149,6 +167,7 @@ const ProfilePage = () => {
           <MenuItem onClick={handleEditToggle}>
             {isEditing ? "Cancel" : "Edit Profile"}
           </MenuItem>
+          <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
         </Menu>
       </Box>
 
@@ -156,11 +175,10 @@ const ProfilePage = () => {
       <Box style={styles.avatarContainer}>
         <Avatar
           alt="Profile Image"
-          src={userInfoRedux?.avatarUrl || null} // If there's an avatar URL, use it, otherwise, show the first letter
+          src={userInfoRedux?.avatarUrl || null}
           style={styles.avatar}
         >
-          {!userInfoRedux?.avatarUrl && userInfoRedux?.username?.charAt(0)}{" "}
-          {/* Show first letter if no avatar */}
+          {!userInfoRedux?.avatarUrl && userInfoRedux?.username?.charAt(0)}
         </Avatar>
       </Box>
 
@@ -174,22 +192,21 @@ const ProfilePage = () => {
         {[
           {
             label: "User name",
-            name: "name", // Updated to "name" to match state
+            name: "name",
             value: userInfo.name,
             editable: true,
           },
-
           {
             label: "Time Zone",
             name: "timeZone",
             value: userInfo.timeZone,
-            editable: true,
+            editable: false,
           },
           {
             label: "Language",
             name: "language",
             value: userInfo.language,
-            editable: true,
+            editable: false,
           },
           {
             label: "Phone Number",
@@ -202,9 +219,9 @@ const ProfilePage = () => {
             <Typography variant="body1" style={styles.fieldLabel}>
               {field.label}
             </Typography>
-            {isEditing ? (
+            {isEditing && field.editable ? (
               <TextField
-                name={field.name} // This now matches the state key
+                name={field.name}
                 value={field.value}
                 onChange={handleInputChange}
                 variant="outlined"
@@ -217,9 +234,20 @@ const ProfilePage = () => {
             )}
           </Box>
         ))}
-
+        {/* Error Message */}
+        {errorMessage && (
+          <Box textAlign="center" padding="20px">
+            <Alert severity="error">{errorMessage}</Alert>
+          </Box>
+        )}
+        {/* Loading Spinner */}
+        {loading && (
+          <Box textAlign="center" padding="20px">
+            <CircularProgress />
+          </Box>
+        )}
         {/* Submit Button */}
-        {isEditing && (
+        {isEditing && !loading && (
           <Box textAlign="center" padding="20px">
             <Button type="submit" variant="contained" color="primary">
               Save

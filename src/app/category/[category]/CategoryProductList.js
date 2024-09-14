@@ -107,17 +107,16 @@ export default function SingleCategoryProductList({ category }) {
                             <div>
                               <span style={{ fontSize: "13px" }}>
                                 €
-                                {Math.round(
-                                  p.productRegularPrice -
-                                    p.productRegularPrice *
-                                      (p.productOffer / 100)
-                                )}
+                                {(
+                                  p.productRegularPrice.toFixed(2) *
+                                  (1 - p.productOffer / 100)
+                                ).toFixed(2)}
                               </span>
                             </div>
                           ) : (
                             <div>
                               <span style={{ fontSize: "13px" }}>
-                                €{p.productRegularPrice}
+                                €{p.productRegularPrice.toFixed(2)}
                               </span>
                             </div>
                           )}
@@ -129,7 +128,7 @@ export default function SingleCategoryProductList({ category }) {
                                 style={{ fontSize: "8px" }}
                               >
                                 {" "}
-                                <del>€{p.productRegularPrice}</del>
+                                <del>€{p.productRegularPrice.toFixed(2)}</del>
                               </span>
                             )}
                           </div>

@@ -24,15 +24,19 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false); // For loading state
 
   const handleSubmit = async (e) => {
+    console.log("click -> ", username, phoneNumber, password);
+
     e.preventDefault();
     setError(""); // Reset error message
     setLoading(true); // Show loading spinner
     try {
-      const { data } = await axios.post("http://localhost:8000/signup", {
+      const { data } = await axios.post("https://backend.aihomesd.com/signup", {
         username,
         phoneNumber,
         password,
       });
+
+      console.log(username, phoneNumber, password);
 
       const { token } = data;
 
@@ -43,13 +47,18 @@ export default function SignupPage() {
 
       // Fetch user info
       const fetchUserInfo = async (userId) => {
-        const response = await fetch("http://localhost:8000/getTheUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id: userId }),
-        });
+        const response = await fetch(
+          "https://backend.aihomesd.com/getTheUser",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: userId }),
+          }
+        );
+
+        console.log("this is res -> ", response);
 
         if (!response.ok) {
           throw new Error("Failed to fetch user info");

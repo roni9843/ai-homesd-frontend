@@ -10,7 +10,7 @@ export default function CateAndProductList() {
 
   const fetchProduct = async (category) => {
     try {
-      const response = await fetch("http://localhost:8000/getProduct", {
+      const response = await fetch("https://backend.aihomesd.com/getProduct", {
         method: "POST",
         body: JSON.stringify({ category }),
         headers: {

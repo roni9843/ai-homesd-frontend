@@ -27,7 +27,7 @@ const autoCall = async () => {
   // // ? get all product
   // await getAllCategoryWithProductFunc();
 
-  fetch("http://localhost:8000/getAllCategoryWithProducts")
+  fetch("https://backend.aihomesd.com/getAllCategoryWithProducts")
     .then((response) => response.json())
     .then((data) => {
       store.dispatch(addCategoryWithProductRedux(data.data));
@@ -48,13 +48,16 @@ const autoCall = async () => {
         const userInfo = jwtDecode(token);
 
         const fetchUserInfo = async (userId) => {
-          const response = await fetch("http://localhost:8000/getTheUser", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: userId }),
-          });
+          const response = await fetch(
+            "https://backend.aihomesd.com/getTheUser",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: userId }),
+            }
+          );
 
           if (!response.ok) {
             throw new Error("Failed to fetch user info");
