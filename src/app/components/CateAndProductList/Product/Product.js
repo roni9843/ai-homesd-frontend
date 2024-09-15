@@ -19,7 +19,7 @@ export default function Product({ product }) {
           }}
         >
           <Image
-            unoptimized
+            // unoptimized
             src={product.images[0]}
             alt="this is image"
             layout="fill"

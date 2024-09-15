@@ -53,7 +53,7 @@ export default function CategoryUiSection() {
                   {c.category.category}
                 </span>
                 <Image
-                  unoptimized
+                  // unoptimized
                   src={c.category.image} // Change to local image
                   alt="Moto Logo"
                   layout="responsive"

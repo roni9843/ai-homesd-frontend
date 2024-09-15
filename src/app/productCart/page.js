@@ -97,7 +97,7 @@ export default function CartPage() {
                     }}
                   >
                     <Image
-                      unoptimized
+                      // unoptimized
                       src={item.images[0]}
                       alt={item.productName}
                       height={100}

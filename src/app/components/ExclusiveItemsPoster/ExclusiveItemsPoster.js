@@ -17,7 +17,7 @@ export default function ExclusiveItemsPoster() {
         <div className="row">
           <div className="col-6 col-md-3 col-lg-3  py-2">
             <Image
-              unoptimized
+              // unoptimized
               src="https://i.ibb.co/j5qL4Y5/Group-7.png" // Change to local image
               alt="Moto Logo"
               layout="responsive"
@@ -31,7 +31,7 @@ export default function ExclusiveItemsPoster() {
           </div>
           <div className="col-6 col-md-3 col-lg-3 py-2">
             <Image
-              unoptimized
+              // unoptimized
               src="https://i.ibb.co/k5FqtBB/Group-8.png" // Change to local image
               alt="Moto Logo"
               layout="responsive"
@@ -45,7 +45,7 @@ export default function ExclusiveItemsPoster() {
           </div>
           <div className="col-6 col-md-3 col-lg-3 py-2">
             <Image
-              unoptimized
+              // unoptimized
               src="https://i.ibb.co/PjdWjzZ/Group-10.png" // Change to local image
               alt="Moto Logo"
               layout="responsive"
@@ -59,7 +59,7 @@ export default function ExclusiveItemsPoster() {
           </div>
           <div className="col-6 col-md-3 col-lg-3 py-2">
             <Image
-              unoptimized
+              // unoptimized
               src="https://i.ibb.co/vzJHF40/Group-9.png" // Change to local image
               alt="Moto Logo"
               layout="responsive"

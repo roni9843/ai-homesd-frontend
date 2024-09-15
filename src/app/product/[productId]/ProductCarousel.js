@@ -13,7 +13,7 @@ export default function ProductCarousel({ images }) {
             style={{ position: "relative", paddingBottom: "100%", height: 0 }}
           >
             <Image
-              unoptimized
+              // unoptimized
               src={image}
               alt="Product image"
               layout="fill"

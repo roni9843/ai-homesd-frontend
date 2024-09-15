@@ -10,7 +10,7 @@ export default function SinglePoster({ ImageLink }) {
       >
         <div style={{ width: "100%" }}>
           <Image
-            unoptimized
+            // unoptimized
             src={ImageLink} // Change to local image
             alt="Moto Logo"
             layout="responsive"

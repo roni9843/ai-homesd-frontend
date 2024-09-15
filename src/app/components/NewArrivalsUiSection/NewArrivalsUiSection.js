@@ -39,7 +39,6 @@ export default function NewArrivalsUiSection() {
               >
                 <div className={styles.imageContainer}>
                   <Image
-                    unoptimized
                     src={p.images[0]}
                     alt={p.productName}
                     layout="responsive"
@@ -50,7 +49,13 @@ export default function NewArrivalsUiSection() {
                       height: "auto",
                       //  borderRadius: "10px 10px 0px 0px",
                     }}
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9ImJsdWUiIC8+PC9zdmc+" // Blue placeholder
+                    loading="lazy" // (default for non-priority images, but good to add explicitly)
+                    priority={false} // Set to true only for above-the-fold images
+                    quality={75} // Adjust quality for smaller image sizes
                   />
+
                   <div className={styles.quickViewOverlay}>QUICK VIEW</div>
                 </div>
                 <div className={styles.productInfo}>

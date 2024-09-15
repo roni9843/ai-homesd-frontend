@@ -219,7 +219,7 @@ export default function HomePageHeader() {
                         }}
                       >
                         <Image
-                          unoptimized
+                          // unoptimized
                           src={suggestion.images[0]}
                           alt={suggestion.productName}
                           layout="responsive"

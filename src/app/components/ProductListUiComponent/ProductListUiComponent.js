@@ -57,7 +57,7 @@ export default function ProductListUiComponent() {
                     <div>
                       <div>
                         <Image
-                          unoptimized
+                          // unoptimized
                           src={p.images[0]}
                           alt="Moto Logo"
                           layout="responsive"

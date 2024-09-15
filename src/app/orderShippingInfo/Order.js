@@ -221,7 +221,7 @@ export default function Order({ orderDetails, userInfo }) {
                 }}
               >
                 <Image
-                  unoptimized
+                  // unoptimized
                   src={item.product.images[0]}
                   alt={item.product.productName}
                   height={100}

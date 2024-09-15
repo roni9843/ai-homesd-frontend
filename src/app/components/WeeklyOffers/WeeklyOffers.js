@@ -86,7 +86,7 @@ export default function WeeklyOffers() {
                   <div>
                     <div>
                       <Image
-                        unoptimized
+                        // unoptimized
                         src={p.images[0]} // Change to local image
                         alt="Moto Logo"
                         layout="responsive"
