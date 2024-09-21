@@ -58,7 +58,7 @@ export default function EditProfile({ setPageState }) {
       if (response.ok) {
         const data = await response.json();
         // Update was successful
-        console.log("Profile updated successfully", data);
+        // console.log("Profile updated successfully", data);
 
         dispatch(setUserInfo(data));
         dispatch(setUserPhone(data.phone));

@@ -14,6 +14,7 @@ import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import { styled } from "@mui/material/styles";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import {
   blackColor,
@@ -97,6 +98,8 @@ ColorlibStepIcon.propTypes = {
 const steps = ["Pending", "Processing", "Shipped", "Delivered"];
 
 export default function Order({ orderDetails, userInfo }) {
+  const router = useRouter();
+
   if (!orderDetails) {
     return <div>No order details available</div>;
   }
@@ -174,7 +177,7 @@ export default function Order({ orderDetails, userInfo }) {
             align="left"
             sx={{ fontWeight: "bold", marginTop: "20px" }}
           >
-            Total: ৳{orderDetails.totalAmount}
+            Total: ৳{orderDetails.totalAmount.toFixed(2)}
           </Typography>
         </CardContent>
       </Card>
@@ -209,6 +212,7 @@ export default function Order({ orderDetails, userInfo }) {
           {orderDetails.products.map((item, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <Card
+                onClick={() => router.push(`/product/${item.product._id}`)}
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -218,6 +222,7 @@ export default function Order({ orderDetails, userInfo }) {
                   padding: "10px",
                   transition: "transform 0.2s",
                   "&:hover": { transform: "scale(1.05)" },
+                  cursor: "pointer",
                 }}
               >
                 <Image
@@ -288,11 +293,7 @@ export default function Order({ orderDetails, userInfo }) {
                       fontWeight: 600,
                     }}
                   >
-                    ৳
-                    {(
-                      item.product.productRegularPrice.toFixed(2) *
-                      (1 - item.product.productOffer / 100)
-                    ).toFixed(2)}
+                    ৳{item.price.toFixed(2)}
                   </Typography>
                 </Box>
               </Card>

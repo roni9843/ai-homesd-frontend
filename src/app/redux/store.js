@@ -4,6 +4,7 @@ import usersReducer, {
   AllProduct,
   addCategoryWithProductRedux,
   addOrderHistory,
+  addToCartFromStorage,
   filterCategory,
   filterOfferProduct,
   setUserInfo,
@@ -40,6 +41,13 @@ const autoCall = async () => {
 
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("token");
+
+    // Retrieve cart items from localStorage and dispatch to Redux store
+    const cartItems = localStorage.getItem("cartItems");
+    if (cartItems) {
+      const parsedCartItems = JSON.parse(cartItems);
+      store.dispatch(addToCartFromStorage(parsedCartItems)); // Dispatch to set cart items in Redux store
+    }
 
     if (token) {
       document.cookie = `token=${token}`;

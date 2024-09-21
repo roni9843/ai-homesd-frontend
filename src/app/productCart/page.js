@@ -1,6 +1,7 @@
 "use client";
 
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import CircularProgress from "@mui/material/CircularProgress"; // Importing spinner
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -12,6 +13,7 @@ import {
   whiteColor,
   whiteColor_v_3,
 } from "../../../color";
+
 import {
   decreaseQuantity,
   increaseQuantity,
@@ -23,19 +25,56 @@ export default function CartPage() {
   const router = useRouter();
   const cart = useSelector((state) => state.users.cart);
   const userInfo = useSelector((state) => state.users.userInfo);
+  const AllProduct = useSelector((state) => state.users.AllProduct);
 
   const [loading, setLoading] = useState(false); // Loading state
 
   const handleIncrease = (id) => {
+    // Dispatch the action to increase quantity in Redux store
     dispatch(increaseQuantity(id));
+
+    // Retrieve the current cart from localStorage
+    let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+    // Find the product by id and increase its quantity
+    cartItems = cartItems.map((item) =>
+      item._id === id ? { ...item, quantity: item.quantity + 1 } : item
+    );
+
+    // Save the updated cart to localStorage
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
 
   const handleDecrease = (id) => {
+    // Dispatch the action to decrease quantity in Redux store
     dispatch(decreaseQuantity(id));
+
+    // Retrieve the current cart from localStorage
+    let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+    // Find the product by id and decrease its quantity, but ensure it stays above 1
+    cartItems = cartItems.map((item) =>
+      item._id === id && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    );
+
+    // Save the updated cart to localStorage
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
 
   const handleRemove = (id) => {
+    // Dispatch the action to remove the item from the cart in Redux store
     dispatch(removeFromCart(id));
+
+    // Retrieve the current cart from localStorage
+    let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+    // Remove the item by filtering out the one with the matching id
+    cartItems = cartItems.filter((item) => item._id !== id);
+
+    // Save the updated cart to localStorage
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
 
   const handleOrder = () => {
@@ -49,6 +88,14 @@ export default function CartPage() {
 
     setLoading(false); // Reset loading state after routing
   };
+
+  // useEffect(() => {
+  //   const getFullProductOnCart = cart.filter((c_p) => {
+  //     // console.log("this is cart info -> ", c_p);
+  //   });
+  // }, [cart]);
+
+  // return 0;
 
   const totalPrice = cart
     .reduce(
@@ -68,7 +115,15 @@ export default function CartPage() {
   return (
     <div style={{ padding: "10px 5px", maxWidth: "800px", margin: "0 auto" }}>
       {cart.length === 0 ? (
-        <p style={{ textAlign: "center" }}>Your cart is empty.</p>
+        <div style={{ textAlign: "center", padding: "20px" }}>
+          <ShoppingCartOutlinedIcon
+            style={{
+              fontSize: "100px",
+              color: "#ccc", // You can adjust the color as needed
+            }}
+          />
+          <p style={{ fontSize: "18px", color: "#666" }}>Your cart is empty.</p>
+        </div>
       ) : (
         <div>
           <div className="row px-0 mx-0">
@@ -125,10 +180,8 @@ export default function CartPage() {
                             onClick={() => handleRemove(item._id)}
                             style={{
                               cursor: "pointer",
-
                               color: blackColor,
                               border: "none",
-
                               fontWeight: "bold",
                             }}
                           >

@@ -24,7 +24,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false); // For loading state
 
   const handleSubmit = async (e) => {
-    console.log("click -> ", username, phoneNumber, password);
+    // console.log("click -> ", username, phoneNumber, password);
 
     e.preventDefault();
     setError(""); // Reset error message
@@ -36,7 +36,7 @@ export default function SignupPage() {
         password,
       });
 
-      console.log(username, phoneNumber, password);
+      // console.log(username, phoneNumber, password);
 
       const { token } = data;
 
@@ -58,7 +58,7 @@ export default function SignupPage() {
           }
         );
 
-        console.log("this is res -> ", response);
+        // console.log("this is res -> ", response);
 
         if (!response.ok) {
           throw new Error("Failed to fetch user info");

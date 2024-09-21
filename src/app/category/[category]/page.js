@@ -35,7 +35,7 @@ export async function generateStaticParams() {
   );
   const names = await response.json();
 
-  // console.log(names, " < ---- category");
+  // // console.log(names, " < ---- category");
 
   // const productIds = ["6680289ac3db9318d1e53041", "66802d3fc3db9318d1e53049"];
 

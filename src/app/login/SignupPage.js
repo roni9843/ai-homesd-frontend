@@ -62,7 +62,7 @@ export default function SignupPage({ setAuthState }) {
         const fetchUser = await response.json();
 
         if (fetchUser) {
-          console.log("this is fetch ", fetchUser);
+          // // console.log("this is fetch ", fetchUser);
 
           dispatch(setUserInfo(fetchUser.user));
           dispatch(setUserPhone(fetchUser.user.phone));
@@ -78,7 +78,7 @@ export default function SignupPage({ setAuthState }) {
 
       fetchUserInfo(userInfo.id);
     } catch (error) {
-      console.log("this is signup  error-> ", error);
+      // // console.log("this is signup  error-> ", error);
       setError(error?.response?.data?.message);
       console.error("Error signing up:", error);
     } finally {
@@ -214,7 +214,7 @@ export default function SignupPage({ setAuthState }) {
           Already have an account?{" "}
           <span
             onClick={() => {
-              console.log("this is Login");
+              // console.log(og("this is Login");
               setAuthState("Login");
             }}
             style={{ color: "#333", fontWeight: "bold", cursor: "pointer" }}

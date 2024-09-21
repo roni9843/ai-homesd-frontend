@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { Inter } from "next/font/google";
 
 import { whiteColor_v_2 } from "../../../color";
+import Footer from "../components/Footer/Footer";
 import HomePageHeaderReduxWrapped from "./HomePageHeaderReduxWrapped";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,7 +30,11 @@ export default function AboutLayout({ children }) {
           <HomePageHeaderReduxWrapped></HomePageHeaderReduxWrapped>
         </Box>
 
-        {children}
+        <div className="mt-4">{children}</div>
+
+        <div className="mt-5">
+          <Footer></Footer>
+        </div>
       </body>
     </html>
   );

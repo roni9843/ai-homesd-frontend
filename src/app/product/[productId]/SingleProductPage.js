@@ -12,7 +12,6 @@ import StickyBox from "react-sticky-box";
 import {
   blackColor,
   grayColor,
-  redColor,
   whiteColor,
   whiteColor_v_2,
   whiteColor_v_3,
@@ -93,13 +92,13 @@ export default function SingleProductPage({ productData }) {
               <span
                 style={{
                   marginLeft: "20px",
-                  backgroundColor: redColor,
-                  color: whiteColor,
+                  backgroundColor: "#d4edda", // Light green color
+                  color: "#155724", // Dark green text color for contrast
                   borderRadius: "5px",
                   padding: "3px 8px",
                 }}
               >
-                On sale
+                In Stock
               </span>
             </div>
             <div style={{ display: "none" }}>
@@ -185,9 +184,34 @@ export default function SingleProductPage({ productData }) {
           >
             {" "}
             <button
-              className="btn   button-opacityNormal"
+              className="btn button-opacityNormal"
               onClick={() => {
-                const payload = productData;
+                // Initialize product with quantity 1
+                const payload = { ...productData, quantity: 1 };
+
+                // Retrieve existing cart items from localStorage
+                let cartItems = localStorage.getItem("cartItems");
+                cartItems = cartItems ? JSON.parse(cartItems) : [];
+
+                // Check if the product already exists in the cart based on _id
+                const existingProductIndex = cartItems.findIndex(
+                  (item) => item._id === payload._id
+                );
+
+                if (existingProductIndex !== -1) {
+                  // If the product exists, update its quantity
+                  cartItems[existingProductIndex].quantity += 1;
+                } else {
+                  // If the product doesn't exist, add it with a quantity of 1
+                  cartItems.push(payload);
+                }
+
+                console.log("this is cart ->  ", cartItems);
+
+                // Save the updated cart array back to localStorage
+                localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+                // Dispatch the action to update the Redux store (optional, depending on your app)
                 dispatch(addToCart(payload));
               }}
               style={{
@@ -212,7 +236,31 @@ export default function SingleProductPage({ productData }) {
             <button
               className="btn   "
               onClick={() => {
-                const payload = productData;
+                // Initialize product with quantity 1
+                const payload = { ...productData, quantity: 1 };
+
+                // Retrieve existing cart items from localStorage
+                let cartItems = localStorage.getItem("cartItems");
+                cartItems = cartItems ? JSON.parse(cartItems) : [];
+
+                // Check if the product already exists in the cart based on _id
+                const existingProductIndex = cartItems.findIndex(
+                  (item) => item._id === payload._id
+                );
+
+                if (existingProductIndex !== -1) {
+                  // If the product exists, update its quantity
+                  cartItems[existingProductIndex].quantity += 1;
+                } else {
+                  // If the product doesn't exist, add it with a quantity of 1
+                  cartItems.push(payload);
+                }
+
+                console.log("this is cart ->  ", cartItems);
+
+                // Save the updated cart array back to localStorage
+                localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
                 dispatch(addToCart(payload));
                 router.push("/productCart");
               }}
@@ -267,7 +315,9 @@ export default function SingleProductPage({ productData }) {
                 justifyContent: "center",
               }}
             >
-              {console.log("this is pdf -> ", productData.pdfFileName)}
+              {
+                // console.log("this is pdf -> ", productData.pdfFileName)
+              }
               <a
                 href={`https://backend.aihomesd.com/controller/uploads/${productData.pdfFileName}`}
                 download
@@ -474,7 +524,31 @@ export default function SingleProductPage({ productData }) {
                 },
               }}
               onClick={() => {
-                const payload = productData;
+                // Initialize product with quantity 1
+                const payload = { ...productData, quantity: 1 };
+
+                // Retrieve existing cart items from localStorage
+                let cartItems = localStorage.getItem("cartItems");
+                cartItems = cartItems ? JSON.parse(cartItems) : [];
+
+                // Check if the product already exists in the cart based on _id
+                const existingProductIndex = cartItems.findIndex(
+                  (item) => item._id === payload._id
+                );
+
+                if (existingProductIndex !== -1) {
+                  // If the product exists, update its quantity
+                  cartItems[existingProductIndex].quantity += 1;
+                } else {
+                  // If the product doesn't exist, add it with a quantity of 1
+                  cartItems.push(payload);
+                }
+
+                console.log("this is cart ->  ", cartItems);
+
+                // Save the updated cart array back to localStorage
+                localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
                 dispatch(addToCart(payload));
               }}
             >
@@ -513,9 +587,40 @@ export default function SingleProductPage({ productData }) {
                 },
               }}
               onClick={() => {
-                const payload = productData;
+                // Initialize product with quantity 1
+                const payload = { ...productData, quantity: 1 };
+
+                // Retrieve existing cart items from localStorage
+                let cartItems = localStorage.getItem("cartItems");
+                cartItems = cartItems ? JSON.parse(cartItems) : [];
+
+                // Check if the product already exists in the cart based on _id
+                const existingProductIndex = cartItems.findIndex(
+                  (item) => item._id === payload._id
+                );
+
+                if (existingProductIndex !== -1) {
+                  // If the product exists, update its quantity
+                  cartItems[existingProductIndex].quantity += 1;
+                } else {
+                  // If the product doesn't exist, add it with a quantity of 1
+                  cartItems.push(payload);
+                }
+
+                console.log("this is cart ->  ", cartItems);
+
+                // Save the updated cart array back to localStorage
+                localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
                 dispatch(addToCart(payload));
-                router.push("/checkout");
+                // router.push("/checkout");
+                router.push("/productCart");
+
+                // if (!userInfo) {
+                //   router.push(`/login?callbackUrl=/${props}`);
+                // } else {
+                //   router.push(`/${props}`);
+                // }
               }}
             >
               <ShoppingBasketTwoToneIcon

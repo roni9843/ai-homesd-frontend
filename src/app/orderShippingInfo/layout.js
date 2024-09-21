@@ -4,6 +4,7 @@ import { Box } from "@mui/material";
 import { Inter } from "next/font/google";
 import { Provider } from "react-redux";
 import { whiteColor_v_2 } from "../../../color";
+import Footer from "../components/Footer/Footer";
 import CustomerHeader from "../components/HomePageHeader/CustomerHeader";
 import InfoBar from "../components/InfoBar/InfoBar";
 import { store } from "../redux/store";
@@ -46,6 +47,10 @@ export default function ShippingLayout({ children }) {
           </Box>
 
           {children}
+
+          <div>
+            <Footer></Footer>
+          </div>
         </body>
       </Provider>
     </html>

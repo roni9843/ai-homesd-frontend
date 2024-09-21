@@ -96,11 +96,10 @@ const ProfilePage = () => {
   const styles = {
     container: {
       maxWidth: "600px",
-      margin: "20px auto",
+      margin: "8px auto",
       backgroundColor: "#fff",
-      borderRadius: "15px",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-      overflow: "hidden",
+      borderRadius: "10px",
+      padding: " 0px 20px",
     },
     coverPhoto: {
       width: "100%",
@@ -108,32 +107,27 @@ const ProfilePage = () => {
       backgroundImage: "url('https://your-cover-photo-url.jpg')",
       backgroundSize: "cover",
       backgroundPosition: "center",
-      position: "relative",
     },
     avatarContainer: {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      position: "relative",
-      top: "-40px",
-      marginBottom: "-30px",
+      marginTop: "-135px",
+      marginBottom: "20px",
     },
     avatar: {
-      width: "100px",
-      height: "100px",
-      border: "4px solid white",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      width: "90px",
+      height: "90px",
     },
     profileInfo: {
       padding: "10px",
       textAlign: "center",
     },
     fieldContainer: {
-      padding: "10px 20px",
+      padding: "10px 0",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      borderBottom: "1px solid #ddd",
     },
     fieldLabel: {
       fontWeight: "bold",
@@ -142,25 +136,16 @@ const ProfilePage = () => {
     fieldValue: {
       color: "#333",
     },
-    editButton: {
-      color: "#007bff",
-      cursor: "pointer",
-    },
   };
 
   return (
     <Box style={styles.container}>
       {/* Cover Photo */}
-      <Box
-        style={{
-          ...styles.coverPhoto,
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "start",
-          padding: "10px",
-        }}
-      >
-        <IconButton onClick={handleMenuClick}>
+      <Box style={styles.coverPhoto}>
+        <IconButton
+          onClick={handleMenuClick}
+          style={{ float: "right", margin: "10px" }}
+        >
           <MoreVertIcon />
         </IconButton>
         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
@@ -226,6 +211,7 @@ const ProfilePage = () => {
                 onChange={handleInputChange}
                 variant="outlined"
                 size="small"
+                fullWidth
               />
             ) : (
               <Typography variant="body1" style={styles.fieldValue}>
@@ -234,18 +220,21 @@ const ProfilePage = () => {
             )}
           </Box>
         ))}
+
         {/* Error Message */}
         {errorMessage && (
           <Box textAlign="center" padding="20px">
             <Alert severity="error">{errorMessage}</Alert>
           </Box>
         )}
+
         {/* Loading Spinner */}
         {loading && (
           <Box textAlign="center" padding="20px">
             <CircularProgress />
           </Box>
         )}
+
         {/* Submit Button */}
         {isEditing && !loading && (
           <Box textAlign="center" padding="20px">

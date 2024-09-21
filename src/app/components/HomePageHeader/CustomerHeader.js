@@ -13,8 +13,6 @@ import {
   Drawer,
   IconButton,
   InputBase,
-  Menu,
-  MenuItem,
   Toolbar,
   Typography,
   useMediaQuery,
@@ -25,14 +23,13 @@ import Image from "next/image"; // Assuming Next.js
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import CustomerHeaderMenu from "./CustomerHeaderMenu";
 
 export default function CustomerHeader() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const filterCategory = useSelector((state) => state.users.filterCategory);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -134,11 +131,11 @@ export default function CustomerHeader() {
       {/* Menu Option Styling */}
       {[
         { label: "HOME", link: "/" },
-        {
-          label: "ALL Products",
-          icon: <ArrowDropDownIcon />,
-          action: handleMenuClick,
-        },
+        // {
+        //   label: "ALL Products",
+        //   icon: <ArrowDropDownIcon />,
+        //   action: handleMenuClick,
+        // },
         { label: "ABOUT", link: "/about" },
         { label: "CONTACT", link: "/contact" },
       ].map((item, index) => (
@@ -302,7 +299,8 @@ export default function CustomerHeader() {
                 {/* All Product Menu */}
                 <Box
                   sx={{
-                    display: "flex",
+                    display: "none",
+                    // display: "flex",
                     alignItems: "center",
                     gap: "5px",
                     cursor: "pointer",
@@ -415,7 +413,9 @@ export default function CustomerHeader() {
                 transition: "transform 0.3s",
                 ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
               }}
-              onClick={() => handleButtonClick("productCart")}
+              onClick={() => {
+                router.push(`/productCart`);
+              }}
             />
           </Badge>
 
@@ -472,17 +472,12 @@ export default function CustomerHeader() {
       </Drawer>
 
       {/* Dropdown Menu for ALL Products */}
-      <Menu
+
+      <CustomerHeaderMenu
+        handleMenuClick={handleMenuClick}
+        handleMenuClose={handleMenuClose}
         anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        transformOrigin={{ vertical: "top", horizontal: "left" }}
-      >
-        <MenuItem onClick={handleMenuClose}>Category 1</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Category 2</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Category 3</MenuItem>
-      </Menu>
+      ></CustomerHeaderMenu>
     </AppBar>
   );
 }

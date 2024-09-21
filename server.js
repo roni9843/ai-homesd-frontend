@@ -29,6 +29,6 @@ app.prepare().then(() => {
       process.exit(1);
     })
     .listen(port, () => {
-      console.log(`> Ready on http://${hostname}:${port}`);
+      // console.log(e.log(og(`> Ready on http://${hostname}:${port}`);
     });
 });

@@ -8,7 +8,7 @@ export default function NewArrivalsUiSection() {
 
   AllProduct = AllProduct.slice(0, 6);
 
-  console.log("this is 6 product -> ", AllProduct);
+  // // console.log("this is 6 product -> ", AllProduct);
 
   const router = useRouter();
 

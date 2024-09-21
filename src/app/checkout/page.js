@@ -118,13 +118,15 @@ export default function CheckoutPage() {
       if (response.ok) {
         const data = await response.json();
         setOrderStatus("Order placed successfully!");
-
         setIsOrderDone(true);
 
         setTimeout(() => {
+          // Clear cart from Redux store and localStorage
+          dispatch(clearCart());
+          localStorage.removeItem("cartItems"); // Clear cart from localStorage
+
           router.push("/orderShippingInfo");
           setIsPushBack(false);
-          dispatch(clearCart());
           setIsLoading(false); // Stop loading after redirect
         }, 3000);
       } else {

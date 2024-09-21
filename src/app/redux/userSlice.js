@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Cookies from "js-cookie"; // Import js-cookie
 
+// Initial state setup
 export const usersSlice = createSlice({
   name: "users",
   initialState: {
     userInfo: null,
     userPhone: null,
-    cart: [],
+    cart: [], // Initialize an empty cart in Redux state
     orderHistory: [],
     allCategoryWithProduct: [],
     filterCategory: [],
@@ -14,21 +14,33 @@ export const usersSlice = createSlice({
     AllProduct: [],
   },
   reducers: {
-    setUserInfo: (state, action) => {
-      state.userInfo = action.payload;
-    },
-    setUserPhone: (state, action) => {
-      state.userPhone = action.payload;
-    },
-    addToCart: (state, action) => {
-      const existingProduct = state.cart.find(
-        (item) => item._id === action.payload._id
+     addToCart: (state, action) => {
+      const { _id } = action.payload;
+
+      // Find the index of the existing product in the cart
+      const existingProductIndex = state.cart.findIndex(
+        (item) => item._id === _id
       );
-      if (existingProduct) {
-        existingProduct.quantity += 1;
+
+      if (existingProductIndex !== -1) {
+        // If the product exists, update the quantity
+        const updatedCart = state.cart.map((item, index) =>
+          index === existingProductIndex
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+        state.cart = updatedCart; // Replace the cart with the updated one
       } else {
-        state.cart.push({ ...action.payload, quantity: 1 });
+        // Add the new product to the cart
+        state.cart = [...state.cart, { ...action.payload, quantity: 1 }];
       }
+
+      // console.log("cart ---- Updated cart state: ", state.cart); // Debug log
+    },
+    addToCartFromStorage: (state, action) => {
+      state.cart = action.payload;
+
+      // console.log("cart ---- Updated cart state: ", state.cart); // Debug log
     },
     removeFromCart: (state, action) => {
       state.cart = state.cart.filter((item) => item._id !== action.payload);
@@ -45,6 +57,15 @@ export const usersSlice = createSlice({
         product.quantity -= 1;
       }
     },
+    clearCart: (state) => {
+      state.cart = []; // Clear the cart in Redux state
+    },
+    setUserInfo: (state, action) => {
+      state.userInfo = action.payload;
+    },
+    setUserPhone: (state, action) => {
+      state.userPhone = action.payload;
+    },
     addCategoryWithProductRedux: (state, action) => {
       function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -55,7 +76,6 @@ export const usersSlice = createSlice({
       }
 
       const shuffledProducts = shuffle(action.payload);
-
       state.allCategoryWithProduct = shuffledProducts;
     },
     filterCategory: (state, action) => {
@@ -72,11 +92,13 @@ export const usersSlice = createSlice({
       }
 
       const shuffledProducts = shuffle(categoriesWithProducts);
-
       state.filterCategory = shuffledProducts;
     },
     AllProduct: (state, action) => {
       const allProducts = action.payload.flatMap((item) => item.products);
+      const liveProducts = allProducts.filter(
+        (product) => product.productLive === true
+      );
 
       function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -86,8 +108,7 @@ export const usersSlice = createSlice({
         return array;
       }
 
-      const shuffledProducts = shuffle(allProducts);
-
+      const shuffledProducts = shuffle(liveProducts);
       state.AllProduct = shuffledProducts;
     },
     filterOfferProduct: (state, action) => {
@@ -107,32 +128,16 @@ export const usersSlice = createSlice({
       }
 
       const shuffledProducts = shuffle(offerProducts);
-
       state.filterOfferProduct = shuffledProducts;
-    },
-    clearCart: (state) => {
-      state.cart = [];
     },
     addOrderHistory: (state, action) => {
       state.orderHistory.push(action.payload);
     },
-
     logOut: (state) => {
-      // Clear the user's information from Redux state
       state.userInfo = null;
       state.userPhone = null;
       state.cart = [];
       state.orderHistory = [];
-
-      // Remove token from cookies
-      Cookies.remove("token");
-
-      // Remove token and other relevant data from localStorage
-      localStorage.removeItem("token");
-      localStorage.removeItem("userInfo");
-      localStorage.removeItem("userPhone");
-      localStorage.removeItem("cart");
-      localStorage.removeItem("orderHistory");
     },
   },
 });
@@ -151,6 +156,7 @@ export const {
   filterCategory,
   AllProduct,
   filterOfferProduct,
+  addToCartFromStorage
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

@@ -6,7 +6,7 @@ export function middleware(req) {
   const cookieStore = cookies();
   const token = cookieStore.get("token");
 
-  console.log("this is middleware -> ", token);
+  // // console.log("this is middleware -> ", token);
 
   if (
     !token &&
@@ -26,5 +26,6 @@ export function middleware(req) {
 }
 
 export const config = {
+  // matcher: ["/checkout/:path*", "/order/:path*", "/orderShippingInfo/:path*"], // Apply middleware to specific routes
   matcher: ["/checkout/:path*", "/order/:path*", "/orderShippingInfo/:path*"], // Apply middleware to specific routes
 };
