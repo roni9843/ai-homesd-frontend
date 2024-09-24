@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 //   description: "Sign Up page",
 // };
 
-export default function ContactLayout({ children }) {
+export default function WishlistLayout({ children }) {
   return (
     <html lang="en">
       <body
@@ -40,7 +40,6 @@ export default function ContactLayout({ children }) {
         </Box>
 
         {children}
-
         <Footer></Footer>
       </body>
     </html>

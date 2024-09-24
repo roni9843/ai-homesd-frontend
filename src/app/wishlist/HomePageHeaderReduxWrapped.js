@@ -30,7 +30,15 @@ export default function HomePageHeaderReduxWrapped() {
           position: "sticky", // Makes the header sticky
           top: 0, // Sticks to the top
           zIndex: 1000, // Ensures the header stays on top
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Adds shadow for 3D effectky
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Adds shadow for 3D effect
+          top: 0, // Sticks to the top
+          zIndex: 1000, // Ensures the header stays on top
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Adds shadow for 3D effect
+          top: 0, // Sticks to the top
+          zIndex: 1000, // Ensures the header stays on top
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Adds shadow for 3D effect
+          top: 0, // Sticks to the top
+          zIndex: 1000, // Ensures the header stays on top
         }}
       >
         <CustomerHeader></CustomerHeader>

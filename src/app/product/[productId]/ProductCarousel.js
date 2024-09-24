@@ -6,7 +6,15 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 export default function ProductCarousel({ images }) {
   return (
     <div style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}>
-      <Carousel dynamicHeight={true} showThumbs={false}>
+      <Carousel
+        showThumbs={true}
+        dynamicHeight={true}
+        autoPlay={true}
+        infiniteLoop={true}
+        swipeable={true}
+        emulateTouch={true}
+        autoFocus={true}
+      >
         {images.images.map((image) => (
           <div
             key={image}

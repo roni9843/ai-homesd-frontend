@@ -27,6 +27,10 @@ export default function HomePageHeaderReduxWrapped() {
           backgroundColor: whiteColor_v_2,
           padding: { xs: "0", lg: "0 50px" }, // No padding on small screens, padding on large screens
           backgroundColor: "white",
+          position: "sticky", // Makes the header sticky
+          top: 0, // Sticks to the top
+          zIndex: 1000, // Ensures the header stays on top
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Adds shadow for 3D effect
         }}
       >
         <CustomerHeader></CustomerHeader>

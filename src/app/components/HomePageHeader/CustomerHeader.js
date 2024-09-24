@@ -4,6 +4,7 @@ import {
   Search as SearchIcon,
 } from "@mui/icons-material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import PersonIcon from "@mui/icons-material/Person";
 import {
@@ -210,14 +211,14 @@ export default function CustomerHeader() {
 
   const profileStyles = {
     profileImage: {
-      width: isSmallScreen ? "25px" : "25px",
-      height: isSmallScreen ? "25px" : "25px",
+      width: isSmallScreen ? "20px" : "20px",
+      height: isSmallScreen ? "20px" : "20px",
       borderRadius: "50%",
       backgroundColor: "black",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontSize: isSmallScreen ? "15px" : "20px",
+      fontSize: isSmallScreen ? "12px" : "12px",
       color: "#fff",
       margin: "0 auto",
     },
@@ -394,17 +395,16 @@ export default function CustomerHeader() {
         {/* Right Side: Shopping Cart and User Profile */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {/* Shopping Cart Icon */}
-          <Badge
-            badgeContent={totalQuantity}
-            color="secondary"
-            sx={{
-              "& .MuiBadge-badge": {
-                backgroundColor: "black", // Change badge background color
-                color: "white", // Change badge text color
-              },
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center", // Vertically center the items
+              justifyContent: "center", // Horizontally center the items
+              gap: "10px", // Add some space between the price and the cart icon
             }}
           >
-            <AddShoppingCartIcon
+            <FavoriteIcon
               sx={{
                 fontSize: "20px",
                 color: "black",
@@ -414,10 +414,43 @@ export default function CustomerHeader() {
                 ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
               }}
               onClick={() => {
-                router.push(`/productCart`);
+                router.push(`/wishlist`);
               }}
             />
-          </Badge>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center", // Vertically center the items
+              justifyContent: "center", // Horizontally center the items
+              gap: "10px", // Add some space between the price and the cart icon
+            }}
+          >
+            <Badge
+              badgeContent={totalQuantity}
+              color="secondary"
+              sx={{
+                "& .MuiBadge-badge": {
+                  backgroundColor: "black", // Change badge background color
+                  color: "white", // Change badge text color
+                },
+              }}
+            >
+              <AddShoppingCartIcon
+                sx={{
+                  fontSize: "20px",
+                  color: "black",
+                  ml: "10px",
+                  cursor: "pointer",
+                  transition: "transform 0.3s",
+                  ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
+                }}
+                onClick={() => {
+                  router.push(`/productCart`);
+                }}
+              />
+            </Badge>
+          </div>
 
           {/* Local Mall Icon */}
           <LocalMallIcon
@@ -459,7 +492,7 @@ export default function CustomerHeader() {
                   alignItems: "center",
                 }}
               >
-                <PersonIcon sx={{ fontSize: "20px", color: "white" }} />
+                <PersonIcon sx={{ fontSize: "15px", color: "white" }} />
               </Box>
             )}
           </Box>

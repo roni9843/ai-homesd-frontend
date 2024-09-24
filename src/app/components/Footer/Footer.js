@@ -9,13 +9,25 @@ const Footer = () => {
   return (
     <footer
       style={{
-        padding: "40px 0",
+        padding: "10px 0px 40px 0px",
         backgroundColor: "#454545",
         color: "white",
       }}
     >
       <div className="container">
-        <div className="row text-center text-md-start">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d913.5678874536801!2d90.3045616287882!3d23.666245096291476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bdedc8ed3751%3A0xd1c2e4805d0ebb9a!2sShaharat%20Resturant%20%26%20Grill%20Corner!5e0!3m2!1sen!2sbd!4v1727010572765!5m2!1sen!2sbd"
+          style={{
+            border: 0,
+            width: "100%", // Full width of the viewport
+            height: "300px", // Full height of the viewport
+          }}
+          allowFullScreen="" // Corrected the fullscreen attribute
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+
+        <div className="row text-center text-md-start mt-4">
           {/* About Section */}
           <div className="col-md-3 mb-4 mb-md-0">
             <h5 style={{ fontWeight: "bold" }}>ABOUT</h5>

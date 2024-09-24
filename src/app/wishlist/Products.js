@@ -1,3 +1,4 @@
+"use client";
 import FavoriteIcon from "@mui/icons-material/Favorite"; // Filled heart
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"; // Import the wishlist icon
 import CircularProgress from "@mui/material/CircularProgress"; // MUI loading spinner
@@ -6,9 +7,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import styles from "./NewArrivalsUiSection.module.css"; // Assuming you use CSS modules
+import styles from "./Products.module.css"; // Assuming you use CSS modules
 
-export default function NewArrivalsUiSection() {
+export default function Products() {
   let AllProduct = useSelector((state) => state.users.AllProduct);
   const [wishlist, setWishlist] = useState([]); // State to track wishlist items
   const [loading, setLoading] = useState(true); // State to track loading
@@ -90,6 +91,7 @@ export default function NewArrivalsUiSection() {
                 className="col-6 col-md-4 col-lg-4"
                 style={{
                   padding: "10px",
+                  display: wishlist.includes(p._id) ? "block" : "none",
                 }}
               >
                 <div

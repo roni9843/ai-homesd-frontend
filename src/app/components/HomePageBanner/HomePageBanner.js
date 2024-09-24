@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function HomePageBanner() {
   return (
-    <div className="row mt-1 mx-0">
+    <div className="row mt-1 mx-0 mb-2 ">
       <div className="mt-3">
         <div
           style={{

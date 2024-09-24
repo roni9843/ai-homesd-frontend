@@ -1,4 +1,4 @@
-import CategoryProductList from "@/app/components/CategoryProductList";
+import NewArrivalsUiSection from "@/app/components/NewArrivalsUiSection/NewArrivalsUiSection";
 import { addToCart } from "@/app/redux/userSlice";
 import AddShoppingCartTwoToneIcon from "@mui/icons-material/AddShoppingCartTwoTone";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -638,10 +638,7 @@ export default function SingleProductPage({ productData }) {
 
       {/* Related Products Section */}
       <div style={{ marginTop: 50 }}>
-        <CategoryProductList
-          category={productData.productCategory}
-          title="Related Products"
-        />
+        <NewArrivalsUiSection />
       </div>
     </>
   );
@@ -659,4 +656,9 @@ export default function SingleProductPage({ productData }) {
 
   
   <ExclusiveItemsPoster />
+
+  <CategoryProductList
+          category={productData.productCategory}
+          title="Related Products"
+        />
  *  */
