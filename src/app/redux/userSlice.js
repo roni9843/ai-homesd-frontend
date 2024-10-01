@@ -12,6 +12,12 @@ export const usersSlice = createSlice({
     filterCategory: [],
     filterOfferProduct: [],
     AllProduct: [],
+    shippingCost :  {
+      value: 0,
+      state : null
+    },
+    discountRate : 0,
+    couponCode : null
   },
   reducers: {
      addToCart: (state, action) => {
@@ -59,6 +65,10 @@ export const usersSlice = createSlice({
     },
     clearCart: (state) => {
       state.cart = []; // Clear the cart in Redux state
+    },
+    clearCouponHistory: (state) => {
+        state.discountRate = 0,
+        state.couponCode = null
     },
     setUserInfo: (state, action) => {
       state.userInfo = action.payload;
@@ -133,6 +143,20 @@ export const usersSlice = createSlice({
     addOrderHistory: (state, action) => {
       state.orderHistory.push(action.payload);
     },
+
+
+    addShippingCostAndDiscountAndCouponCode: (state, action) => {
+   
+   
+      state.shippingCost = action.payload.shippingCost;
+      state.discountRate = action.payload.discountRate;
+      state.couponCode = action.payload.couponCode;
+
+
+    },
+
+    
+
     logOut: (state) => {
       state.userInfo = null;
       state.userPhone = null;
@@ -151,12 +175,14 @@ export const {
   decreaseQuantity,
   clearCart,
   addOrderHistory,
+  clearCouponHistory,
   logOut,
   addCategoryWithProductRedux,
   filterCategory,
   AllProduct,
   filterOfferProduct,
-  addToCartFromStorage
+  addToCartFromStorage,
+  addShippingCostAndDiscountAndCouponCode
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

@@ -1,60 +1,222 @@
 "use client";
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import { whiteColor_v_2 } from "../../../color";
+import Shipping from "../productCart/Shipping";
+import Coupon from "../productCart/Coupon";
 import { useDispatch, useSelector } from "react-redux";
+import { clearCart, clearCouponHistory } from "../redux/userSlice";
+import { useRouter } from "next/navigation";
 import checkGif from "../../../public/check.gif";
-import { clearCart } from "../redux/userSlice";
+import Image from "next/image";
 
-export default function CheckoutPage() {
+export default function Checkout() {
+  const [shippingMethod, setShippingMethod] = useState("insideDhaka");
   const router = useRouter();
+
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.users.userInfo);
+
+  const [orderNotes, setOrderNotes] = useState("");
+  const [couponCode, setCouponCode] = useState(null);
   const cart = useSelector((state) => state.users.cart);
-  const [address, setAddress] = useState("");
-  const [orderStatus, setOrderStatus] = useState(null);
-
-  const [userNameState, setUserNameState] = useState("");
-
-  const [userPhoneState, setUserPhoneState] = useState("");
-
-  const [isOrderDone, setIsOrderDone] = useState(false);
+  const userInfo = useSelector((state) => state.users.userInfo);
+  const discountRateRedux = useSelector((state) => state.users.discountRate);
+  const shippingCostRedux = useSelector((state) => state.users.shippingCost);
+  const [shippingCost, setShippingCost] = useState({
+    value: shippingCostRedux.value,
+    state: shippingCostRedux.state,
+  });
+  const [isHovered, setIsHovered] = useState(false);
+  const [discountRate, setDiscountRate] = useState(discountRateRedux);
   const [isPushBack, setIsPushBack] = useState(true);
+
+
+
+  // New state for form fields
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [thanaDistrict, setThanaDistrict] = useState("");
+  const [orderStatus, setOrderStatus] = useState(null);
+  const [isOrderDone, setIsOrderDone] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // New loading state
-  const addressInputRef = useRef(null); // Ref for address field
+
+  const couponCodeRedux = useSelector((state) => state.users.couponCode);
+
+      useEffect(()=>{
+
+       setCouponCode(couponCodeRedux)
+
+
+      },[userInfo])
+
+
+
+
+
+  useEffect(()=>{
+
+// userInfo === null ? "" : userInfo.username
+setName(userInfo === null ? "" : userInfo.username)
+setPhone(userInfo === null ? "" : userInfo.phoneNumber)
+
+  },[userInfo])
+
+
+  // New state for form validation errors
+  const [errors, setErrors] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    thanaDistrict: "",
+  });
+
+
+
+
+  // Updated styles for smaller fonts and mobile layout
+  const styles = {
+    container: {
+  //   display: 'flex',
+   //   flexDirection: 'row',
+   //   flexWrap: 'wrap',
+    //  maxWidth: '1200px',
+      margin: '20px auto',
+      fontFamily: 'Arial, sans-serif',
+    },
+    form: {
+    //  flex: '2',
+      padding: '20px',
+      border: '1px solid #ddd',
+      marginBottom: '20px',
+   //   boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+      borderRadius: '8px',
+      fontSize: '14px', // Smaller font size for professional look
+      backgroundColor:"white"
+    },
+    orderSummary: {
+    //  flex: '1',
+      padding: '20px',
+      backgroundColor: 'white', // Set background color to white
+      border: '1px solid #ddd',
+      boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+      borderRadius: '8px',
+      fontSize: '14px', // Smaller font size for the order summary as well
+      border: "2px solid black"
+    },
+    section: {
+      marginTop: '20px',
+      marginBottom: '20px',
+    },
+    label: {
+      display: 'block',
+      fontWeight: 'bold',
+      marginBottom: '5px',
+      color: '#333',
+    },
+    input: {
+      width: '100%',
+      padding: '10px', // Smaller padding
+      marginBottom: '15px',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      fontSize: '14px', // Input font size
+    },
+    orderConfirmation : {
+      marginTop: "50px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+
+    orderConfirmationCard : {
+      width: "300px",
+      borderRadius: "10px",
+      overflow: "hidden",
+      backgroundColor: "#f8faf6",
+      border: "none",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    textarea: {
+      width: '100%',
+      padding: '10px', // Smaller padding
+      height: '80px',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      fontSize: '14px',
+      marginBottom: '20px',
+    },
+    summaryItem: {
+      display: 'flex',
+      justifyContent: 'space-between',
+    //  marginBottom: '15px',
+    //  paddingBottom: '10px',
+    //  borderBottom: '1px solid #eee',
+    },
+    radio: {
+      marginBottom: '10px',
+    },
+    button: {
+      backgroundColor: '#000',
+      color: '#fff',
+      padding: '15px',
+      textAlign: 'center',
+      border: 'none',
+      width: '100%',
+      cursor: 'pointer',
+      fontSize: '16px',
+      marginTop: '20px',
+      textTransform: 'uppercase',
+      borderRadius: '4px',
+    },
+    orderItem: {
+      display:"flex",
+      justifyContent: "space-between",
+      borderBottom: '1px solid #ccc',
+      paddingBottom: '10px',
+      marginBottom: '10px',
+    },
+    error: {
+      color: "red",
+      fontSize: "12px",
+      marginBottom: "10px",
+    },
+    // Mobile-first design with specific focus on moving the order section below the form
+    '@media (max-width: 768px)': {
+      container: {
+        flexDirection: 'column',
+      },
+      orderSummary: {
+        marginTop: '20px', // Push the order summary below the form on mobile
+      },
+    },
+  };
+
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    setUserNameState(userInfo?.username);
+    setTotalPrice(
+      cart
+        .reduce(
+          (total, item) =>
+            total +
+            (item.productOffer
+              ? (
+                  item.productRegularPrice.toFixed(2) *
+                  (1 - item.productOffer / 100)
+                ).toFixed(2)
+              : item.productRegularPrice.toFixed(2)) * item.quantity,
+          0
+        )
+        .toFixed(2)
+    );
+  }, [cart]);
 
-    setUserPhoneState(userInfo?.phoneNumber);
 
-    if (userInfo?.id) {
-      fetchUserInfo(userInfo.id);
-    }
-  }, [userInfo]);
 
-  const fetchUserInfo = async (userId) => {
-    const response = await fetch("https://backend.aihomesd.com/getTheUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: userId }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch user info");
-    }
-
-    const fetchUser = await response.json();
-
-    if (fetchUser) {
-      setUserPhoneState(fetchUser.user.username);
-
-      setUserNameState(fetchUser.user.phoneNumber);
-    }
-  };
 
   useEffect(() => {
     if (isPushBack) {
@@ -64,295 +226,342 @@ export default function CheckoutPage() {
     }
   }, [cart, router, isPushBack]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    if (!address) {
-      setOrderStatus("Address is required.");
-      return;
-    }
 
-    setIsLoading(true); // Start loading
-
-    const orderDetails = {
-      userId: userInfo._id,
-      products: cart.map((item) => ({
-        product: item._id,
-        qty: item.quantity,
-        price:
-          item.productOffer > 0
-            ? (
-                item.productRegularPrice.toFixed(2) *
-                (1 - item.productOffer / 100)
-              ).toFixed(2)
-            : item.productRegularPrice.toFixed(2),
-      })),
-
-      address,
-      totalAmount: cart
-        .reduce(
-          (total, item) =>
-            total +
-            (item.productOffer
+  // Validation function
+  const handleOrder = async () => {
+    const newErrors = {
+      name: name ? "" : "Name is required",
+      phone: phone ? "" : "Phone number is required",
+      address: address ? "" : "Address is required",
+      thanaDistrict: thanaDistrict ? "" : "Thana & District is required",
+    };
+  
+    setErrors(newErrors);
+  
+    // Check if there are any errors
+    if (!newErrors.name && !newErrors.phone && !newErrors.address && !newErrors.thanaDistrict) {
+      // All fields are filled, proceed with order
+      const orderDetails = {
+        userId: userInfo._id,
+        products: cart.map((item) => ({
+          product: item._id,
+          qty: item.quantity,
+          price:
+            item.productOffer > 0
               ? (
                   item.productRegularPrice.toFixed(2) *
                   (1 - item.productOffer / 100)
                 ).toFixed(2)
-              : item.productRegularPrice.toFixed(2)) *
-              item.quantity,
-          0
-        )
-        .toFixed(2),
-      paymentMethod: "Cash on Delivery",
-    };
+              : item.productRegularPrice.toFixed(2),
+        })),
+        address: address,
+        totalAmount: totalPrice,
+        paymentMethod: "Cash on Delivery",
+        shippingCost: shippingCost.value,
+        shippingState: shippingCost.state,
+        couponCode: couponCode,
+        couponAmount: discountRate,
+        phoneNumber: phone,
+        thanaDistrict: thanaDistrict,
+        name: name,
+        orderNotes: orderNotes,
+      };
 
-    try {
-      const response = await fetch("https://backend.aihomesd.com/postOrder", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderDetails),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setOrderStatus("Order placed successfully!");
-        setIsOrderDone(true);
-
-        setTimeout(() => {
-          // Clear cart from Redux store and localStorage
-          dispatch(clearCart());
-          localStorage.removeItem("cartItems"); // Clear cart from localStorage
-
-          router.push("/orderShippingInfo");
-          setIsPushBack(false);
-          setIsLoading(false); // Stop loading after redirect
-        }, 3000);
-      } else {
-        setOrderStatus("Failed to place order.");
-        setIsLoading(false); // Stop loading on failure
+      setIsLoading(true); // Start loading
+  
+      try {
+        const response = await fetch("http://localhost:8000/postOrder", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderDetails),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+  
+          setOrderStatus("Order placed successfully!");
+          setIsOrderDone(true);
+  
+          // Show success alert
+         // alert("Order placed successfully!");
+  
+          setTimeout(() => {
+            // Clear cart from Redux store and localStorage
+            dispatch(clearCart());
+            dispatch(clearCouponHistory());
+            localStorage.removeItem("cartItems"); // Clear cart from localStorage
+  
+            router.push("/orderShippingInfo");
+            setIsPushBack(false);
+            setIsLoading(false); // Stop loading after redirect
+          }, 3000);
+        } else {
+          setOrderStatus("Failed to place order.");
+          setIsLoading(false); // Stop loading on failure
+          alert("Failed to place order. Please try again.");
+        }
+      } catch (error) {
+        // Catch network or server errors
+        setOrderStatus("An error occurred. Please try again later.");
+        setIsLoading(false);
+        console.error("Order placement error:", error);
+        alert("An error occurred. Please try again later.");
       }
-    } catch (error) {
-      setOrderStatus("Error: " + error.message);
-      setIsLoading(false); // Stop loading on error
+    } else {
+      // Show an error if any field is missing
+      alert("Please fill all required fields before placing your order.");
+      setIsLoading(false); // Start loading
     }
   };
+  
 
-  useEffect(() => {
-    // Focus on address field when page loads
-    if (addressInputRef.current) {
-      addressInputRef.current.focus();
-    }
-  }, []);
+
+
+
 
   return (
-    <div className="checkout-page">
-      <style jsx>{`
-        .checkout-page {
-          margin: 0 auto;
-          padding: 20px;
-          max-width: 600px;
-          width: 100%;
-        }
 
-        .checkout-title {
-          text-align: center;
-          color: #000;
-          margin-bottom: 20px;
-          font-size: 24px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
 
-        .checkout-title-bold {
-          padding-left: 5px;
-          font-weight: bold;
-        }
+    <div>  
+    
 
-        .checkout-form {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-        }
+    {
+      !isOrderDone ?
+  
 
-        .checkout-field {
-          display: flex;
-          flex-direction: column;
-        }
 
-        .checkout-label {
-          margin-bottom: 8px;
-          color: #000;
-          font-weight: bold;
-          font-size: 15px;
-        }
+    <Box
+      sx={{
+        backgroundColor: whiteColor_v_2,
+        padding: { xs: "0", lg: "5px 50px" },
+      }}
+    >
 
-        .checkout-input {
-          padding: 7px;
-          border-radius: 5px;
-          font-size: 12px;
-          color: #000;
-          background-color: #f3f3f3;
-          border: none;
-        }
+    {userInfo &&  (
+      <div className="row m-0 p-0"   >
 
-        .checkout-textarea {
-          padding: 7px;
-          border-radius: 5px;
-          font-size: 12px;
-          color: #000;
-          background-color: #fff;
-          border: 1px solid #f3f3f3;
-          height: 100px;
-        }
 
-        .checkout-submit {
-          padding: 10px;
-          border-radius: 20px;
-          border: none;
-          background-color: ${isLoading ? "#ccc" : "#000"};
-          color: #fff;
-          font-size: 16px;
-          font-weight: bold;
-          cursor: ${isLoading ? "not-allowed" : "pointer"};
-          transition: background-color 0.3s, transform 0.1s ease;
-        }
+ 
 
-        .order-confirmation {
-          margin-top: 50px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
+        <div
+        className="mb-3 mt-3"
+        style={{ textAlign: "center", fontSize: "24px" }}
+      >
+        <span>My </span>
+        <span style={{ fontWeight: "bold" }}>CHECKOUT DETAILS</span>
+      </div>
+      {/* Left Side: Billing & Shipping Form */}
+      <div className="col-12 col-md-6 px-2"   >
+        <div className="m-2" style={styles.form}>
+          <h2
+            style={{
+              fontSize: "18px",
+              fontWeight: "bold",
+              borderBottom: "2px solid gray",
+              marginBottom: "20px",
+              paddingBottom: "10px",
+            }}
+          >
+            BILLING & SHIPPING
+          </h2>
+          <div style={styles.section}>
+            <label style={styles.label}>Full Name (পুরো নাম)</label>
+            <input
+              style={styles.input}
+              type="text"
+              placeholder="Enter your Name (আপনার নাম লিখুন)"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            {errors.name && <p style={styles.error}>{errors.name}</p>}
 
-        .order-confirmation-card {
-          width: 300px;
-          border-radius: 10px;
-          overflow: hidden;
-          background-color: #f8faf6;
-          border: none;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
+            <label style={styles.label}>Phone No (ফোন নাম্বার)</label>
+            <input
+              style={styles.input}
+              type="tel"
+              placeholder="Enter your Phone No (ফোন নাম্বার লিখুন)"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            {errors.phone && <p style={styles.error}>{errors.phone}</p>}
 
-        .order-status {
-          text-align: center;
-          margin-top: 20px;
-          color: #000;
-          font-weight: bold;
-          font-size: 16px;
-        }
+            <label style={styles.label}>Address (ঠিকানা)</label>
+            <input
+              style={styles.input}
+              type="text"
+              placeholder="Enter Your Address (আপনার ঠিকানা লিখুন)"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+            {errors.address && <p style={styles.error}>{errors.address}</p>}
 
-        .spinner {
-          width: 50px;
-          height: 50px;
-          border: 5px solid #f3f3f3;
-          border-top: 5px solid #000;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-          margin: 20px auto;
-        }
-
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-          .checkout-title {
-            font-size: 20px;
-          }
-
-          .checkout-label {
-            font-size: 14px;
-          }
-
-          .checkout-input,
-          .checkout-textarea {
-            font-size: 14px;
-          }
-
-          .checkout-submit {
-            font-size: 14px;
-          }
-        }
-      `}</style>
-
-      {userInfo && (
-        <div style={{ display: `${isOrderDone ? "none" : "block"}` }}>
-          <span className="checkout-title">
-            Checkout{"  "}
-            <span className="checkout-title-bold">Details</span>
-          </span>
-          <form onSubmit={handleSubmit} className="checkout-form">
-            <div className="checkout-field">
-              <label className="checkout-label">Name:</label>
-              <input
-                type="text"
-                className="checkout-input"
-                value={userNameState}
-                readOnly
-              />
-            </div>
-
-            <div className="checkout-field">
-              <label className="checkout-label">Phone Number:</label>
-              <input
-                type="text"
-                value={userPhoneState}
-                readOnly
-                className="checkout-input"
-              />
-            </div>
-            <div className="checkout-field">
-              <label className="checkout-label">Address:</label>
-              <textarea
-                ref={addressInputRef} // Set the ref for auto focus
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-                className="checkout-textarea"
-              />
-            </div>
-            <div className="checkout-field">
-              <label className="checkout-label">Payment Method:</label>
-              <input
-                type="text"
-                value="Cash on Delivery"
-                readOnly
-                className="checkout-input"
-              />
-            </div>
-
-            {isLoading ? (
-              <div className="spinner"></div>
-            ) : (
-              <button type="submit" className="checkout-submit">
-                Place Order
-              </button>
+            <label style={styles.label}>Thana & District (থানা ও জেলা)</label>
+            <input
+              style={styles.input}
+              type="text"
+              placeholder="Enter your Thana & District (থানা ও জেলা লিখুন)"
+              value={thanaDistrict}
+              onChange={(e) => setThanaDistrict(e.target.value)}
+            />
+            {errors.thanaDistrict && (
+              <p style={styles.error}>{errors.thanaDistrict}</p>
             )}
 
-            <span>{orderStatus}</span>
-          </form>
-        </div>
-      )}
+            <label style={styles.label}>Country (optional)</label>
+            <input style={styles.input} type="text" value="Bangladesh" disabled />
+          </div>
 
-      {isOrderDone && (
-        <div className="order-confirmation">
-          <div className="order-confirmation-card">
-            <Image src={checkGif} alt="check" width={100} height={100} />
-            <span className="order-status">Order Placed Successfully!</span>
+          <div style={styles.section}>
+            <h3 style={{ fontSize: "16px", fontWeight: "bold" }}>
+              ADDITIONAL INFORMATION
+            </h3>
+            <label style={styles.label}>Order Notes (optional)</label>
+            <textarea
+              style={styles.textarea}
+              placeholder="Notes about your order, e.g. special notes for delivery."
+              value={orderNotes}
+              onChange={(e) => setOrderNotes(e.target.value)}
+            ></textarea>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Right Side: Order Summary */}
+      <div className="col-12 col-md-6  px-2" >
+
+      <div className="m-2" style={styles.orderSummary} >
+      
+      <h2 style={{ fontSize: '18px' ,fontWeight : "bold" ,   borderBottom: "2px solid gray",marginBottom: "20px", paddingBottom:"10px" }}>YOUR ORDER</h2> {/* Smaller heading */}
+
+  
+
+        {cart.map((item) => (
+          <div style={styles.orderItem}>
+          <p>{ item.productName } × { item.quantity }</p>
+          <div style={styles.summaryItem}>
+            <span></span>
+            <span>৳ {((item.productOffer
+              ? item.productRegularPrice * (1 - item.productOffer / 100)
+              : item.productRegularPrice) * item.quantity).toFixed(2)}</span>
+          </div>
+        </div>
+        ))}
+
+       
+        {/* Subtotal and Shipping */}
+        <div style={styles.summaryItem}>
+          <strong>Subtotal:</strong>
+          <span>৳ {totalPrice} </span>
+        </div>
+
+        {
+          discountRate > 0 &&   <div className="mt-0" style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", padding: "5px 0" }}>
+          <span style={{fontWeight: "bold"}}>Coupon Discount:</span>
+          <span style={{ fontWeight: "bold" }}>- ৳ {discountRate}</span>
+          </div>
+        }
+
+      <Shipping setShippingCost={setShippingCost}></Shipping>
+
+
+
+        <div style={styles.summaryItem}>
+          <strong>Total:</strong>
+          <span>৳ { ((totalPrice - discountRate) + shippingCost.value).toFixed(2) } </span>
+        </div>
+
+        {/* Payment Method */}
+        <div style={styles.section}>
+          <h3 style={{ fontSize: '16px' }}>Cash on delivery</h3>
+          <p style={{ fontSize: '14px' }}>Pay with cash upon delivery.</p>
+        </div>
+
+
+
+
+      
+
+                  {isLoading ? (
+                    <div className="spinner"></div>
+                  ) : (
+
+                     <button
+                     className="btn button-opacityNormal"
+                     onClick={handleOrder}
+                      style={{
+                      backgroundColor: "black",
+                      padding: "10px 15px",
+                      borderRadius: "25px",
+                      color: "white",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      transition: "background-color 0.3s ease, transform 0.1s ease",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width:"100%"
+                    }}
+             disabled={isLoading}
+                  >
+                  
+                    PLACE ORDER 
+                    
+                  </button>
+
+                  )}
+      
+                  <span>{orderStatus}</span>
+
+
+                  {
+                
+                    !discountRateRedux &&  <div className="my-4" style={{ height: "1px", width: "100%", backgroundColor: "gray" }}></div>
+    
+    
+                  }
+              
+
+
+                  <Coupon setCouponCodeText={setCouponCode} setDiscountRate={setDiscountRate} setIsHovered={setIsHovered} isHovered={isHovered} 
+                  ></Coupon>
+
+       
+
+
+
+
+      </div>
+        
+      </div>
+    
+
+
+
+      
+
+    
+       
+
+      </div>
+                  )}
+
+
+    </Box>
+    :   <div  style={styles.orderConfirmation}>
+    <div style={styles.orderConfirmationCard}>
+      <Image src={checkGif} alt="check" width={100} height={100} />
+      <span className="order-status">Order Placed Successfully!</span>
     </div>
+  </div>
+  }
+    
+    
+    </div>
+
+    
   );
 }

@@ -17,6 +17,8 @@ import {
   whiteColor_v_3,
 } from "../../../../color";
 import ProductCarousel from "./ProductCarousel";
+import SingleProductINDESBtnReduxWrapped from "./SingleProductINDESBtnReduxWrapped";
+
 import "./SingleProductPage.css";
 
 export default function SingleProductPage({ productData }) {
@@ -105,7 +107,6 @@ export default function SingleProductPage({ productData }) {
               <FavoriteBorderIcon />
             </div>
           </div>
-
           {/* Price Section */}
           <div
             className="mt-3"
@@ -153,7 +154,6 @@ export default function SingleProductPage({ productData }) {
               </span>
             )}
           </div>
-
           {/* Additional Sections */}
           <div style={{ marginBottom: 20 }}>
             {/* Video Link Section */}
@@ -172,120 +172,11 @@ export default function SingleProductPage({ productData }) {
 
             {/* Weight Section */}
           </div>
-
           {/* Action Buttons */}
 
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" }, // Show only on small screens
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <button
-              className="btn button-opacityNormal"
-              onClick={() => {
-                // Initialize product with quantity 1
-                const payload = { ...productData, quantity: 1 };
-
-                // Retrieve existing cart items from localStorage
-                let cartItems = localStorage.getItem("cartItems");
-                cartItems = cartItems ? JSON.parse(cartItems) : [];
-
-                // Check if the product already exists in the cart based on _id
-                const existingProductIndex = cartItems.findIndex(
-                  (item) => item._id === payload._id
-                );
-
-                if (existingProductIndex !== -1) {
-                  // If the product exists, update its quantity
-                  cartItems[existingProductIndex].quantity += 1;
-                } else {
-                  // If the product doesn't exist, add it with a quantity of 1
-                  cartItems.push(payload);
-                }
-
-                console.log("this is cart ->  ", cartItems);
-
-                // Save the updated cart array back to localStorage
-                localStorage.setItem("cartItems", JSON.stringify(cartItems));
-
-                // Dispatch the action to update the Redux store (optional, depending on your app)
-                dispatch(addToCart(payload));
-              }}
-              style={{
-                backgroundColor: blackColor,
-                color: whiteColor,
-                border: "none",
-                padding: "12px 25px",
-                fontSize: 16,
-                borderRadius: 20,
-                cursor: "pointer",
-                marginRight: 10,
-                transition: "background-color 0.3s ease, transform 0.1s ease",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <AddShoppingCartTwoToneIcon
-                style={{ color: whiteColor, marginRight: 8 }}
-              />
-              Add to Cart
-            </button>
-            <button
-              className="btn   "
-              onClick={() => {
-                // Initialize product with quantity 1
-                const payload = { ...productData, quantity: 1 };
-
-                // Retrieve existing cart items from localStorage
-                let cartItems = localStorage.getItem("cartItems");
-                cartItems = cartItems ? JSON.parse(cartItems) : [];
-
-                // Check if the product already exists in the cart based on _id
-                const existingProductIndex = cartItems.findIndex(
-                  (item) => item._id === payload._id
-                );
-
-                if (existingProductIndex !== -1) {
-                  // If the product exists, update its quantity
-                  cartItems[existingProductIndex].quantity += 1;
-                } else {
-                  // If the product doesn't exist, add it with a quantity of 1
-                  cartItems.push(payload);
-                }
-
-                console.log("this is cart ->  ", cartItems);
-
-                // Save the updated cart array back to localStorage
-                localStorage.setItem("cartItems", JSON.stringify(cartItems));
-
-                dispatch(addToCart(payload));
-                router.push("/productCart");
-              }}
-              style={{
-                border: `2px solid ${"black"}`,
-                color: "black",
-                padding: "12px 25px",
-                fontWeight: "bold",
-                fontSize: 16,
-                borderRadius: 20,
-                cursor: "pointer",
-                marginRight: 10,
-                transition: "background-color 0.3s ease, transform 0.1s ease",
-                display: "flex",
-                alignItems: "center",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <ShoppingBasketTwoToneIcon
-                style={{ color: "black", marginRight: 8 }}
-              />
-              Buy Now
-            </button>
-          </Box>
+          <SingleProductINDESBtnReduxWrapped
+            productData={productData}
+          ></SingleProductINDESBtnReduxWrapped>
 
           {productData?.productYoutubeLink &&
             productData.productYoutubeLink !== "" && (
@@ -306,7 +197,6 @@ export default function SingleProductPage({ productData }) {
                 ></iframe>
               </div>
             )}
-
           {productData?.pdfFileName && productData.pdfFileName !== "" && (
             <div
               style={{
@@ -337,7 +227,6 @@ export default function SingleProductPage({ productData }) {
               </a>
             </div>
           )}
-
           <Box
             sx={{
               marginTop: 5,
@@ -477,11 +366,8 @@ export default function SingleProductPage({ productData }) {
               )}
             </Box>
           </Box>
-
           {/* Order Now and + Add to Cart Buttons at the Bottom */}
-
           {/* Your existing product details code here */}
-
           <Box
             sx={{
               position: "fixed",

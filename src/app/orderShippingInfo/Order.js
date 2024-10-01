@@ -169,15 +169,28 @@ export default function Order({ orderDetails, userInfo }) {
           <Typography>Name: {userInfo.username}</Typography>
           <Typography>Phone: {userInfo.phoneNumber}</Typography>
           <Typography>Address: {orderDetails.address}</Typography>
+          {
+            orderDetails.orderNotes &&    <Typography>Order Notes: {orderDetails.orderNotes}</Typography>
+          }
+       
+          <hr className="m-1 p-0" />
+          <Typography>Shipping Cost: ৳ {orderDetails.shippingCost}</Typography>
+          {
+            orderDetails.couponAmount !== 0 &&  <Typography>Coupon Discount: ৳ {orderDetails.couponAmount}</Typography>
+          }
+         
           <Typography sx={{ fontWeight: "bold" }}>
             Payment Method: {orderDetails.paymentMethod}
+          </Typography>
+          <Typography sx={{ fontWeight: "bold" }}>
+            Payment Area: {orderDetails.shippingState === "shippingOutsideDhaka" ? "ঢাকার বাহিরে" : "ঢাকার মধ্যে"   }
           </Typography>
           <Typography
             variant="h5"
             align="left"
             sx={{ fontWeight: "bold", marginTop: "20px" }}
           >
-            Total: ৳{orderDetails.totalAmount.toFixed(2)}
+            Total: ৳{(orderDetails.totalAmount - orderDetails.couponAmount + orderDetails.shippingCost).toFixed(2)}
           </Typography>
         </CardContent>
       </Card>
