@@ -271,7 +271,7 @@ setPhone(userInfo === null ? "" : userInfo.phoneNumber)
       setIsLoading(true); // Start loading
   
       try {
-        const response = await fetch("http://localhost:8000/postOrder", {
+        const response = await fetch("https://backend.aihomesd.com/postOrder", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

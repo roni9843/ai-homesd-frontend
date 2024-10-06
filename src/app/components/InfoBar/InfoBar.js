@@ -36,7 +36,7 @@ export default function InfoBar() {
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
           <PhoneIcon fontSize="small" />
-          <Typography variant="body2">018XXXX-XXXXX</Typography>
+          <Typography variant="body2"> 01734-700316</Typography>
         </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>

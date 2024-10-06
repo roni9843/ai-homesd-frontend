@@ -33,7 +33,7 @@ export default function Shipping({setShippingCost}) {
 
 
   // Base URL for your API
-  const baseUrl = 'http://localhost:8000/shipping/'; // Add the endpoint for fetching shipping info
+  const baseUrl = 'https://backend.aihomesd.com/shipping/'; // Add the endpoint for fetching shipping info
 
   // Function to fetch shipping information
   const fetchShippingInfo = async () => {

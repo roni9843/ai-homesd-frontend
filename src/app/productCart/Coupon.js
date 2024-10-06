@@ -17,7 +17,7 @@ export default function Coupon({ isHovered, setIsHovered,setDiscountRate ,setCou
   // Function to fetch coupon data
   const fetchCouponData = async () => {
     try {
-      const response = await fetch('http://localhost:8000/coupons'); // Replace with your actual API endpoint
+      const response = await fetch('https://backend.aihomesd.com/coupons'); // Replace with your actual API endpoint
       if (!response.ok) {
         throw new Error('Failed to fetch coupon data');
       }
@@ -35,7 +35,7 @@ export default function Coupon({ isHovered, setIsHovered,setDiscountRate ,setCou
   const handleApplyCoupon = async () => {
     if (couponCode) {
       try {
-        const response = await fetch(`http://localhost:8000/coupons/validate/${couponCode}`); // Validate the coupon code
+        const response = await fetch(`https://backend.aihomesd.com/coupons/validate/${couponCode}`); // Validate the coupon code
         if (!response.ok) {
           throw new Error('Invalid coupon code');
         }

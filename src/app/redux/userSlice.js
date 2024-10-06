@@ -63,6 +63,18 @@ export const usersSlice = createSlice({
         product.quantity -= 1;
       }
     },
+    increaseQuantityFromProductPage: (state, action) => {
+      const product = state.cart.find((item) => item._id === action.payload.id);
+      if (product) {
+        product.quantity =  product.quantity  + action.payload.qty;
+      }
+    },
+    decreaseQuantityFromProductPage: (state, action) => {
+      const product = state.cart.find((item) => item._id === action.payload.id);
+      if (product) {
+        product.quantity =  product.quantity  - action.payload.qty;
+      }
+    },
     clearCart: (state) => {
       state.cart = []; // Clear the cart in Redux state
     },
@@ -182,7 +194,9 @@ export const {
   AllProduct,
   filterOfferProduct,
   addToCartFromStorage,
-  addShippingCostAndDiscountAndCouponCode
+  addShippingCostAndDiscountAndCouponCode,
+  increaseQuantityFromProductPage,
+  decreaseQuantityFromProductPage
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

@@ -1,9 +1,11 @@
+import { Facebook, LinkedIn, Twitter } from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Container,
   Divider,
   Grid,
+  IconButton,
   Typography,
 } from "@mui/material";
 
@@ -37,40 +39,55 @@ export default function AboutPage() {
         </Typography>
       </Box>
 
-      {/* Section 2: Who We Are */}
-      <Grid container spacing={4} sx={{ mb: 5 }}>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h4" sx={{ fontWeight: 600, mb: 2 }}>
-            Who We Are
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ lineHeight: 1.7, textAlign: "justify" }}
-          >
-            We are a passionate team committed to delivering high-quality
-            products and services to meet the evolving needs of our customers.
-            With a focus on innovation, excellence, and customer satisfaction,
-            we strive to make a difference in the industry by offering reliable,
-            efficient, and user-friendly solutions. Our goal is to consistently
-            exceed expectations and provide value that goes beyond products.
-          </Typography>
+      {/* Section 5: Meet Our Team */}
+     
+      <Box sx={{ mb: 5 }}>
+        <Grid container spacing={4} justifyContent="center">
+          <Grid item xs={12} sm={6} md={4}>
+            <Box textAlign="center">
+              <Avatar
+                src="/Nazmus.jpg"
+                alt="John Doe"
+                sx={{
+                  width: 250,
+                  height: 250,
+                  mb: 2,
+                  mx: "auto",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+                }}
+              />
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
+              Engr. Md. Nazmus Sakib
+              </Typography>
+              <Typography variant="body2">CEO</Typography>
+      
+              {/* Social Media Icons */}
+              <Box sx={{ mt: 2 }}>
+                <IconButton color="primary" aria-label="Facebook">
+                  <Facebook />
+                </IconButton>
+                <IconButton color="primary" aria-label="Twitter">
+                  <Twitter />
+                </IconButton>
+                <IconButton color="primary" aria-label="LinkedIn">
+                  <LinkedIn />
+                </IconButton>
+              </Box>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Avatar
-            src="https://i.ibb.co/bH8bTRD/pexels-blitzboy-1040881.jpg"
-            alt="Our Team"
-            sx={{
-              width: "100%",
-              height: "auto",
-              borderRadius: 2,
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            }}
-          />
-        </Grid>
-      </Grid>
+      </Box>
+      
 
       <Divider sx={{ mb: 5 }} />
 
+      {/* Section 3: Vision and Mission */}
+      <Box sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ fontWeight: 600, mb: 3 }}>
+        Company Name: Ai Home Tech
+        </Typography>
+     
+      </Box>
       {/* Section 3: Vision and Mission */}
       <Box sx={{ mb: 5 }}>
         <Typography variant="h4" sx={{ fontWeight: 600, mb: 3 }}>
@@ -91,6 +108,34 @@ export default function AboutPage() {
           success. We are committed to delivering superior customer experiences
           by ensuring our solutions meet the highest standards of reliability
           and performance.
+        </Typography>
+      </Box>
+      {/* Section 3: Vision and Mission */}
+      <Box sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ fontWeight: 600, mb: 3 }}>
+        Address
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{ lineHeight: 1.8, textAlign: "justify", mb: 3 }}
+        >
+        59/1-A,<br />
+        West Raja Bazar,  Panthapath, Dhaka 1215
+        
+        </Typography>
+      </Box>
+      <Box sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ fontWeight: 600, mb: 3 }}>
+        Contact Information:
+
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{ lineHeight: 1.8, textAlign: "justify", mb: 3 }}
+        >
+        CEO Email: nsakib32@gmail.com <br />
+        CEO mobile number : 01734700316
+        
         </Typography>
       </Box>
 
@@ -135,73 +180,10 @@ export default function AboutPage() {
         </Grid>
       </Box>
 
+
       <Divider sx={{ mb: 5 }} />
 
-      {/* Section 5: Meet Our Team */}
-      <Box sx={{ mb: 5 }}>
-        <Typography variant="h4" sx={{ fontWeight: 600, mb: 4 }}>
-          Meet Our Team
-        </Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={4}>
-            <Avatar
-              src="https://i.ibb.co/SP8fGZG/pexels-tony-james-andersson-249384-1674752.jpg"
-              alt="John Doe"
-              sx={{
-                width: 150,
-                height: 150,
-                mb: 2,
-                mx: "auto",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-              }}
-            />
-            <Typography align="center" variant="h6" sx={{ fontWeight: 500 }}>
-              John Doe
-            </Typography>
-            <Typography align="center" variant="body2">
-              CEO & Founder
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Avatar
-              src="https://via.placeholder.com/150"
-              alt="Jane Smith"
-              sx={{
-                width: 150,
-                height: 150,
-                mb: 2,
-                mx: "auto",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-              }}
-            />
-            <Typography align="center" variant="h6" sx={{ fontWeight: 500 }}>
-              Jane Smith
-            </Typography>
-            <Typography align="center" variant="body2">
-              Chief Marketing Officer
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Avatar
-              src="https://i.ibb.co/bH8bTRD/pexels-blitzboy-1040881.jpg"
-              alt="Alex Johnson"
-              sx={{
-                width: 150,
-                height: 150,
-                mb: 2,
-                mx: "auto",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-              }}
-            />
-            <Typography align="center" variant="h6" sx={{ fontWeight: 500 }}>
-              Alex Johnson
-            </Typography>
-            <Typography align="center" variant="body2">
-              Lead Developer
-            </Typography>
-          </Grid>
-        </Grid>
-      </Box>
+    
     </Container>
   );
 }

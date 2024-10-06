@@ -41,8 +41,8 @@ const Footer = () => {
               }}
             ></div>
             <p>
-              Aihomesd Food Service is a leading business that delivers natural,
-              healthy, and chemical-free food to people.
+            Ai Home Tech ............................ ....
+            ................. ................. ............
             </p>
             <div className="d-flex justify-content-center justify-content-md-start">
               <a
@@ -159,13 +159,13 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="/ceo"
+                  href="/contact"
                   style={{ color: "white", textDecoration: "none" }}
                 >
                   CEO Message
                 </a>
               </li>
-              <li>
+              <li style={{display:"none"}}>
                 <a
                   href="/coo"
                   style={{ color: "white", textDecoration: "none" }}
@@ -173,7 +173,7 @@ const Footer = () => {
                   COO Message
                 </a>
               </li>
-              <li>
+              <li style={{display:"none"}}>
                 <a
                   href="/cmo"
                   style={{ color: "white", textDecoration: "none" }}

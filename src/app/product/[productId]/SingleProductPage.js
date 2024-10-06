@@ -7,7 +7,7 @@ import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import StickyBox from "react-sticky-box";
 import {
   blackColor,
@@ -25,7 +25,7 @@ export default function SingleProductPage({ productData }) {
   const [showMore, setShowMore] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const userInfo = useSelector((state) => state.users.userInfo);
   const [value, setValue] = useState(0);
 
   const handleShowMore = () => {
@@ -368,7 +368,10 @@ export default function SingleProductPage({ productData }) {
           </Box>
           {/* Order Now and + Add to Cart Buttons at the Bottom */}
           {/* Your existing product details code here */}
-          <Box
+
+
+          {
+            1 == 2 &&    <Box
             sx={{
               position: "fixed",
               bottom: 0,
@@ -500,7 +503,18 @@ export default function SingleProductPage({ productData }) {
 
                 dispatch(addToCart(payload));
                 // router.push("/checkout");
-                router.push("/productCart");
+               // ? old route 
+                // router.push("/productCart");
+
+
+
+
+                // ? new route 
+                if (!userInfo) {
+                  router.push("/login?callbackUrl=/checkout");
+                } else {
+                  router.push("/checkout");
+                }
 
                 // if (!userInfo) {
                 //   router.push(`/login?callbackUrl=/${props}`);
@@ -519,6 +533,8 @@ export default function SingleProductPage({ productData }) {
               Order Now
             </Button>
           </Box>
+          }
+       
         </div>
       </div>
 
