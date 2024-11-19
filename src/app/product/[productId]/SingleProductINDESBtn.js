@@ -2,6 +2,7 @@
 
 import {
   addToCart,
+  clearCart,
   decreaseQuantity,
   increaseQuantity,
   increaseQuantityFromProductPage,
@@ -180,6 +181,9 @@ export default function SingleProductINDESBtn({ productData }) {
       <button
         className="btn"
         onClick={() => {
+
+          dispatch(clearCart());
+
           updateCart(0); // Use current quantity without incrementing
   
           // ? old route 
