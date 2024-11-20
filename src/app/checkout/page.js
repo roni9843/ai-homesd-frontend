@@ -6,7 +6,7 @@ import { whiteColor_v_2 } from "../../../color";
 import Shipping from "../productCart/Shipping";
 import Coupon from "../productCart/Coupon";
 import { useDispatch, useSelector } from "react-redux";
-import { clearCart, clearCouponHistory } from "../redux/userSlice";
+import { clearCart, clearCouponHistory, clearDirectOrderProduct } from "../redux/userSlice";
 import { useRouter } from "next/navigation";
 import checkGif from "../../../public/check.gif";
 import Image from "next/image";
@@ -19,7 +19,18 @@ export default function Checkout() {
 
   const [orderNotes, setOrderNotes] = useState("");
   const [couponCode, setCouponCode] = useState(null);
-  const cart = useSelector((state) => state.users.cart);
+  const isDirectOrder = useSelector((state) => state.users.isDirectOrder);
+
+
+  // const cart = useSelector((state) => state.users.isDirectOrder ? [...state.users.directOrderProductData] : state.users.cart);
+
+  const cart = useSelector((state) => state.users.isDirectOrder ? [...state.users.directOrderProductData] : state.users.cart);
+
+
+
+  const [productCart,setProductCart] = useState(cart)
+
+
   const userInfo = useSelector((state) => state.users.userInfo);
   const discountRateRedux = useSelector((state) => state.users.discountRate);
   const shippingCostRedux = useSelector((state) => state.users.shippingCost);
@@ -45,16 +56,8 @@ export default function Checkout() {
   const couponCodeRedux = useSelector((state) => state.users.couponCode);
 
       useEffect(()=>{
-
        setCouponCode(couponCodeRedux)
-
-
       },[userInfo])
-
-
-
-
-
   useEffect(()=>{
 
 // userInfo === null ? "" : userInfo.username
@@ -75,8 +78,140 @@ setPhone(userInfo === null ? "" : userInfo.phoneNumber)
 
 
 
-  // Updated styles for smaller fonts and mobile layout
-  const styles = {
+
+
+ 
+
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    setTotalPrice(
+      productCart
+        .reduce(
+          (total, item) =>
+            total +
+            (item.productOffer
+              ? (
+                  item.productRegularPrice.toFixed(2) *
+                  (1 - item.productOffer / 100)
+                ).toFixed(2)
+              : item.productRegularPrice.toFixed(2)) * item.quantity,
+          0
+        )
+        .toFixed(2)
+    );
+  }, [productCart]);
+
+
+
+
+  useEffect(() => {
+    if (isPushBack) {
+      if (cart.length === 0) {
+        router.push("/");
+      }
+    }
+  }, [cart, router, isPushBack]);
+
+
+
+  // Validation function
+  const handleOrder = async () => {
+    const newErrors = {
+      name: name ? "" : "Name is required",
+      phone: phone ? "" : "Phone number is required",
+      address: address ? "" : "Address is required",
+      thanaDistrict: thanaDistrict ? "" : "Thana & District is required",
+    };
+  
+    setErrors(newErrors);
+  
+    // Check if there are any errors
+    if (!newErrors.name && !newErrors.phone && !newErrors.address && !newErrors.thanaDistrict) {
+      // All fields are filled, proceed with order
+      const orderDetails = {
+        userId: userInfo._id,
+        products: cart.map((item) => ({
+          product: item._id,
+          qty: item.quantity,
+          price:
+            item.productOffer > 0
+              ? (
+                  item.productRegularPrice.toFixed(2) *
+                  (1 - item.productOffer / 100)
+                ).toFixed(2)
+              : item.productRegularPrice.toFixed(2),
+        })),
+        address: address,
+        totalAmount: totalPrice,
+        paymentMethod: "Cash on Delivery",
+        shippingCost: shippingCost.value,
+        shippingState: shippingCost.state,
+        couponCode: couponCode,
+        couponAmount: discountRate,
+        phoneNumber: phone,
+        thanaDistrict: thanaDistrict,
+        name: name,
+        orderNotes: orderNotes,
+      };
+
+      setIsLoading(true); // Start loading
+  
+      try {
+        const response = await fetch("https://backend.aihomesd.com/postOrder", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderDetails),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+  
+          setOrderStatus("Order placed successfully!");
+          setIsOrderDone(true);
+  
+          // Show success alert
+         // alert("Order placed successfully!");
+  
+          setTimeout(() => {
+            // Clear cart from Redux store and localStorage
+            dispatch(clearCart());
+            dispatch(clearCouponHistory());
+            localStorage.removeItem("cartItems"); // Clear cart from localStorage
+  
+            router.push("/orderShippingInfo");
+            setIsPushBack(false);
+            setIsLoading(false); // Stop loading after redirect
+          }, 3000);
+        } else {
+          setOrderStatus("Failed to place order.");
+          setIsLoading(false); // Stop loading on failure
+          alert("Failed to place order. Please try again.");
+        }
+      } catch (error) {
+        // Catch network or server errors
+        setOrderStatus("An error occurred. Please try again later.");
+        setIsLoading(false);
+        console.error("Order placement error:", error);
+        alert("An error occurred. Please try again later.");
+      }
+    } else {
+      // Show an error if any field is missing
+      alert("Please fill all required fields before placing your order.");
+      setIsLoading(false); // Start loading
+    }
+  };
+  
+
+
+
+
+
+
+   // Updated styles for smaller fonts and mobile layout
+   const styles = {
     container: {
   //   display: 'flex',
    //   flexDirection: 'row',
@@ -194,129 +329,6 @@ setPhone(userInfo === null ? "" : userInfo.phoneNumber)
       },
     },
   };
-
-  const [totalPrice, setTotalPrice] = useState(0);
-
-  useEffect(() => {
-    setTotalPrice(
-      cart
-        .reduce(
-          (total, item) =>
-            total +
-            (item.productOffer
-              ? (
-                  item.productRegularPrice.toFixed(2) *
-                  (1 - item.productOffer / 100)
-                ).toFixed(2)
-              : item.productRegularPrice.toFixed(2)) * item.quantity,
-          0
-        )
-        .toFixed(2)
-    );
-  }, [cart]);
-
-
-
-
-  useEffect(() => {
-    if (isPushBack) {
-      if (cart.length === 0) {
-        router.push("/");
-      }
-    }
-  }, [cart, router, isPushBack]);
-
-
-
-  // Validation function
-  const handleOrder = async () => {
-    const newErrors = {
-      name: name ? "" : "Name is required",
-      phone: phone ? "" : "Phone number is required",
-      address: address ? "" : "Address is required",
-      thanaDistrict: thanaDistrict ? "" : "Thana & District is required",
-    };
-  
-    setErrors(newErrors);
-  
-    // Check if there are any errors
-    if (!newErrors.name && !newErrors.phone && !newErrors.address && !newErrors.thanaDistrict) {
-      // All fields are filled, proceed with order
-      const orderDetails = {
-        userId: userInfo._id,
-        products: cart.map((item) => ({
-          product: item._id,
-          qty: item.quantity,
-          price:
-            item.productOffer > 0
-              ? (
-                  item.productRegularPrice.toFixed(2) *
-                  (1 - item.productOffer / 100)
-                ).toFixed(2)
-              : item.productRegularPrice.toFixed(2),
-        })),
-        address: address,
-        totalAmount: totalPrice,
-        paymentMethod: "Cash on Delivery",
-        shippingCost: shippingCost.value,
-        shippingState: shippingCost.state,
-        couponCode: couponCode,
-        couponAmount: discountRate,
-        phoneNumber: phone,
-        thanaDistrict: thanaDistrict,
-        name: name,
-        orderNotes: orderNotes,
-      };
-
-      setIsLoading(true); // Start loading
-  
-      try {
-        const response = await fetch("https://backend.aihomesd.com/postOrder", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderDetails),
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-  
-          setOrderStatus("Order placed successfully!");
-          setIsOrderDone(true);
-  
-          // Show success alert
-         // alert("Order placed successfully!");
-  
-          setTimeout(() => {
-            // Clear cart from Redux store and localStorage
-            dispatch(clearCart());
-            dispatch(clearCouponHistory());
-            localStorage.removeItem("cartItems"); // Clear cart from localStorage
-  
-            router.push("/orderShippingInfo");
-            setIsPushBack(false);
-            setIsLoading(false); // Stop loading after redirect
-          }, 3000);
-        } else {
-          setOrderStatus("Failed to place order.");
-          setIsLoading(false); // Stop loading on failure
-          alert("Failed to place order. Please try again.");
-        }
-      } catch (error) {
-        // Catch network or server errors
-        setOrderStatus("An error occurred. Please try again later.");
-        setIsLoading(false);
-        console.error("Order placement error:", error);
-        alert("An error occurred. Please try again later.");
-      }
-    } else {
-      // Show an error if any field is missing
-      alert("Please fill all required fields before placing your order.");
-      setIsLoading(false); // Start loading
-    }
-  };
-  
 
 
 

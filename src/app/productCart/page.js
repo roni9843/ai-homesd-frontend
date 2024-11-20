@@ -18,9 +18,11 @@ import {
 
 import {
   addShippingCostAndDiscountAndCouponCode,
+  clearCouponHistory,
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
+  clearDirectOrderProduct,
 } from "../redux/userSlice";
 import { Box, Table } from "@mui/material";
 //import { Button } from "bootstrap/dist/js/bootstrap.bundle.min";
@@ -100,6 +102,8 @@ export default function CartPage() {
 
   const handleOrder = () => {
     setLoading(true); // Set loading to true when order is initiated
+
+    dispatch(clearDirectOrderProduct())
 
     const payload = {shippingCost,couponCode,discountRate};
 

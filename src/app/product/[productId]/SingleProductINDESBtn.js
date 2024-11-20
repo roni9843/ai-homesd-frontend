@@ -1,10 +1,13 @@
 "use client";
 
 import {
+  addDirectOrderProduct,
   addToCart,
   clearCart,
+  clearCouponHistory,
   decreaseQuantity,
   increaseQuantity,
+  clearDirectOrderProduct,
   increaseQuantityFromProductPage,
 } from "@/app/redux/userSlice";
 import AddShoppingCartTwoToneIcon from "@mui/icons-material/AddShoppingCartTwoTone";
@@ -182,10 +185,27 @@ export default function SingleProductINDESBtn({ productData }) {
         className="btn"
         onClick={() => {
 
-          dispatch(clearCart());
 
-          updateCart(0); // Use current quantity without incrementing
+       
+        //  updateCart(0); // Use current quantity without incrementing
   
+
+          // Dispatch action to add product data and quantity to Redux store
+
+        dispatch(clearDirectOrderProduct())
+
+          dispatch(addDirectOrderProduct({
+            ...productData,
+            quantity: quantity
+          }));
+
+      //    Existing routing logic
+          if (!userInfo) {
+            router.push("/login?callbackUrl=/checkout");
+          } else {
+            router.push("/checkout");
+          }
+
           // ? old route 
           router.push("/productCart");
   

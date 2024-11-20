@@ -17,7 +17,10 @@ export const usersSlice = createSlice({
       state : null
     },
     discountRate : 0,
-    couponCode : null
+    couponCode : null ,
+    isDirectOrder: false,
+    directOrderProductData: []
+    
   },
   reducers: {
      addToCart: (state, action) => {
@@ -78,6 +81,17 @@ export const usersSlice = createSlice({
     clearCart: (state) => {
       state.cart = []; // Clear the cart in Redux state
     },
+
+    addDirectOrderProduct: (state, action) => {
+      state.directOrderProductData.push(action.payload);
+      state.isDirectOrder = true;
+    },
+
+    clearDirectOrderProduct: (state) => {
+      state.isDirectOrder = false;
+      state.directOrderProductData = [];
+    },
+
     clearCouponHistory: (state) => {
         state.discountRate = 0,
         state.couponCode = null
@@ -196,7 +210,9 @@ export const {
   addToCartFromStorage,
   addShippingCostAndDiscountAndCouponCode,
   increaseQuantityFromProductPage,
-  decreaseQuantityFromProductPage
+  decreaseQuantityFromProductPage,
+  addDirectOrderProduct,
+  clearDirectOrderProduct
 } = usersSlice.actions;
 
 export default usersSlice.reducer;
