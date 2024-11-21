@@ -52,6 +52,33 @@ export default function CartPage() {
 
 
 
+
+  // ? selected product 
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const handleSelectProduct = (id) => {
+    setSelectedProducts((prevSelected) => {
+      if (prevSelected.includes(id)) {
+        return prevSelected.filter((productId) => productId !== id);
+      } else {
+        return [...prevSelected, id];
+      }
+    });
+  };
+
+  const calculateSelectedTotalPrice = () => {
+    return cart
+      .filter((item) => selectedProducts.includes(item._id))
+      .reduce((total, item) => {
+        return total + (item.productOffer
+          ? (item.productRegularPrice * (1 - item.productOffer / 100)) * item.quantity
+          : item.productRegularPrice * item.quantity);
+      }, 0)
+      .toFixed(2);
+  };
+
+
+
   const handleIncrease = (id) => {
     // Dispatch the action to increase quantity in Redux store
     dispatch(increaseQuantity(id));
@@ -194,7 +221,7 @@ export default function CartPage() {
             <span style={{ fontWeight: "bold" }}>Card list</span>
           </div>
 
-          <div className="col-12 col-md-6 col-lg-6">
+       <div className="col-12 col-md-6 col-lg-6">
             <Box
               sx={{
                 display: { xs: "flex", lg: "none" }, // Hide on extra small and small screens, show on large and above
@@ -348,137 +375,220 @@ export default function CartPage() {
             >
 
 
-              <table className="" style={{ backgroundColor: "transparent", width: "100%" }}>
-                <thead>
-                  <tr>
-                    <th scope="col" style={{ borderBottom: "2px solid gray", padding: "10px" }}>PRODUCT</th>
-                    <th scope="col" style={{ borderBottom: "2px solid gray", padding: "10px" }}>PRICE</th>
-                    <th scope="col" style={{ borderBottom: "2px solid gray", padding: "10px" }}>QUANTITY</th>
-                    <th scope="col" style={{ borderBottom: "2px solid gray", padding: "10px" }}>SUBTOTAL</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cart.map((item) => (
-                    <tr key={item._id}>
-                      <td className="pt-2" style={{ padding: "10px", display: "flex", alignItems: "center" }}>
-                        <button
-                          onClick={() => handleRemove(item._id)}
-                          style={{
-                            cursor: "pointer",
-                            color: "black",
-                            border: "none",
-                            fontWeight: "bold",
-                            background: "transparent",
-                            transition: "transform 0.2s",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = "scale(1.1)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = "scale(1)";
-                          }}
-                        >
-                          <CloseTwoToneIcon />
-                        </button>
-                        <Image
-                        onClick={()=> router.push(`/product/${item._id}`)}
-                          src={item.images[0]}
-                          alt={item.productName}
-                          height={100}
-                          width={100}
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            objectFit: "cover",
-                            borderRadius: "8px",
-                            marginLeft: "10px",
-                          }}
-                        />
-                        <span
-                        onClick={()=> router.push(`/product/${item._id}`)}
-                          style={{
-                            marginLeft: "10px",
-                            fontSize: "14px",
-                            maxWidth: "150px",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "normal",
-                            transition: "color 0.2s",
-                            cursor: "pointer",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = "blue"; // Change color on hover
-                            e.currentTarget.style.height = "auto"; // Adjust height
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = "initial"; // Reset color
-                          }}
-                        >
-                          {item.productName}
-                        </span>
-                      </td>
-                      <td style={{ padding: "10px" }}>
-                        <span style={{ fontWeight: "bold" }}>
-                          ৳
-                          {item.productOffer
-                            ? (
-                              item.productRegularPrice.toFixed(2) *
-                              (1 - item.productOffer / 100)
+            <table
+            style={{
+              backgroundColor: "transparent",
+              width: "100%",
+              borderCollapse: "collapse",
+            }}
+          >
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                  style={{
+                    borderBottom: "2px solid gray",
+               //     padding: "15px",
+              // padding: "10px",
+                    textAlign: "center",
+                    width: "5%",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                    }}
+                  />
+                </th>
+                <th
+                  scope="col"
+                  style={{
+                    borderBottom: "2px solid gray",
+                  //  padding: "15px",
+                  padding: "10px",
+                    textAlign: "left",
+                    width: "50%",
+                  }}
+                >
+                  PRODUCT DETAILS
+                </th>
+                <th
+                  scope="col"
+                  style={{
+                    borderBottom: "2px solid gray",
+                  //  padding: "15px",
+                  padding: "10px",
+                    textAlign: "center",
+                    width: "15%",
+                  }}
+                >
+                  QUANTITY
+                </th>
+                <th
+                  scope="col"
+                  style={{
+                    borderBottom: "2px solid gray",
+                  //  padding: "15px",
+                  padding: "10px",
+                    textAlign: "center",
+                    width: "15%",
+                  }}
+                >
+                  SUBTOTAL
+                </th>
+              </tr>
+            </thead>
+            <tbody >
+              {cart.map((item) => (
+                <tr  key={item._id} style={{ textAlign: "center", marginTop:"10px" }}>
+                  {/* Checkbox */}
+                  <td style={{ padding: "10px" }}>
+                    <input
+                      type="checkbox"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                      }}
+                      onChange={() => handleSelectProduct(item._id)}
+                      checked={selectedProducts.includes(item._id)}
+                    />
+                  </td>
+          
+                 {/* Product Details */}
+                    <td
+                    className="mt-2"
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start", // Align items to the start
+                      gap: "10px",
+                    }}
+                    >
+                    {/* Image */}
+                    <Image
+                      onClick={() => router.push(`/product/${item._id}`)}
+                      src={item.images[0]}
+                      alt={item.productName}
+                      height={60}
+                      width={60}
+                      style={{
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                      }}
+                    />
+
+                    {/* Name and Price */}
+                    <div style={{ textAlign: "left" }}>
+                      <span
+                        onClick={() => router.push(`/product/${item._id}`)}
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                          display: "block",
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                          maxWidth: "300px", // Adjust width as needed
+                        }}
+                      >
+                        {item.productName.length > 100
+                          ? `${item.productName.slice(0, 100)}...`
+                          : item.productName}
+                      </span>
+                      <span style={{ fontWeight: "bold", color: "gray", textAlign: "left" }}>
+                        ৳
+                        {item.productOffer
+                          ? (
+                              item.productRegularPrice * (1 - item.productOffer / 100)
                             ).toFixed(2)
-                            : item.productRegularPrice.toFixed(2)}
-                        </span>
-                      </td>
-                      <td style={{ padding: "10px" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                          }}
-                        >
-                          <button
-                            onClick={() => handleDecrease(item._id)}
-                            style={{
-                              padding: "5px 10px",
-                              cursor: "pointer",
-                              background: "#ddd",
-                              border: "none",
-                              borderRadius: "5px",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            -
-                          </button>
-                          <span style={{ fontSize: "16px", fontWeight: "bold" }}>
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => handleIncrease(item._id)}
-                            style={{
-                              padding: "5px 10px",
-                              cursor: "pointer",
-                              background: "#ddd",
-                              border: "none",
-                              borderRadius: "5px",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            +
-                          </button>
-                        </div>
-                      </td>
-                      <td style={{ padding: "10px" }}>
-                        <span style={{ fontWeight: "bold" }}>
-                          ৳
-                          {((item.productOffer
-                            ? item.productRegularPrice * (1 - item.productOffer / 100)
-                            : item.productRegularPrice) * item.quantity).toFixed(2)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                          : item.productRegularPrice.toFixed(2)}
+                      </span>
+                    </div>
+                    </td>
+
+
+          
+                  {/* Quantity Section */}
+                  <td style={{ padding: "10px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <button
+                        onClick={() => handleDecrease(item._id)}
+                        style={{
+                          padding: "5px 10px",
+                          cursor: "pointer",
+                          background: "#ddd",
+                          border: "none",
+                          borderRadius: "5px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        -
+                      </button>
+                      <span style={{ fontSize: "16px", fontWeight: "bold" }}>
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => handleIncrease(item._id)}
+                        style={{
+                          padding: "5px 10px",
+                          cursor: "pointer",
+                          background: "#ddd",
+                          border: "none",
+                          borderRadius: "5px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </td>
+          
+                  {/* Subtotal and Remove */}
+                  <td style={{ padding: "10px", textAlign: "right" }}>
+                  
+                  <button
+                  onClick={() => handleRemove(item._id)}
+                  style={{
+                    cursor: "pointer",
+                    color: "red",
+                    border: "none",
+                    background: "transparent",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  ✕
+                </button>
+                  
+                  {/* Subtotal */}
+                    <span style={{ fontWeight: "bold", display: "block", marginBottom: "10px" }}>
+                      ৳
+                      {(
+                        (item.productOffer
+                          ? item.productRegularPrice * (1 - item.productOffer / 100)
+                          : item.productRegularPrice) * item.quantity
+                      ).toFixed(2)}
+                    </span>
+                    {/* Remove Button */}
+                 
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          
+          
+
             </Box>
           </div>
 

@@ -244,15 +244,20 @@ export default function CustomerHeader() {
           {/* Mobile Menu Icon */}
           {isMobile && (
             <IconButton
-              onClick={toggleDrawer}
+            onClick={toggleDrawer}
+            sx={{
+              color: "#000",
+              transition: "color 0.3s",
+              ":hover": { color: "gray" }, // Hover effect
+            }}
+          >
+            <MenuIcon
               sx={{
-                color: "#000",
-                transition: "color 0.3s",
-                ":hover": { color: "gray" }, // Hover effect
+                fontSize: "30px", // Increased size
               }}
-            >
-              <MenuIcon />
-            </IconButton>
+            />
+          </IconButton>
+          
           )}
 
           {/* Logo */}
@@ -394,109 +399,130 @@ export default function CustomerHeader() {
 
         {/* Right Side: Shopping Cart and User Profile */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {/* Shopping Cart Icon */}
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center", // Vertically center the items
-              justifyContent: "center", // Horizontally center the items
-              gap: "10px", // Add some space between the price and the cart icon
-            }}
-          >
-            <FavoriteIcon
-              sx={{
-                fontSize: "20px",
-                color: "black",
-                ml: "10px",
-                cursor: "pointer",
-                transition: "transform 0.3s",
-                ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
-              }}
-              onClick={() => {
-                router.push(`/wishlist`);
-              }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center", // Vertically center the items
-              justifyContent: "center", // Horizontally center the items
-              gap: "10px", // Add some space between the price and the cart icon
-            }}
-          >
-            <Badge
-              badgeContent={totalQuantity}
-              color="secondary"
-              sx={{
-                "& .MuiBadge-badge": {
-                  backgroundColor: "black", // Change badge background color
-                  color: "white", // Change badge text color
-                },
-              }}
-            >
-              <AddShoppingCartIcon
-                sx={{
-                  fontSize: "20px",
-                  color: "black",
-                  ml: "10px",
-                  cursor: "pointer",
-                  transition: "transform 0.3s",
-                  ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
-                }}
-                onClick={() => {
-                  router.push(`/productCart`);
-                }}
-              />
-            </Badge>
-          </div>
-
-          {/* Local Mall Icon */}
-          <LocalMallIcon
+        {/* Shopping Cart Icon */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "10px",
+          }}
+        >
+          <FavoriteIcon
             sx={{
-              fontSize: "20px",
+              fontSize: "30px", // Increased size
               color: "black",
               ml: "10px",
               cursor: "pointer",
               transition: "transform 0.3s",
-              ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
+              ":hover": { transform: "scale(1.1)", color: "gray" },
             }}
-            onClick={() => handleButtonClick("orderShippingInfo")}
+            onClick={() => {
+              router.push(`/wishlist`);
+            }}
           />
-
-          {/* Profile Icon */}
+        </div>
+        <div
+          onClick={() => {
+            router.push(`/productCart`);
+          }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "10px",
+          }}
+        >
+          <Badge
+            badgeContent={totalQuantity}
+            color="secondary"
+            sx={{
+              "& .MuiBadge-badge": {
+                backgroundColor: "black",
+                color: "white",
+              },
+            }}
+          >
+            <AddShoppingCartIcon
+              sx={{
+                fontSize: "30px", // Increased size
+                color: "black",
+                ml: "10px",
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                ":hover": { transform: "scale(1.1)", color: "gray" },
+              }}
+            />
+          </Badge>
+        </div>
+      
+        {/* Local Mall Icon */}
+        <LocalMallIcon
+          sx={{
+            fontSize: "30px", // Increased size
+            color: "black",
+            ml: "10px",
+            cursor: "pointer",
+            transition: "transform 0.3s",
+            ":hover": { transform: "scale(1.1)", color: "gray" },
+          }}
+          onClick={() => handleButtonClick("orderShippingInfo")}
+        />
+      
+        {/* Profile Icon */}
+        <Box
+        sx={{
+          ml: "10px",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          transition: "transform 0.3s",
+          ":hover": { transform: "scale(1.1)", color: "gray" },
+        }}
+        onClick={() => handleButtonClick("profile")}
+      >
+        {userInfo ? (
           <Box
             sx={{
-              ml: "10px",
-              cursor: "pointer",
+              backgroundColor: "black",
+              borderRadius: "50%",
+              width: "30px", // Adjust size of the circle
+              height: "30px", // Adjust size of the circle
               display: "flex",
+              justifyContent: "center",
               alignItems: "center",
-              transition: "transform 0.3s",
-              ":hover": { transform: "scale(1.1)", color: "gray" }, // Hover effect
             }}
-            onClick={() => handleButtonClick("profile")}
           >
-            {userInfo ? (
-              <div style={profileStyles.profileImage}>
-                {userInfo.username.charAt(0)}
-              </div>
-            ) : (
-              <Box
-                sx={{
-                  backgroundColor: "black",
-                  borderRadius: "50%",
-                  padding: "5px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <PersonIcon sx={{ fontSize: "15px", color: "white" }} />
-              </Box>
-            )}
+            <Typography
+              sx={{
+                fontSize: "20px", // Increase font size for the first character
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              {userInfo.username.charAt(0)}
+            </Typography>
           </Box>
-        </Box>
+        ) : (
+          <Box
+            sx={{
+              backgroundColor: "black",
+              borderRadius: "50%",
+              padding: "5px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "30px", // Adjust size of the circle for consistency
+              height: "30px", // Adjust size of the circle for consistency
+            }}
+          >
+            <PersonIcon sx={{ fontSize: "25px", color: "white" }} /> {/* Adjusted icon size */}
+          </Box>
+        )}
+      </Box>
+      
+      </Box>
+      
       </Toolbar>
 
       {/* Mobile Sidebar Drawer */}
