@@ -52,7 +52,8 @@ export const usersSlice = createSlice({
       // console.log("cart ---- Updated cart state: ", state.cart); // Debug log
     },
     removeFromCart: (state, action) => {
-      state.cart = state.cart.filter((item) => item._id !== action.payload);
+      const ids = Array.isArray(action.payload) ? action.payload : [action.payload];
+      state.cart = state.cart.filter((item) => !ids.includes(item._id));
     },
     increaseQuantity: (state, action) => {
       const product = state.cart.find((item) => item._id === action.payload);
@@ -81,6 +82,27 @@ export const usersSlice = createSlice({
     clearCart: (state) => {
       state.cart = []; // Clear the cart in Redux state
     },
+
+
+    // ? product cart selected items
+toggleSelectCartItems: (state, action) => {
+  // First, set all items' isSelect property to false
+  state.cart = state.cart.map((item) => ({
+    ...item,
+    isSelect: false,
+  }));
+
+  const ids = Array.isArray(action.payload) ? action.payload : [action.payload];
+
+  // Then, toggle the isSelect property for the specified items
+  state.cart = state.cart.map((item) => {
+    if (ids.includes(item._id)) {
+      return { ...item, isSelect: !item.isSelect };
+    }
+    return item;
+  });
+},
+
 
     addDirectOrderProduct: (state, action) => {
       state.directOrderProductData.push(action.payload);
@@ -212,7 +234,8 @@ export const {
   increaseQuantityFromProductPage,
   decreaseQuantityFromProductPage,
   addDirectOrderProduct,
-  clearDirectOrderProduct
+  clearDirectOrderProduct,
+  toggleSelectCartItems
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

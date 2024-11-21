@@ -6,7 +6,7 @@ import { whiteColor_v_2 } from "../../../color";
 import Shipping from "../productCart/Shipping";
 import Coupon from "../productCart/Coupon";
 import { useDispatch, useSelector } from "react-redux";
-import { clearCart, clearCouponHistory, clearDirectOrderProduct } from "../redux/userSlice";
+import { clearCart, clearCouponHistory, removeFromCart,clearDirectOrderProduct } from "../redux/userSlice";
 import { useRouter } from "next/navigation";
 import checkGif from "../../../public/check.gif";
 import Image from "next/image";
@@ -24,7 +24,7 @@ export default function Checkout() {
 
   // const cart = useSelector((state) => state.users.isDirectOrder ? [...state.users.directOrderProductData] : state.users.cart);
 
-  const cart = useSelector((state) => state.users.isDirectOrder ? [...state.users.directOrderProductData] : state.users.cart);
+  const cart = useSelector((state) => state.users.isDirectOrder ? [...state.users.directOrderProductData] : state.users.cart.filter(item => item.isSelect === true));
 
 
 
@@ -115,6 +115,20 @@ setPhone(userInfo === null ? "" : userInfo.phoneNumber)
 
 
 
+  const removeFromCartFunction = (cartIds) => {
+    // Dispatch the action to remove the item from the cart in Redux store
+    dispatch(removeFromCart(cartIds));
+
+    // Retrieve the current cart from localStorage
+    let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+    // Remove the items by filtering out the ones with the matching ids
+    cartItems = cartItems.filter((item) => !cartIds.includes(item._id));
+
+    // Save the updated cart to localStorage
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  };
+
   // Validation function
   const handleOrder = async () => {
     const newErrors = {
@@ -177,9 +191,15 @@ setPhone(userInfo === null ? "" : userInfo.phoneNumber)
   
           setTimeout(() => {
             // Clear cart from Redux store and localStorage
-            dispatch(clearCart());
+            // dispatch(clearCart());
             dispatch(clearCouponHistory());
-            localStorage.removeItem("cartItems"); // Clear cart from localStorage
+            // localStorage.removeItem("cartItems"); // Clear cart from localStorage
+
+
+            let ids = cart.map((item) => item._id)
+
+            removeFromCartFunction(ids);
+
   
             router.push("/orderShippingInfo");
             setIsPushBack(false);
@@ -502,7 +522,14 @@ setPhone(userInfo === null ? "" : userInfo.phoneNumber)
 
                      <button
                      className="btn button-opacityNormal"
-                     onClick={handleOrder}
+                     onClick={()=> {
+                    
+
+                    
+
+                     handleOrder()
+                    
+                    }}
                       style={{
                       backgroundColor: "black",
                       padding: "10px 15px",
@@ -540,28 +567,10 @@ setPhone(userInfo === null ? "" : userInfo.phoneNumber)
 
                   <Coupon setCouponCodeText={setCouponCode} setDiscountRate={setDiscountRate} setIsHovered={setIsHovered} isHovered={isHovered} 
                   ></Coupon>
-
-       
-
-
-
-
+      </div>    
       </div>
-        
-      </div>
-    
-
-
-
-      
-
-    
-       
-
-      </div>
+    </div>
                   )}
-
-
     </Box>
     :   <div  style={styles.orderConfirmation}>
     <div style={styles.orderConfirmationCard}>

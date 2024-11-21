@@ -23,6 +23,7 @@ import {
   increaseQuantity,
   removeFromCart,
   clearDirectOrderProduct,
+  toggleSelectCartItems,
 } from "../redux/userSlice";
 import { Box, Table } from "@mui/material";
 //import { Button } from "bootstrap/dist/js/bootstrap.bundle.min";
@@ -78,41 +79,60 @@ export default function CartPage() {
   };
 
 
+  useEffect(() => {
+    const total = calculateSelectedTotalPrice();
+    setTotalPrice(total);
+  }, [selectedProducts, cart]); // Add selectedProducts to the dependency array
+
+
+
+  useEffect(() => {
+    // setSelectedProducts(cart.filter(item => item.isSelected).map(item => item._id));
+  }, [cart]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const cartIds = cart.map(item => item._id);
+      setSelectedProducts(cartIds);
+    }, 1000);
+  }, []);
+
+
+
 
   const handleIncrease = (id) => {
     // Dispatch the action to increase quantity in Redux store
     dispatch(increaseQuantity(id));
-
+  
     // Retrieve the current cart from localStorage
     let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-
+  
     // Find the product by id and increase its quantity
     cartItems = cartItems.map((item) =>
       item._id === id ? { ...item, quantity: item.quantity + 1 } : item
     );
-
+  
     // Save the updated cart to localStorage
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
-
+  
   const handleDecrease = (id) => {
     // Dispatch the action to decrease quantity in Redux store
     dispatch(decreaseQuantity(id));
-
+  
     // Retrieve the current cart from localStorage
     let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-
+  
     // Find the product by id and decrease its quantity, but ensure it stays above 1
     cartItems = cartItems.map((item) =>
       item._id === id && item.quantity > 1
         ? { ...item, quantity: item.quantity - 1 }
         : item
     );
-
+  
     // Save the updated cart to localStorage
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
-
   const handleRemove = (id) => {
     // Dispatch the action to remove the item from the cart in Redux store
     dispatch(removeFromCart(id));
@@ -135,8 +155,10 @@ export default function CartPage() {
     const payload = {shippingCost,couponCode,discountRate};
 
 
-   dispatch(addShippingCostAndDiscountAndCouponCode(payload));
+     
 
+     dispatch(addShippingCostAndDiscountAndCouponCode(payload));
+     dispatch(toggleSelectCartItems(selectedProducts))
 
 
     if (!userInfo) {
@@ -160,24 +182,25 @@ export default function CartPage() {
   const [totalPrice,setTotalPrice] = useState(0)
 
 
+  
 
 
   useEffect(()=>{
 
-    setTotalPrice(cart
-      .reduce(
-        (total, item) =>
-          total +
-          (item.productOffer
-            ? (
-              item.productRegularPrice.toFixed(2) *
-              (1 - item.productOffer / 100)
-            ).toFixed(2)
-            : item.productRegularPrice.toFixed(2)) *
-          item.quantity,
-        0
-      )
-      .toFixed(2))
+    // setTotalPrice(cart
+    //   .reduce(
+    //     (total, item) =>
+    //       total +
+    //       (item.productOffer
+    //         ? (
+    //           item.productRegularPrice.toFixed(2) *
+    //           (1 - item.productOffer / 100)
+    //         ).toFixed(2)
+    //         : item.productRegularPrice.toFixed(2)) *
+    //       item.quantity,
+    //     0
+    //   )
+    //   .toFixed(2))
 
 
   },[cart])
@@ -222,13 +245,55 @@ export default function CartPage() {
           </div>
 
        <div className="col-12 col-md-6 col-lg-6">
-            <Box
+              <Box
               sx={{
                 display: { xs: "flex", lg: "none" }, // Hide on extra small and small screens, show on large and above
                 flexDirection: "column",
                 gap: "20px",
               }}
             >
+              {/* Header with Select All checkbox and Product Details label */}
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "10px 0",
+                borderBottom: "2px solid #ccc", // Under border
+              }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                <input
+                type="checkbox"
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    // Select all products
+                    setSelectedProducts(cart.map(item => item._id));
+                  } else {
+                    // Deselect all products
+                    setSelectedProducts([]);
+                  }
+                }}
+                checked={selectedProducts.length === cart.length}
+                style={{ marginRight: "5px" }} // Add some margin for spacing
+              />
+              
+              <span 
+                style={{ fontWeight: "bold", cursor: "pointer" }} 
+                onClick={() => {
+                  if (selectedProducts.length === cart.length) {
+                    // If all products are selected, deselect all
+                    setSelectedProducts([]);
+                  } else {
+                    // Select all products
+                    setSelectedProducts(cart.map(item => item._id));
+                  }
+                }}
+              >
+                Select All
+              </span>
+                </div>
+                <span style={{ fontWeight: "bold", flex: 1, textAlign: "center" }}>Product Details</span>
+              </div>
+            
               <div
                 style={{
                   display: "flex",
@@ -244,16 +309,20 @@ export default function CartPage() {
                       alignItems: "center",
                     }}
                   >
+                    <input
+                      type="checkbox"
+                      onChange={() => handleSelectProduct(item._id)}
+                      checked={selectedProducts.includes(item._id)}
+                      style={{ marginRight: "10px" }} // Add some margin for spacing
+                    />
                     <Image
-                    onClick={()=> router.push(`/product/${item._id}`) }
+                      onClick={() => router.push(`/product/${item._id}`)}
                       unoptimized
                       src={item.images[0]}
                       alt={item.productName}
-                      height={100}
-                      width={100}
+                      height={80} // Smaller image height
+                      width={80}  // Smaller image width
                       style={{
-                        width: "100px",
-                        height: "100px",
                         objectFit: "cover",
                         borderRadius: "8px",
                         marginRight: "20px",
@@ -321,7 +390,7 @@ export default function CartPage() {
                           </div>
                           <div
                             style={{
-                              display: "flex",
+                              display : "flex",
                               alignItems: "center",
                               gap: "10px",
                             }}
@@ -382,78 +451,46 @@ export default function CartPage() {
               borderCollapse: "collapse",
             }}
           >
-            <thead>
-              <tr>
-                <th
-                  scope="col"
-                  style={{
-                    borderBottom: "2px solid gray",
-               //     padding: "15px",
-              // padding: "10px",
-                    textAlign: "center",
-                    width: "5%",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                    }}
-                  />
-                </th>
-                <th
-                  scope="col"
-                  style={{
-                    borderBottom: "2px solid gray",
-                  //  padding: "15px",
-                  padding: "10px",
-                    textAlign: "left",
-                    width: "50%",
-                  }}
-                >
-                  PRODUCT DETAILS
-                </th>
-                <th
-                  scope="col"
-                  style={{
-                    borderBottom: "2px solid gray",
-                  //  padding: "15px",
-                  padding: "10px",
-                    textAlign: "center",
-                    width: "15%",
-                  }}
-                >
-                  QUANTITY
-                </th>
-                <th
-                  scope="col"
-                  style={{
-                    borderBottom: "2px solid gray",
-                  //  padding: "15px",
-                  padding: "10px",
-                    textAlign: "center",
-                    width: "15%",
-                  }}
-                >
-                  SUBTOTAL
-                </th>
-              </tr>
-            </thead>
+          <thead>
+          <tr>
+            <th scope="col" style={{ borderBottom: "2px solid gray", textAlign: "center", padding: "10px" }}>
+              <input
+                type="checkbox"
+                style={{height:"15px", width:"15px"}}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    // Select all products
+                    setSelectedProducts(cart.map(item => item._id));
+                  } else {
+                    // Deselect all products
+                    setSelectedProducts([]);
+                  }
+                }}
+                checked={selectedProducts.length === cart.length}
+              />
+            </th>
+            <th scope="col" style={{ borderBottom: "2px solid gray", textAlign: "left" }}>
+              PRODUCT DETAILS
+            </th>
+            <th scope="col" style={{ borderBottom: "2px solid gray", textAlign: "center" }}>
+              QUANTITY
+            </th>
+            <th scope="col" style={{ borderBottom: "2px solid gray", textAlign: "center" }}>
+              SUBTOTAL
+            </th>
+          </tr>
+        </thead>
             <tbody >
               {cart.map((item) => (
                 <tr  key={item._id} style={{ textAlign: "center", marginTop:"10px" }}>
                   {/* Checkbox */}
                   <td style={{ padding: "10px" }}>
-                    <input
-                      type="checkbox"
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                      }}
-                      onChange={() => handleSelectProduct(item._id)}
-                      checked={selectedProducts.includes(item._id)}
-                    />
+                  <input
+                  style={{height:"15px", width:"15px"}}
+                  type="checkbox"
+                  onChange={() => handleSelectProduct(item._id)}
+                  checked={selectedProducts.includes(item._id)}
+                />
                   </td>
           
                  {/* Product Details */}
@@ -677,9 +714,11 @@ export default function CartPage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    width:"100%"
+                    width:"100%",
+                    opacity: ((totalPrice - discountRate).toFixed(2) <= 0) ? 0.5 : 1,
+                    pointerEvents: ((totalPrice - discountRate).toFixed(2) <= 0) ? "none" : "auto"
                   }}
-                  disabled={loading}
+                  disabled={loading || ((totalPrice - discountRate).toFixed(2) <= 0)}
                 >
                   {loading ? (
                     <CircularProgress size={20} color="inherit" style={{ marginRight: "10px" }} />
